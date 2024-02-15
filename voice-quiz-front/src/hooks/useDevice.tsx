@@ -9,10 +9,10 @@ const useDevice = () => {
       const isMobile = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
       const isTablet = /(ipad|tablet|playbook|silk)|(android(?!.*mobile))/g.test(userAgent);
 
-      if (isMobile && windowWidth < 768) {
+      if (isMobile || windowWidth < 768) {
         setDevice('Mobile');
-      } else if (isTablet && windowWidth < 1024) {
-        setDevice('Tablet');
+      } else if (isTablet || windowWidth < 1024) {
+        setDevice('Tablet');  
       } else {
         setDevice('Desktop');
       }
