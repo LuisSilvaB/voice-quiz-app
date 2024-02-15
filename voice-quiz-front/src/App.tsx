@@ -7,10 +7,12 @@ import RoutesContainer from './routes/routes'
 function App() {
 
   return (
-    <div className='bg-white w-screen border border-solid h-screen flex items-center  flex-col'>
-      <Navbar />
-      <RoutesContainer />
-      <Outlet />
+    <div className='bg-white w-screen h-screen items-center flex flex-col m-0 p-0'>
+      <div className='max-w-[1920px] w-full h-full m-0 p-0'>
+        <Navbar />
+        <RoutesContainer />
+        <Outlet />
+      </div>
     </div>
   )
 }
