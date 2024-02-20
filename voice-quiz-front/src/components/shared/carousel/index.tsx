@@ -1,12 +1,13 @@
 import { Carousel } from "@material-tailwind/react";
-
+import cx from "../../../libs/cx";
 interface CarouselComponent {
     images:string[];
     arrowLeft: React.ReactNode;
     arrowRight: React.ReactNode;
+    tailwindStyle?: string;
 }
 
-const CarouselComponent:React.FC<CarouselComponent> = ({images, arrowLeft, arrowRight}) => {
+const CarouselComponent:React.FC<CarouselComponent> = ({images, arrowLeft, arrowRight, tailwindStyle}) => {
   return (
     <Carousel
       prevArrow={() => {
@@ -18,7 +19,7 @@ const CarouselComponent:React.FC<CarouselComponent> = ({images, arrowLeft, arrow
       autoplay
       loop
       placeholder={""}
-      className=""
+      className={cx(tailwindStyle)}
       navigation={({ setActiveIndex, activeIndex, length }) => (
         <div className="absolute p-0 m-0 bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
           {new Array(length).fill("").map((_, i) => (

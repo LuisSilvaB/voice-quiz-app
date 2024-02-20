@@ -19,7 +19,7 @@ const images:string[] = [Login7, Login2, Login3, Login5, Login6];
 
 const Login = () => {
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-screen w-full items-center justify-center">
       <div className="m-0 flex h-full max-h-[1080px] w-full flex-col items-center justify-center p-0 text-black lg:flex-row">
         <section className="relative hidden h-full w-[40%] lg:flex">
           <CarouselComponent

@@ -6,8 +6,7 @@ import Hamburger from 'hamburger-react'
 import useToggle from '../../../hooks/useToggle';
 import useDevice from "../../../hooks/useDevice";
 import cx from "../../../libs/cx";
-import VoiceLogo from '/public/voice-quiz-logo.png'
-
+// import Logo from "/public/voice-quiz-logo.png"
 
 const Navbar = () => {
   const {isOpen, onClose, onToggle} = useToggle(); 
@@ -28,16 +27,16 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="flex h-[10%] w-full items-center justify-between px-2 lg:px-10 bg-white shadow-lg">
+    <nav className="flex sticky top-0 z-20 h-[100px] w-full items-center justify-between px-2 lg:px-10 bg-white shadow-lg">
       <div className="flex flex-row justify-center items-center">
-        <img src={VoiceLogo} className="w-16 h-16 lg:w-24 lg:h-24"/>
-        {/* <h1 className="Montserrat font-black z-10 text-xl text-[#598392] lg:text-4xl">
-          Voice quiz
-        </h1> */}
+        {/* <img src={Logo} className="w-16 h-16 lg:w-24 lg:h-24"/> */}
+        <h1 className="Montserrat font-black z-10 text-xl text-[#598392] lg:text-4xl">
+          VQ
+        </h1>
       </div>
       <div className="flex w-auto justify-end gap-6">
         <NavbarOptions isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
-        <Button placeholder={"Iniciar Sesión"} className="bg-[#598392]">
+        <Button placeholder={"Iniciar Sesión"} className="z-10 bg-[#598392]">
           Iniciar Sesión
         </Button>
         <Button
@@ -63,9 +62,9 @@ const NavbarOptions:React.FC<NavbarOptiosInterface> = ({isOpen, onClose}) => {
   return (
     <ul
       className={cx(
-        "Inter relative hidden flex-row text-xs text-[#598392] transition-all lg:flex",
+        "Inter relative bg-white hidden flex-row text-xs text-[#598392] transition-all lg:flex",
         isOpen && 
-          "absolute top-0 flex h-full w-full flex-col items-center bg-white pt-[80px]",
+          "fixed top-10 right-0 flex h-full w-[70%] flex-col items-center bg-white pt-[80px]",
       )}
     >
       <Link
