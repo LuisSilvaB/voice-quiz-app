@@ -3,7 +3,14 @@ import withMT from "@material-tailwind/react/utils/withMT";
 export default withMT({
   content: ["./src/**/*.{html,js,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily:{
+        montserrat: ['Montserrat'], 
+        lobster: ['Lobster'], 
+        concert: ['Concert One'],  
+        inter:["Inter"]
+      }
+    },
   },
   plugins: [],
 })
