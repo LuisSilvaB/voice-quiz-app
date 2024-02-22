@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <section className="relative box-border flex h-full w-full flex-col items-center justify-center text-black lg:mt-24 lg:flex-col">
       <div className="flex flex-row justify-center items-center">
-        <div className="absolute top-[40%] z-10 flex w-[90%]  flex-1 items-center justify-center lg:items-start lg:pt-20 bg-white py-8 shadow-md lg:shadow-none lg:relative lg:h-[500px] lg:w-[40%] lg:top-0">
+        <div className="absolute top-[10%] z-20 flex w-[90%]  flex-1 items-center justify-center lg:items-start lg:pt-20 bg-white py-8 shadow-md lg:shadow-none lg:relative lg:h-[500px] lg:w-[40%] lg:top-0">
           <div className="h-[50%] w-[80%] lg:w-[70%] ">
             <p className="font-concert text-2xl text-[#598392] lg:text-5xl">
               Bienvenido a <br />{" "}
@@ -35,7 +35,7 @@ export default function Home() {
               arrowLeft={<CarouserArrowLeft />}
               arrowRight={<CarouserArrowRight />}
             />
-            <div className="absolute w-full h-full bg-[#c5d5c6] blur-sm top-8 -right-8 z-0" />
+            <div className="hidden lg:inline absolute w-full h-full bg-[#c5d5c6] blur-sm top-8 -right-8 z-0"  />
           </div>
         </div>
       </div>
