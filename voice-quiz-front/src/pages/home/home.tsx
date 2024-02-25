@@ -4,14 +4,14 @@ import homeCarousel2 from "/public/home/home-carousel-2.jpg"
 import homeCarousel3 from "/public/home/home-carousel-3.jpg"
 import CarouserArrowLeft from "../../components/shared/carousel/carousel-arrow-left";
 import CarouserArrowRight from "../../components/shared/carousel/carousel-arrow-right";
-import Values from "./sections/values";
+import Benefits from "./sections/Benefits";
 export default function Home() {
   const homeCarouselImages:string[] = [homeCarousel1, homeCarousel2, homeCarousel3]
   return (
     <section className="relative box-border flex h-full w-full flex-col items-center justify-center text-black lg:mt-24 lg:flex-col">
       <div className="flex flex-row justify-center items-center">
-        <div className="absolute top-[40%] z-10 flex w-[90%] flex-1 items-center justify-center bg-white py-8 shadow-md lg:shadow-none lg:relative lg:h-[500px] lg:w-full">
-          <div className="h-[50%] w-[80%] ">
+        <div className="absolute top-[10%] z-20 flex w-[90%]  flex-1 items-center justify-center lg:items-start lg:pt-20 bg-white py-8 shadow-md lg:shadow-none lg:relative lg:h-[500px] lg:w-[40%] lg:top-0">
+          <div className="h-[50%] w-[80%] lg:w-[70%] ">
             <p className="font-concert text-2xl text-[#598392] lg:text-5xl">
               Bienvenido a <br />{" "}
               <span className="text-5xl lg:text-8xl">Voice quiz</span>{" "}
@@ -28,17 +28,18 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-1 items-center justify-center">
-          <div className="w-full lg:h-[60%] lg:w-[60%] ">
+          <div className="relative w-full lg:h-[60%] lg:w-[60%] ">
             <CarouselComponent
-              tailwindStyle="w-full h-[220px] lg:w-full z-0 lg:h-full rounded-md"
+              tailwindStyle="w-full h-[220px] lg:w-full z-10 lg:h-full rounded-md shadow-sm"
               images={homeCarouselImages}
               arrowLeft={<CarouserArrowLeft />}
               arrowRight={<CarouserArrowRight />}
             />
+            <div className="hidden lg:inline absolute w-full h-full bg-[#c5d5c6] blur-sm top-8 -right-8 z-0"  />
           </div>
         </div>
       </div>
-      <Values />
+      <Benefits />
     </section>
   );
 }
