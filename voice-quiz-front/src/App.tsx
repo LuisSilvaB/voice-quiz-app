@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import './App.css'
 import './input.css'
 import Navbar from './components/layout/navbar'
