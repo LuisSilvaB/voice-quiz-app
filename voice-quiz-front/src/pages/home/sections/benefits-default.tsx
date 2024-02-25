@@ -3,11 +3,7 @@ import { CiCircleQuestion } from "react-icons/ci";
 import { CgTranscript } from "react-icons/cg";
 import { MdOutlineTouchApp } from "react-icons/md";
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-
-const Benefits = () => {
+const BenefitsDefault = () => {
   return (
     <div className="mt-32 h-full lg:h-[40vh] w-full bg-[#f3f7f8]">
       <div className='flex flex-row gap-10 justify-center items-center w-full h-full flex-wrap py-20 lg:p-0'>        
@@ -44,4 +40,4 @@ const Benefits = () => {
   );
 }
 
-export default Benefits
+export default BenefitsDefault; 

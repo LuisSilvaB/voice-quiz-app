@@ -4,7 +4,8 @@ import homeCarousel2 from "/public/home/home-carousel-2.jpg"
 import homeCarousel3 from "/public/home/home-carousel-3.jpg"
 import CarouserArrowLeft from "../../components/shared/carousel/carousel-arrow-left";
 import CarouserArrowRight from "../../components/shared/carousel/carousel-arrow-right";
-import Benefits from "./sections/Benefits";
+import BenefitsSwiper from "./sections/benefits-swiper";
+import BenefitsDefault from "./sections/benefits-default";
 export default function Home() {
   const homeCarouselImages:string[] = [homeCarousel1, homeCarousel2, homeCarousel3]
   return (
@@ -39,7 +40,12 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Benefits />
+      <div className="lg:hidden w-full mt-32 flex justify-center bg-[#e0eaed]">
+        <BenefitsSwiper />
+      </div>  
+      <div className="hidden lg:inline w-full ">
+        <BenefitsDefault />
+      </div>
     </section>
   );
 }
