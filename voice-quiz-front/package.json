@@ -25,6 +25,7 @@
     "react-social-login-buttons": "^3.9.1",
     "react-speech-recognition": "^3.10.0",
     "regenerator-runtime": "^0.14.1",
+    "swiper": "^11.0.6",
     "tailwind-merge": "^2.2.1",
     "usellm": "^0.13.0"
   },
