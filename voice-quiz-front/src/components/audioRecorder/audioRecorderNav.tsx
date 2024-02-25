@@ -92,7 +92,7 @@ const AudioRecorderNav = () => {
   };
 
   return (
-    <div className='container mx-auto p-4 bg-white shadow-md rounded-md'>
+    <div className='relative box-border flex h-full w-full flex-col items-center justify-center text-black lg:mt-24 lg:flex-col'>
       <h2 className='text-2xl font-bold mb-4'>Speech to Text Converter</h2>
       <textarea className='border border-gray-300 p-2 mb-4 w-full h-40' value={transcript} readOnly />
       {listening && (

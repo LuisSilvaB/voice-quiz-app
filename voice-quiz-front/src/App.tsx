@@ -8,14 +8,14 @@ import RoutesContainer from './routes/routes'
 function App() {
 
   return (
-    <div className='bg-white w-full h-full min-h-screen items-center  flex flex-col m-0 p-0'>
-      <div className='max-w-[1920px] w-full h-full m-0 p-0'>
+    <main className="box-border bg-white w-full h-full min-h-screen items-center  flex flex-col m-0 p-0">
+      <div className="max-w-[1920px] flex-1 h-auto m-0 p-0 w-full">
         <Navbar />
         <RoutesContainer />
         <Outlet />
       </div>
-    </div>
-  )
+    </main>
+  );
 }
 
 export default App
