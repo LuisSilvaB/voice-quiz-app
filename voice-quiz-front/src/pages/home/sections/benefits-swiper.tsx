@@ -20,7 +20,7 @@ const BenefitsSwiper = () => {
         <Swiper
           slidesPerView={1}
           centeredSlides={true}
-          spaceBetween={-40}
+          spaceBetween={-10}
           className="flex w-full flex-row gap-4  rounded-lg"
           autoplay={{
             delay: 2500,
@@ -28,6 +28,9 @@ const BenefitsSwiper = () => {
           }}
           modules={[Autoplay]}
           breakpoints={{
+            400:{
+              spaceBetween: -10,
+            }, 
             640: {
               slidesPerView: 1,
             },

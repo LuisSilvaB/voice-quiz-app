@@ -6,10 +6,14 @@ import Hamburger from 'hamburger-react'
 import useToggle from '../../../hooks/useToggle';
 import useDevice from "../../../hooks/useDevice";
 import cx from "../../../libs/cx";
-// import Logo from "/public/voice-quiz-logo.png"
+
+// const hiddenRoutes:string[] = [
+//   "/auth/login", 
+// ]
 
 const Navbar = () => {
-  const {isOpen, onClose, onToggle} = useToggle(); 
+  const {isOpen, onClose, onToggle} = useToggle();
+  // const [hiddenSidebar, setHiddenSidebar] = useState<boolean>() 
   const device = useDevice(); 
   const location = useLocation();
   useEffect(()=>{
@@ -19,32 +23,45 @@ const Navbar = () => {
       }
     }
     handleDeviceDetection();
-    console.log(device)
   },[device]); 
-  
-  if (location.pathname === '/login') {
-    return null
-  }
+
+  // useEffect(()=>{
+  //   const detectionRoute = () => {
+  //     hiddenRoutes.forEach( route => {
+  //       if(location.pathname === route){
+  //         setHiddenSidebar(true); 
+  //       }
+  //     })
+  //   }
+  //   detectionRoute(); 
+  // },[location.pathname])
+
+  if (location.pathname === "/auth/login") return null
 
   return (
-    <nav className="flex sticky top-0 z-30 h-[100px] w-full items-center justify-between px-2 lg:px-10 bg-white shadow-lg">
+    <nav className={cx("flex sticky top-0 z-30 h-[100px] w-full items-center justify-between px-2 lg:px-10 bg-white shadow-lg",
+    )}>
       <div className="flex flex-row justify-center items-center">
         {/* <img src={Logo} className="w-16 h-16 lg:w-24 lg:h-24"/> */}
-        <h1 className="Montserrat font-black z-10 text-xl text-[#598392] lg:text-4xl">
+        <h1 className={"Montserrat font-black z-10 text-xl text-[#598392] lg:text-4xl"}>
           VQ
         </h1>
       </div>
       <div className="flex w-auto justify-end gap-6">
         <NavbarOptions isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
-        <Button placeholder={"Iniciar Sesión"} className="z-10 bg-[#598392]">
-          Iniciar Sesión
-        </Button>
-        <Button
-          placeholder={"Registro"}
-          className="hidden items-center justify-center bg-[#F3F4F6] text-[#598392] lg:flex"
-        >
-          Registro
-        </Button>
+        <Link to={"/auth/login"} className="z-10">
+          <Button placeholder={"Iniciar Sesión"} className=" bg-[#598392]">
+            Iniciar Sesión
+          </Button>
+        </Link>
+        <Link to = {"/auth/register"}>
+          <Button
+            placeholder={"Registro"}
+            className="hidden items-center justify-center bg-[#F3F4F6] text-[#598392] lg:flex"
+          >
+            Registro
+          </Button>
+        </Link>
         <div className="flex items-center justify-center text-gray-500 lg:hidden">
           <Hamburger size={25} toggled={isOpen} onToggle={onToggle} />
         </div>
@@ -64,7 +81,7 @@ const NavbarOptions:React.FC<NavbarOptiosInterface> = ({isOpen, onClose}) => {
       className={cx(
         "Inter relative bg-white hidden flex-row text-xs text-[#598392] transition-all lg:flex",
         isOpen && 
-          "fixed top-10 right-0 flex h-full w-[70%] flex-col items-center bg-white pt-[80px]",
+          "fixed top-0 right-0 flex h-full w-[70%] flex-col items-center bg-white pt-[80px]",
       )}
     >
       <Link
@@ -102,7 +119,7 @@ const NavbarOptions:React.FC<NavbarOptiosInterface> = ({isOpen, onClose}) => {
         />
       </Link>
       <Link
-        to={"/"}
+        to={"/dashboard"}
         onClick={onClose}
         className={cx(
           "group flex flex-col rounded-lg p-3 text-base font-medium text-[#598392] transition-all hover:cursor-pointer hover:text-[#bac1c4]",
