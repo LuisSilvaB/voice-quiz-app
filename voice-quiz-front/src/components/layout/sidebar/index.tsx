@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TfiSave } from "react-icons/tfi";
 import { CiSettings } from "react-icons/ci";
@@ -6,16 +7,27 @@ import { useLocation } from 'react-router-dom';
 import { VscHistory } from "react-icons/vsc";
 import { Button } from '@material-tailwind/react';
 import { useEffect } from 'react';
+import cx from '../../../libs/cx';
+
+
+const accessRoutes:string[] = [
+  "/dashboard", 
+  "/dashboard/", 
+  "/dashboard/save-data",
+  "/dashboard/history",
+  "/dashboard/settings"  
+]
 
 const SidebarComponent = () => {
-
+  const location = useLocation();
+  const [someRoute, setSomeRoute] = useState<boolean>(false);
   useEffect(()=>{
-
-  },[])
-  const location = useLocation(); 
-  if(location.pathname !== "/dashboard") return null; 
+    const someRoute =  accessRoutes.some( route => location.pathname === route)
+    setSomeRoute(someRoute);
+  },[location.pathname])
+  if (!someRoute) return null
   return (
-    <nav className="sticky top-0 hidden flex-col justify-between bg-white pt-6 lg:flex lg:w-[300px]">
+    <nav className="sticky top-0 hidden flex-col justify-between bg-white pt-6 lg:flex lg:w-[300px] lg:min-w-[300px]">
       {/* <header className=" flex h-[100px] w-full items-center justify-center gap-2 text-[#598392]">
         <p className="font-montserrat text-3xl font-bold">VQ</p>
         <p className="">Voice quiz app </p>
@@ -26,7 +38,10 @@ const SidebarComponent = () => {
             <li>
               <Link
                 to="/dashboard"
-                className="flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50"
+                className={cx(
+                  "flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50",
+                  location.pathname === "/dashboard" && "bg-blue-gray-50",
+                )}
               >
                 <BsGrid1X2 />
                 <p>Clases</p>
@@ -35,7 +50,11 @@ const SidebarComponent = () => {
             <li>
               <Link
                 to="/dashboard/save-data"
-                className="flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50"
+                className={cx(
+                  "flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50",
+                  location.pathname === "/dashboard/save-data" &&
+                    "bg-blue-gray-50",
+                )}
               >
                 <TfiSave />
                 <p>Guardadas</p>
@@ -43,8 +62,12 @@ const SidebarComponent = () => {
             </li>
             <li>
               <Link
-                to="/settings"
-                className="flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50"
+                to="/dashboard/history"
+                className={cx(
+                  "flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50",
+                  location.pathname === "/dashboard/history" &&
+                    "bg-blue-gray-50",
+                )}
               >
                 <VscHistory />
                 <p>Historial</p>
@@ -52,8 +75,11 @@ const SidebarComponent = () => {
             </li>
             <li>
               <Link
-                to="/settings"
-                className="flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50"
+                to="/dashboard/settings"
+                className={cx(
+                  "flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50",
+                  location.pathname === "/dashboard/settings" && "bg-blue-gray-50",
+                )}
               >
                 <CiSettings />
                 <p>Settings</p>
@@ -68,7 +94,9 @@ const SidebarComponent = () => {
           <p className="text-base">
             Descubre nuestros beneficios adicionales que tenemos para ti
           </p>
-          <Button className='mt-10' placeholder={"Actualiza"}>Actualiza</Button>
+          <Button className="mt-10" placeholder={"Actualiza"}>
+            Actualiza
+          </Button>
         </div>
       </footer>
     </nav>

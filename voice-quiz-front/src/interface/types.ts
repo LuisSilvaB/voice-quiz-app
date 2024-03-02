@@ -8,3 +8,17 @@ export interface OpenAIMessage {
       arguments: string;
     };
   }
+export interface Session {
+  id: string;
+  title:string; 
+  createAt:string; 
+  placeholderImg: string;
+}
+
+export interface ClassRecord {
+  id: string;
+  title: string;
+  createAt: string;
+  placeholderImg: string;
+  sessions: Session[];
+}

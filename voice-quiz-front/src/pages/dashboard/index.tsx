@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
 import SidebarComponent from '../../components/layout/sidebar';
-
+// import Audio from './../audio/audio.tsx'
 interface DashboardProps {
     children?: React.ReactNode; 
 } 
@@ -9,7 +9,8 @@ interface DashboardProps {
 const Dashboard:React.FC<DashboardProps> = () => {
   return (
     <div className='w-full h-full flex-1 flex flex-row'>
-        <SidebarComponent />      
+        <SidebarComponent />   
+        {/* <Audio />    */}
         <Outlet />
     </div>
   )
