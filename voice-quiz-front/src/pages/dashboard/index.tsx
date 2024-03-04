@@ -1,7 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
 import SidebarComponent from '../../components/layout/sidebar';
-// import Audio from './../audio/audio.tsx'
 interface DashboardProps {
     children?: React.ReactNode; 
 } 

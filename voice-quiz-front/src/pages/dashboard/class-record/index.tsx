@@ -1,15 +1,29 @@
-import { useEffect, useState } from 'react';
-import { ClassRecord } from '../../../interface/types';
+import { useEffect } from 'react';
+import ClassRecord from '../../../class/class-record.class';
+import { nanoid } from '@reduxjs/toolkit';
 import ClassCard from './class-card/class-card';
 import ClassesMock from '../mock/class.mock.json'
-import { nanoid } from '@reduxjs/toolkit';
-
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux'; 
+import { setClassRecords, clearClassRecords, setTargetClassRecord, clearTargetClassRecord } from '../../../features/class-record';
+import { RootState } from '../../../app/store';  
+import EditClassModal from './class-card/edit-class.modal';
+import DeleteClassModal from './class-card/delete-class.modal';
+import { Button } from '@material-tailwind/react';
 interface Props {
 
 }
 
 const ClassRecords:React.FC<Props> = () => {
-  const [ classes, setClasses ] = useState<ClassRecord[]>([])
+  const dispatch = useDispatch(); 
+  const classSelector = useSelector((state: RootState)=> state.classRecord)
+  const handleOpenOptions = (id:string) => {
+      if (id === classSelector.classRecordTarget.id) dispatch(clearTargetClassRecord()) 
+      else {
+      const targetClass = classSelector.classRecords.find((target) => target.id === id)
+      if (targetClass) dispatch(setTargetClassRecord(targetClass)) 
+    }
+  }
   useEffect(()=>{
     const getClasses:ClassRecord[] = ClassesMock.dashboardClasses.map(item =>(
       {
@@ -25,25 +39,34 @@ const ClassRecords:React.FC<Props> = () => {
         }))
       }
     )) 
-    setClasses (prevClasses => {
-      const newclasses = [
-        ...prevClasses, 
-        ...getClasses
-      ]
-      return newclasses
-    })
-    return () => {setClasses([])}
+    dispatch(setClassRecords(getClasses));
+    return () => {dispatch(clearClassRecords())}
   },[])
   return (
-    <div className='flex flex-1 gap-2 flex-wrap  h-auto border lg:p-10'>
-        <section className='flex-1 border p-4 flex justify-center lg:justify-start items-start flex-wrap gap-3 h-fit max-h-[80vh] my-auto overflow-y-auto'>
-          {classes.map((item, index) => (
-            <ClassCard key={index} id={item.id} placeholderImg={item.placeholderImg} title={item.title} sessions={item.sessions} createAt={item.createAt}/>
-          ))}
-
-        </section>
+    <div className="flex flex-col h-fit justify-start items-start lg:p-10">
+      <div className='w-full flex justify-end pr-4 pb-4'>
+        <Button placeholder={""} className='bg-blue-gray-400'>
+          Añadir nueva clase + 
+        </Button>
+      </div>
+      <section className="my-auto flex h-fit max-h-[80vh]  flex-1 flex-wrap items-start justify-start gap-3 overflow-y-auto border p-4 lg:justify-center">
+        {classSelector.classRecords.map((item, index) => (
+          <ClassCard
+            handleOpenOptions={handleOpenOptions}
+            targetClassRecord={classSelector.classRecordTarget}
+            key={index}
+            id={item.id}
+            placeholderImg={item.placeholderImg}
+            title={item.title}
+            sessions={item.sessions}
+            createAt={item.createAt}
+          />
+        ))}
+      </section>
+      <EditClassModal />
+      <DeleteClassModal />
     </div>
-  )
+  );
 }
 
 export default ClassRecords; 
