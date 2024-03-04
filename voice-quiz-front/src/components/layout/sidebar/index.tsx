@@ -27,7 +27,7 @@ const SidebarComponent = () => {
   },[location.pathname])
   if (!someRoute) return null
   return (
-    <nav className="sticky top-0 hidden flex-col justify-between bg-white pt-6 lg:flex lg:w-[300px] lg:min-w-[300px]">
+    <nav className="sticky top-0 hidden flex-col justify-between bg-white pt-6 lg:flex max-h-[1080px] lg:w-[300px] lg:min-w-[300px]">
       {/* <header className=" flex h-[100px] w-full items-center justify-center gap-2 text-[#598392]">
         <p className="font-montserrat text-3xl font-bold">VQ</p>
         <p className="">Voice quiz app </p>
