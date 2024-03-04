@@ -1,4 +1,5 @@
 export type Status = "idle" | "recording" | "transcribing" | "streaming";
+export type ModalActions = "edit" | "delete" | null; 
 export interface OpenAIMessage {
     content: string;
     role: string;
@@ -15,7 +16,7 @@ export interface Session {
   placeholderImg: string;
 }
 
-export interface ClassRecord {
+export interface ClassRecordShape {
   id: string;
   title: string;
   createAt: string;
