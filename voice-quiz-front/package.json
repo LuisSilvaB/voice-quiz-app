@@ -27,6 +27,7 @@
     "react-speech-recognition": "^3.10.0",
     "redux": "^5.0.1",
     "regenerator-runtime": "^0.14.1",
+    "sonner": "^1.4.3",
     "swiper": "^11.0.6",
     "tailwind-merge": "^2.2.1",
     "usellm": "^0.13.0"
