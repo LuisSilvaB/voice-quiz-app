@@ -3,7 +3,7 @@ import { IoMdTrash } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { motion } from "framer-motion";
 import cx from "../../../../../libs/cx";
-import { variants } from "."; 
+import { variants } from "../../types"; 
 import { ModalActions } from "../../../../../interface/types";
 import { useDispatch } from "react-redux";
 import { setTypeModal,setIsOpenModal } from "../../../../../features/class-record";

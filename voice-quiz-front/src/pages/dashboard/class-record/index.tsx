@@ -5,11 +5,12 @@ import ClassCard from './class-card/class-card';
 import ClassesMock from '../mock/class.mock.json'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux'; 
-import { setClassRecords, clearClassRecords, setTargetClassRecord, clearTargetClassRecord } from '../../../features/class-record';
+import { setClassRecords, clearClassRecords, setTargetClassRecord, clearTargetClassRecord, setIsOpenModal, setTypeModal } from '../../../features/class-record';
 import { RootState } from '../../../app/store';  
 import EditClassModal from './class-card/edit-class.modal';
 import DeleteClassModal from './class-card/delete-class.modal';
 import { Button } from '@material-tailwind/react';
+import CreateClassModal from './create-class.modal';
 interface Props {
 
 }
@@ -23,6 +24,10 @@ const ClassRecords:React.FC<Props> = () => {
       const targetClass = classSelector.classRecords.find((target) => target.id === id)
       if (targetClass) dispatch(setTargetClassRecord(targetClass)) 
     }
+  }
+  const handleCreatClass = () => {
+    dispatch(setTypeModal("create"))
+    dispatch(setIsOpenModal(true))
   }
   useEffect(()=>{
     const getClasses:ClassRecord[] = ClassesMock.dashboardClasses.map(item =>(
@@ -45,7 +50,7 @@ const ClassRecords:React.FC<Props> = () => {
   return (
     <div className="flex flex-col h-fit justify-start items-start lg:p-10">
       <div className='w-full flex justify-end pr-4 pb-4'>
-        <Button placeholder={""} className='bg-blue-gray-400'>
+        <Button placeholder={""} className='bg-green-600' onClick={handleCreatClass}>
           Añadir nueva clase + 
         </Button>
       </div>
@@ -63,6 +68,7 @@ const ClassRecords:React.FC<Props> = () => {
           />
         ))}
       </section>
+      <CreateClassModal />
       <EditClassModal />
       <DeleteClassModal />
     </div>

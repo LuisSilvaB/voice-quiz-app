@@ -1,5 +1,5 @@
 import { motion } from "framer-motion" 
-import { variants } from "./options-list"
+import { variants } from "../types"
 import { useSelector, useDispatch } from "react-redux"
 import { RootState } from "../../../../app/store";
 import { setIsOpenModal, clearTargetClassRecord } from "../../../../features/class-record";
@@ -36,7 +36,7 @@ const EditClassModal:React.FC = () => {
             >
               <IoMdClose />
             </div>
-            <div className="absolute -top-10 left-0 right-0 mx-auto flex h-20 w-20 items-center justify-center rounded-full border bg-white text-4xl text-green-600 ">
+            <div className="absolute -top-10 left-0 right-0 mx-auto flex h-20 w-20 items-center justify-center rounded-full border bg-white text-4xl text-blue-600 ">
               <MdEdit />
             </div>
             <div
@@ -76,7 +76,7 @@ const EditClassModal:React.FC = () => {
             <Button placeholder={""} className="" onClick={closeModal}>
               Cancelar
             </Button >
-            <Button placeholder={""} className="bg-green-600" onClick={editModal}>
+            <Button placeholder={""} className="bg-blue-600" onClick={editModal}>
               Guardar
             </Button >
           </div>

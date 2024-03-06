@@ -1,5 +1,5 @@
 import { motion } from "framer-motion" 
-import { variants } from "./options-list"
+import { variants } from "../types"
 import { useSelector, useDispatch } from "react-redux"
 import { RootState } from "../../../../app/store";
 import { setIsOpenModal, clearTargetClassRecord } from "../../../../features/class-record";

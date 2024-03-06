@@ -1,5 +1,5 @@
 export type Status = "idle" | "recording" | "transcribing" | "streaming";
-export type ModalActions = "edit" | "delete" | null; 
+export type ModalActions = "edit" | "delete" | "create" | null; 
 export interface OpenAIMessage {
     content: string;
     role: string;

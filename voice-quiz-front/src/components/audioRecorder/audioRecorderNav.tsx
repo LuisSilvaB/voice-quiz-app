@@ -69,7 +69,7 @@ const AudioRecorderNav = () => {
       SpeechRecognition.stopListening();
       setAudioStream(null);
     } else {
-      SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
+      SpeechRecognition.startListening({ continuous: true, language: 'es-ES' });
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then((stream) => {
           setAudioStream(stream);
