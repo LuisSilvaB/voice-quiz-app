@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import classRecordReducers from "../features/class-record"
+import courseReducers from "../features/class-record"
 export const store = configureStore({
     reducer: {
-        classRecord: classRecordReducers
+        course: courseReducers
     }, 
 })
 

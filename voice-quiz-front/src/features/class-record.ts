@@ -1,27 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit"; 
-import ClassRecord from "../class/class-record.class";
+import CourseClass from "../class/course.class";
 import { ModalActions } from "../interface/types";
 
 const ClassRecordSlice = createSlice({
-    name: "classRecord",
+    name: "Course",
     initialState: {
-        classRecords: [] as ClassRecord[],
-        classRecordTarget: {} as ClassRecord,
+        classRecords: [] as CourseClass[],
+        classRecordTarget: {} as CourseClass,
         isOpenModal: false, 
         typeModal: null as ModalActions
     },
     reducers:{
-        setTargetClassRecord: (state, action) => {
-            state.classRecordTarget = action.payload; 
+        setTargetCourse: (state, action) => {
+            state.classRecordTarget = action.payload as CourseClass; 
         }, 
-        clearTargetClassRecord: (state) => {
-            state.classRecordTarget = {} as ClassRecord
+        clearTargetCourse: (state) => {
+            state.classRecordTarget = {} as CourseClass
         }, 
-        setClassRecords: (state, action) => {
-            state.classRecords = action.payload; 
+        setCourses: (state, action) => {
+            state.classRecords = action.payload as CourseClass[]; 
         },
-        clearClassRecords:(state) => {
-            state.classRecords = [] as ClassRecord[]
+        clearCourses:(state) => {
+            state.classRecords = [] as CourseClass[]
         }, 
         setIsOpenModal:(state, action) => {
             state.isOpenModal = action.payload; 
@@ -32,5 +32,5 @@ const ClassRecordSlice = createSlice({
     }
 })
 
-export const { setTargetClassRecord, clearTargetClassRecord, clearClassRecords, setClassRecords, setIsOpenModal, setTypeModal } = ClassRecordSlice.actions; 
+export const { setTargetCourse, clearTargetCourse, clearCourses, setCourses, setIsOpenModal, setTypeModal } = ClassRecordSlice.actions; 
 export default ClassRecordSlice.reducer; 

@@ -1,9 +1,10 @@
 {
-    "dashboardClasses": [
-        {
+    "dashboardCourses": [
+        {   
+            "id":"e35cdaa0-9274-4586-93ca-145740cf2c19",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 1",
+            "title": "Curso 1",
             "sessions": [
                 {
                     "title": "Session1",
@@ -25,10 +26,10 @@
                 }
             ]
         },
-        {
+        {   "id":"60616190-6527-4de8-95dc-c27ce85b02dc",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 2",
+            "title": "Curso 2",
             "sessions": [
                 {
                     "title": "Session1",
@@ -38,31 +39,10 @@
             ]
         },
         {
+            "id": "62b86aa7-f5d4-400e-8851-f10d29e57e9f",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 3",
-            "sessions": [
-                {
-                    "title": "Session1",
-                    "createAt": "2016-01-01", 
-                    "placeholderImg":"https://random.imagecdn.app/300/100"
-                },
-                {
-                    "title": "Session1",
-                    "createAt": "2016-01-01", 
-                    "placeholderImg":"https://random.imagecdn.app/300/100"
-                },
-                {
-                    "title": "Session1",
-                    "createAt": "2016-01-01", 
-                    "placeholderImg":"https://random.imagecdn.app/300/100"
-                }
-            ]
-        },
-        {
-            "createAt": "2016-01-01",
-            "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 4",
+            "title": "Curso 3",
             "sessions": [
                 {
                     "title": "Session1",
@@ -82,9 +62,33 @@
             ]
         },
         {
+            "id":"3037520e-e29a-4816-8746-91c0c579fcbf",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 5",
+            "title": "Curso 4",
+            "sessions": [
+                {
+                    "title": "Session1",
+                    "createAt": "2016-01-01", 
+                    "placeholderImg":"https://random.imagecdn.app/300/100"
+                },
+                {
+                    "title": "Session1",
+                    "createAt": "2016-01-01", 
+                    "placeholderImg":"https://random.imagecdn.app/300/100"
+                },
+                {
+                    "title": "Session1",
+                    "createAt": "2016-01-01", 
+                    "placeholderImg":"https://random.imagecdn.app/300/100"
+                }
+            ]
+        },
+        {
+            "id": "3086a804-ddfe-4e11-af28-2e47e2a8574f",
+            "createAt": "2016-01-01",
+            "placeholderImg": "https://random.imagecdn.app/300/100",
+            "title": "Curso 5",
             "sessions": [
                 {
                     "title": "Session1",
@@ -94,9 +98,10 @@
             ]
         },
         {
+            "id":"f6a9e1d7-b1b0-4f74-8cec-03e727174045",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 6",
+            "title": "Curso 6",
             "sessions": [
                 {
                     "title": "Session1",
@@ -106,9 +111,10 @@
             ]
         },
         {
+            "id":"9c2833af-a1a0-49ca-89d2-0659f919e829",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 7",
+            "title": "Curso 7",
             "sessions": [
                 {
                     "title": "Session1",
@@ -118,9 +124,10 @@
             ]
         },
         {
+            "id":"6b7a32e7-6c35-47ee-8446-7265e45343bc", 
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 8",
+            "title": "Curso 8",
             "sessions": [
                 {
                     "title": "Session1",
@@ -130,9 +137,10 @@
             ]
         },
         {
+            "id":"16fb4bd7-b433-493a-9573-f9dcbf6a4e3e",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 9",
+            "title": "Curso 9",
             "sessions": [
                 {
                     "title": "Session1",
@@ -142,9 +150,10 @@
             ]
         },
         {
+            "id":"cbd08f5f-0400-48f3-82f3-0575e7bdf285",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 10",
+            "title": "Curso 10",
             "sessions": [
                 {
                     "title": "Session1",
@@ -154,9 +163,10 @@
             ]
         },
         {
+            "id":"491db71c-fae5-48f7-ae52-125e9a03f7fd",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 11",
+            "title": "Curso 11",
             "sessions": [
                 {
                     "title": "Session1",
@@ -166,9 +176,10 @@
             ]
         },
         {
+            "id":"cc60f9df-4aed-441d-bb17-6f12cfc5b555",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 12",
+            "title": "Curso 12",
             "sessions": [
                 {
                     "title": "Session1",
@@ -178,9 +189,10 @@
             ]
         },
         {
+            "id":"fb19f794-bde4-41e2-a783-68b642b49670",
             "createAt": "2016-01-01",
             "placeholderImg": "https://random.imagecdn.app/300/100",
-            "title": "Class 13",
+            "title": "Curso 13",
             "sessions": [
                 {
                     "title": "Session1",

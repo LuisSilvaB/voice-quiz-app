@@ -1,18 +1,29 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Outlet } from 'react-router-dom';
 import SidebarComponent from '../../components/layout/sidebar';
+import { useNavigate, useLocation } from 'react-router-dom';
 interface DashboardProps {
     children?: React.ReactNode; 
 } 
 
-const Dashboard:React.FC<DashboardProps> = () => {
+const DashboardLayout:React.FC<DashboardProps> = () => {
+  const navigate = useNavigate();
+  const location = useLocation(); 
+  
+  if (location.pathname === "/dashboard" || location.pathname === "/dashboard/"  ) {
+    navigate('/dashboard/class-record')
+  }
+  useEffect(()=>{
+    if (location.pathname === "/dashboard") {
+      navigate('/dashboard/class-record')
+    }
+  },[location.pathname, navigate])
   return (
     <div className='w-full h-full flex-1 flex flex-row'>
         <SidebarComponent />   
-        {/* <Audio />    */}
         <Outlet />
     </div>
   )
 }
 
-export default Dashboard; 
+export default DashboardLayout; 

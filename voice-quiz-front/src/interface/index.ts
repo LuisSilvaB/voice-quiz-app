@@ -1,3 +1,3 @@
-import { Status, OpenAIMessage, ClassRecord, Session } from './types';
+import { Status, OpenAIMessage, CourseShape, Session } from './types';
 
-export { type Status, type OpenAIMessage, type ClassRecord, type Session }; 
+export { type Status, type OpenAIMessage, type CourseShape, type Session }; 

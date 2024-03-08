@@ -16,7 +16,7 @@ export interface Session {
   placeholderImg: string;
 }
 
-export interface ClassRecordShape {
+export interface CourseShape {
   id: string;
   title: string;
   createAt: string;
