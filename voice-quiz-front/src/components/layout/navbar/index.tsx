@@ -39,7 +39,7 @@ const Navbar = () => {
   if (location.pathname === "/auth/login") return null
 
   return (
-    <nav className={cx("flex sticky top-0 z-30 h-[100px] w-full items-center justify-between px-2 lg:px-10 bg-white shadow-lg",
+    <nav className={cx("flex sticky top-0 z-30 h-[60px] w-full items-center justify-between px-2 lg:px-10 bg-white shadow-lg",
     )}>
       <div className="flex flex-row justify-center items-center">
         {/* <img src={Logo} className="w-16 h-16 lg:w-24 lg:h-24"/> */}
@@ -49,12 +49,12 @@ const Navbar = () => {
       </div>
       <div className="flex w-auto justify-end gap-6">
         <NavbarOptions isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
-        <Link to={"/auth/login"} className="z-10">
+        <Link to={"/auth/login"} className="z-10 flex items-center">
           <Button placeholder={"Iniciar Sesión"} className=" bg-[#598392]">
             Iniciar Sesión
           </Button>
         </Link>
-        <Link to = {"/auth/register"}>
+        <Link to = {"/auth/register"} className="z-10 flex items-center">
           <Button
             placeholder={"Registro"}
             className="hidden items-center justify-center bg-[#F3F4F6] text-[#598392] lg:flex"
@@ -119,7 +119,7 @@ const NavbarOptions:React.FC<NavbarOptiosInterface> = ({isOpen, onClose}) => {
         />
       </Link>
       <Link
-        to={"/dashboard"}
+        to={"/dashboard/courses/courses-list"}
         onClick={onClose}
         className={cx(
           "group flex flex-col rounded-lg p-3 text-base font-medium text-[#598392] transition-all hover:cursor-pointer hover:text-[#bac1c4]",
