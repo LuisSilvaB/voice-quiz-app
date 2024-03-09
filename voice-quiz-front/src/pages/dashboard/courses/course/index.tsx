@@ -3,6 +3,9 @@ import { useEffect, useState } from "react"
 import CourseClass from "../../../../class/course.class"
 import coursesMock from "../../mock/class.mock.json"
 import { Button, Chip } from "@material-tailwind/react"
+import CourseSessionsTable from "./curse-sessions-table"
+import { FaMicrophone } from "react-icons/fa";
+
 const Course = () => {
   const [currentCourse, setCurrentCourse ] = useState<CourseClass>({} as CourseClass)
   const params = useParams(); 
@@ -16,10 +19,9 @@ const Course = () => {
     setCurrentCourse(data as CourseClass)
   }
   return (
-    <div className="flex flex-1 w-full select-none flex-col items-start justify-start">
-      <div className="flex w-full h-full flex-col gap-2">
-
-        <div className="top-5 mt-4 rounded-lg border-t bg-white p-6 shadow-lg lg:ml-11 lg:w-full lg:max-w-[500px]">
+    <div className="flex w-full flex-1 select-none flex-row items-start justify-start gap-6">
+      <div className="flex h-full w-max flex-col gap-2 lg:ml-11">
+        <div className="top-5 mt-4 rounded-lg border-t bg-white p-6 shadow-lg lg:w-full lg:max-w-[500px]">
           <div className="flex flex-col gap-5">
             <div className=" h-48 w-48 rounded-lg  bg-white">
               <img
@@ -56,38 +58,17 @@ const Course = () => {
           </div>
         </div>
 
-        <div className="lg:ml-11 lg:w-full lg:max-w-[500px] flex-1 border"></div>
-
+        <div className="flex-1 border lg:w-full lg:max-w-[500px]"></div>
       </div>
-      {/* <div className="mt-8">
-        {
-          currentCourse?.sessions?.map((session, index) => (
-            <div key={index} className="flex w-full items-center gap-2">
-              <img src="https://placehold.co/600x400" className="w-[200px] h-auto rounded-lg shadow-lg" />
-              <div className="flex-1 flex flex-col gap-2">
-                <p className="text-2xl font-bold">
-                  {session.title}
-                </p>
-                <div className="flex w-full justify-between items-center gap-2 border-b">
-                  <span className="font-bold">Id:</span>
-                  <p>{session.id}</p>
-                </div>
-                <div className="flex w-full justify-between items-center gap-2 border-b">
-                  <span className="font-bold">Fecha de creación:</span>
-                  <p>{session.createAt}</p>
-                </div>
-                <div className="flex w-full justify-between items-center gap-2 border-b">
-                  <span className="font-bold">Última actualización:</span>
-                  <p>{session.createAt}</p>
-                </div>
-                <div className="flex w-full justify-between items-center gap-2 border-b">
-                  <span className="font-bold">Duración:</span>
-                </div>
-              </div>
-            </div>
-          ))
-        }
-      </div> */}
+      <div className="flex flex-col max-h-[80vh] flex-1 overflow-y-auto px-4 pt-5">
+        <div className="flex justify-end py-4">
+          <Button placeholder={""} className="bg-green-500 flex gap-2 items-center">
+            <p>Comenzar una sesión</p>
+            <FaMicrophone />
+          </Button>
+        </div>
+        <CourseSessionsTable sessions={currentCourse.sessions} />
+      </div>
     </div>
   );
 }
