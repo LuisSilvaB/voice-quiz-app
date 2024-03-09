@@ -13,6 +13,7 @@
   "dependencies": {
     "@material-tailwind/react": "^2.1.9",
     "@reduxjs/toolkit": "^2.2.1",
+    "@tanstack/react-table": "^8.13.2",
     "@types/dom-speech-recognition": "^0.0.4",
     "@types/react-speech-recognition": "^3.9.5",
     "clsx": "^2.1.0",
