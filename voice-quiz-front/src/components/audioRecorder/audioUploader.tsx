@@ -10,7 +10,7 @@ const AudioUploader: React.FC = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files && files.length > 0) {
+    if (files && files?.length > 0) {
       setAudioFile(files[0]);
     }
   };

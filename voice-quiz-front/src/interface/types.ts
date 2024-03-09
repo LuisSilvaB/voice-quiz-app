@@ -1,5 +1,10 @@
 export type Status = "idle" | "recording" | "transcribing" | "streaming";
 export type ModalActions = "edit" | "delete" | "create" | null; 
+
+export interface tableSessionsShape {
+  
+}
+
 export interface OpenAIMessage {
     content: string;
     role: string;
@@ -23,3 +28,4 @@ export interface CourseShape {
   placeholderImg: string;
   sessions: Session[];
 }
+
