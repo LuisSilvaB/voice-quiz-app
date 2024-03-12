@@ -1,188 +1,127 @@
-from fastapi import FastAPI, Form, Request, Response, File, Depends, HTTPException, status
-from fastapi.responses import RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from fastapi.encoders import jsonable_encoder
-from langchain.llms import CTransformers
-from langchain.chains import QAGenerationChain
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.docstore.document import Document
-from langchain.document_loaders import PyPDFLoader
-from langchain.prompts import PromptTemplate
-from langchain.embeddings import HuggingFaceBgeEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.chains.summarize import load_summarize_chain
-from langchain.chains import RetrievalQA
-import os 
-import json
-import time
-import uvicorn
-import aiofiles
-from PyPDF2 import PdfReader
-import csv
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
-app = FastAPI()
+from langchain.text_splitter import CharacterTextSplitter
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+from usellm import Message, Options, UseLLM
 
-templates = Jinja2Templates(directory="templates")
+# Initialize the service
+service = UseLLM(service_url="https://usellm.org/api/llm")
 
-def load_llm():
-    # Load the locally downloaded model here
-    llm = CTransformers(
-        model = "mistral-7b-instruct-v0.1.Q4_K_S.gguf",
-        model_type="mistral",
-        max_new_tokens = 1048,
-        temperature = 0.3
-    )
-    return llm
+# Prepare the conversation
+template_system = """
+Eres un experto en crear preguntas basadas solamente en transcripciones de grabaciones de sesiones clase.
+Tu objetivo es reforzar el aprendizaje de los estudiantes para que comprendan toda la informacion importante que el docente enseño durante la clase.
+Haces esto creando questionarios con preguntas sobre el texto transcrito que el profesor dijo durante la clase y que te proporcionara en los siguiente mensajes.
+El docente desea que realices preguntas solo del tipo abiertas para retroalimentar lo que se dijo en clase.
+Las preguntas debe tener la siguiente estructura y las presentaras en el siguiente formato segun el tipo de pregunta:
 
-def file_processing(file_path):
+¿ (Aqui va la pregunta) ?
+Resp: (Aqui va la respuesta)
+-
+¿ (Aqui va la pregunta) ?
+Resp: (Aqui va la respuesta)
+-
+[...]
+"""
 
-    # Load data from PDF
-    loader = PyPDFLoader(file_path)
-    data = loader.load()
+def split_text_into_chunks(text, chunk_size):
+    chunks = []
+    start_index = 0
+    while start_index < len(text):
+        end_index = min(start_index + chunk_size, len(text))
+        chunks.append(text[start_index:end_index])
+        start_index = end_index
+    return chunks
 
-    question_gen = ''
+app = Flask(__name__)
 
-    for page in data:
-        question_gen += page.page_content
+@app.route('/api/example', methods=['GET'])
+def get_example():
+    data = {
+        'message': 'This is an example API endpoint',
+        'status': 'success'
+    }
+    return jsonify(data)
+
+
+#1. Recibir la transcripción de la sesión
+@app.route('/api/docs', methods=['POST'])
+def process_docs():
+
+    session_name = request.form.get('session_name')  # Nombre de la sesión
+
+    #1. validar entrada de datos
+    if 'documents' not in request.files:
+       return 'No documents found', 400
+    
+    documents = request.files.getlist('documents') #Receive data from .txt files
+    
+    if len(documents) == 0 or all(file.filename == '' for file in documents):
+        return 'No documents found2', 400
+    
+    # Leer el contenido de cada archivo individualmente y concatenarlo
+    transcript_text = ""
+    for file in documents:
+        transcript_text += file.read().decode()
         
-    splitter_ques_gen = RecursiveCharacterTextSplitter(
-        chunk_size = 1000,
-        chunk_overlap = 100
-    )
+    #2. Dividir los documentos en partes mas pequeñas.
+    chunk=CharacterTextSplitter(separator=".", chunk_size=2000, chunk_overlap=0)
+    trans_docs = chunk.create_documents([transcript_text])
 
-    chunks_ques_gen = splitter_ques_gen.split_text(question_gen)
+    primer_fragmento = trans_docs[0].page_content
+    print(primer_fragmento)
+    #3. Preparar la conversación
 
-    document_ques_gen = [Document(page_content=t) for t in chunks_ques_gen]
+    # Prepare the conversation for the user role
 
-    splitter_ans_gen = RecursiveCharacterTextSplitter(
-        chunk_size = 300,
-        chunk_overlap = 30
-    )
-
-
-    document_answer_gen = splitter_ans_gen.split_documents(
-        document_ques_gen
-    )
-
-    return document_ques_gen, document_answer_gen
-
-def llm_pipeline(file_path):
-
-    document_ques_gen, document_answer_gen = file_processing(file_path)
-
-
-
-    llm_ques_gen_pipeline = load_llm()
-
-    prompt_template = """
-    You are an expert at creating questions based on coding materials and documentation.
-    Your goal is to prepare a coder or programmer for their exam and coding tests.
-    You do this by asking questions about the text below:
-
-    ------------
-    {text}
-    ------------
-
-    Create questions that will prepare the coders or programmers for their tests.
-    Make sure not to lose any important information.
-
-    QUESTIONS:
+    
+    template_user =f"""
+    Genera 5 preguntas de lo mas importante que se dijo en la transcripcion: {primer_fragmento}
     """
+    messages = [
+        Message(role="system", content=template_system),
+        Message(role="user", content=template_user)
+    ]
 
-    PROMPT_QUESTIONS = PromptTemplate(template=prompt_template, input_variables=["text"])
+    options = Options(messages=messages)
 
-    refine_template = ("""
-    You are an expert at creating practice questions based on coding material and documentation.
-    Your goal is to help a coder or programmer prepare for a coding test.
-    We have received some practice questions to a certain extent: {existing_answer}.
-    We have the option to refine the existing questions or add new ones.
-    (only if necessary) with some more context below.
-    ------------
-    {text}
-    ------------
+    # Interact with the service
+    response = service.chat(options)
 
-    Given the new context, refine the original questions in English.
-    If the context is not helpful, please provide the original questions.
-    QUESTIONS:
-    """
-    )
+    # Print the assistant's response
+    print(response.content)
 
-    REFINE_PROMPT_QUESTIONS = PromptTemplate(
-        input_variables=["existing_answer", "text"],
-        template=refine_template,
-    )
+    response = {'success': True}
+    return jsonify(response)
 
-    ques_gen_chain = load_summarize_chain(llm = llm_ques_gen_pipeline, 
-                                            chain_type = "refine", 
-                                            verbose = True, 
-                                            question_prompt=PROMPT_QUESTIONS, 
-                                            refine_prompt=REFINE_PROMPT_QUESTIONS)
-
-    ques = ques_gen_chain.run(document_ques_gen)
-
-    embeddings = HuggingFaceBgeEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
-
-    vector_store = FAISS.from_documents(document_answer_gen, embeddings)
-
-    llm_answer_gen = load_llm()
-
-    ques_list = ques.split("\n")
-    filtered_ques_list = [element for element in ques_list if element.endswith('?') or element.endswith('.')]
-
-    answer_generation_chain = RetrievalQA.from_chain_type(llm=llm_answer_gen, 
-                                                chain_type="stuff", 
-                                                retriever=vector_store.as_retriever())
-
-    return answer_generation_chain, filtered_ques_list
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
-def get_csv (file_path):
-    answer_generation_chain, ques_list = llm_pipeline(file_path)
-    base_folder = 'static/output/'
-    if not os.path.isdir(base_folder):
-        os.mkdir(base_folder)
-    output_file = base_folder+"QA.csv"
-    with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
-        csv_writer = csv.writer(csvfile)
-        csv_writer.writerow(["Question", "Answer"])  # Writing the header row
-
-        for question in ques_list:
-            print("Question: ", question)
-            answer = answer_generation_chain.run(question)
-            print("Answer: ", answer)
-            print("--------------------------------------------------\n\n")
-
-            # Save answer to CSV file
-            csv_writer.writerow([question, answer])
-    return output_file
-
-@app.get("/")
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@app.post("/upload")
-async def chat(request: Request, pdf_file: bytes = File(), filename: str = Form(...)):
-    base_folder = 'static/docs/'
-    if not os.path.isdir(base_folder):
-        os.mkdir(base_folder)
-    pdf_filename = os.path.join(base_folder, filename)
-
-    async with aiofiles.open(pdf_filename, 'wb') as f:
-        await f.write(pdf_file)
-    response_data = jsonable_encoder(json.dumps({"msg": 'success',"pdf_filename": pdf_filename}))
-    res = Response(response_data)
-    return res
-
-
-@app.post("/analyze")
-async def chat(request: Request, pdf_filename: str = Form(...)):
-    output_file = get_csv(pdf_filename)
-    response_data = jsonable_encoder(json.dumps({"output_file": output_file}))
-    res = Response(response_data)
-    return res
-
-if __name__ == "__main__":
-    uvicorn.run("app:app", host='0.0.0.0', port=8000, reload=True)
+"""
+"POST /api/docs HTTP/1.1" 200 -
+ * Detected change in 'C:\\Users\\Hp\\Documents\\workspace-taller\\proyecto-original\\voice-quiz-app\\voice-quiz-back\\app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 120-821-688
+Buenos días a todos, hoy hacen nos adentraremos en un tema fascinante, la teoría de la relatividad. Como saben, esta teoría revolucionaria fue propuesta por Albert Einstein en el siglo 20, ya transformado nuestra comprensión del universo. Primero quiero discutir los fundamentos de la teoría. La relatividad especial, 
+desarrollada en 1905. Establece que las leyes de la física son las mismas para todos los observadores. No acelerados y que la velocidad de la luz en el vacío es constante. Independientemente del movimiento del observador o de la fuente de luz. Esto significa que el tiempo y el espacio son relativos y están entrelazados en una entidad única llamada espacio tiempo. Para ilustrar esto, imaginemos dos eventos que ocurren simultáneamente para un observador estacionario. Si todo, si otro observador entra en movimiento en relación con el primero, esos mismos eventos pueden parecer. Que no ocurren simultáneamente debido a la dilatación 
+ describe como la gravedad es el resultado de la curvatura del espacio tiempo causada por la presencia de masa y energía. Para si describe como la gravedad es mplificar, podríamos imaginar el espacio tiempo como una sabia sábana elástica, donde los objetos masivos, como planetas y estrelel espacio tiempo como una sablas, crean depresiones que hacen que otros objetos se muevan a lo largo de la. Trayectoria curva. Un ejemplo clásico es la explic a lo largo de la. Trayectoriaación de por qué la manzana cae del árbol. No es solo una atracción gravitacional de la tierra, sino la curvatura del espacio tieerra, sino la curvatura del esmpo alrededor de la masa de la tierra que determina el movimiento de la manzana hacia el suelo. Espero que esta introducción les ción les haya dado la comprens
+haya dado la comprensión básica de la teoría de la relatividad ahora. Vamos a profundizar en algunos conceptos clave y a explorarel universo observado. Muchas  sus indicaciones en el universo observado. Muchas gracias
+¿Qué teoría revolucionaria fue propuesta por Albert Einstein en el siglo 20?
+Resp: La teoría de la relatividad.
+-
+¿En qué año fue desarrollada la relatividad especial y qué establece?
+Resp: Fue desarrollada en 1905 y establece que las leyes de la física son las mismas para todos los observadores no acelerados, y que la velocidad de la luz en que la velocidad de la luz en el vacío es constante.
+-
+¿Cómo describe la teoría de la relatividad general la gravedad?
+Resp: Describe que la gravedad es el resultado de la curvatura del espacio tiempo causada por la presencia de masa y energía.    
+-
+¿Qué analogía se utiliza para explicar cómo los objetos masivos curvan el espacio tiempo?
+Resp: Se utiliza la analogía de imaginar el espacio tiempo como una sábana elástica donde los objetos masivos crean depresiones. 
+-
+¿Qué determina el movimiento de la manzana hacia el suelo según la teoría de la relatividad general?
+Resp: La curvatura del espacio tiempo alrededor de la masa de la tierra.
+127.0.0.1 - - [12/Mar/2024 02:57:50] "POST /api/docs HTTP/1.1" 200 -
+"""
