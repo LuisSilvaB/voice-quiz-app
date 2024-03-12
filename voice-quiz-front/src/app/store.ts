@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import courseReducers from "../features/class-record"
+import courseReducers from "../features/course.features"
 export const store = configureStore({
     reducer: {
         course: courseReducers
