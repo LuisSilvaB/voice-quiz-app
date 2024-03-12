@@ -6,7 +6,7 @@ import cx from "../../../../../../libs/cx";
 import { variants } from "../../../types"; 
 import { ModalActions } from "../../../../../../interface/types";
 import { useDispatch } from "react-redux";
-import { setTypeModal,setIsOpenModal } from "../../../../../../features/class-record";
+import { setTypeModal,setIsOpenModal } from "../../../../../../features/course.features";
 
 interface Props {
   cardClassId: string;

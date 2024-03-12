@@ -1,17 +1,33 @@
-import { useReactTable, getCoreRowModel, createColumnHelper, flexRender } from '@tanstack/react-table';
-import { Session } from '../../../../interface/types';
+import {
+  useReactTable,
+  getCoreRowModel,
+  createColumnHelper,
+  getPaginationRowModel,
+  flexRender,
+  getFilteredRowModel,
+  getSortedRowModel,
+} from "@tanstack/react-table";
+import { Session, toggleProps } from '../../../../interface/types';
 import { IconButton } from '@material-tailwind/react';
 import { IoMdTrash } from "react-icons/io";
 import { RxEyeOpen } from "react-icons/rx";
+import { TbListDetails } from "react-icons/tb";
 
-interface Props {
+
+interface Props extends toggleProps {
   sessions: Session[];
+  filter: string; 
+  openSessionDetails(id:string): void;
+  openSessionView(id:string): void;
+  setFilter:React.Dispatch<React.SetStateAction<string>>; 
 }
 
-const CourseSessionsTable:React.FC<Props>= ({sessions}) => {
+const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetails, openSessionView, setFilter}) => {
+  // const [targerFilter, setTargetFilter] = useState<Session | null>(null)
   const columnHelper = createColumnHelper<Session>()
   const columns = [
     columnHelper.accessor("id", {
+      
       header: () => "Id",
       cell: (info) => info.getValue(),
     }),
@@ -24,25 +40,41 @@ const CourseSessionsTable:React.FC<Props>= ({sessions}) => {
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("id", {
+      filterFn: "auto", 
       header: () => "Acciones",
-      cell: () => (
-        <div className="flex gap-2">
-          <IconButton className="bg-blue-500" placeholder={""}>
+      cell: (info) => (
+        <div className="flex gap-2" >
+          <IconButton className="bg-blue-500" onClick={ () => openSessionView(info.getValue()) } placeholder={""}>
             <RxEyeOpen />
+          </IconButton>
+          <IconButton className="bg-orange-500" onClick={ () => openSessionDetails(info.getValue())} placeholder={""}>
+            <TbListDetails />
           </IconButton>
           <IconButton className='bg-red-500' placeholder={""}>
             <IoMdTrash />
           </IconButton>
         </div>
       ),
+      
     }),
   ];
   const table = useReactTable({
     data: sessions ?? [], 
     columns, 
+    getPaginationRowModel: getPaginationRowModel(),
+    getCoreRowModel: getCoreRowModel(), 
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     debugTable: true, 
-    getCoreRowModel: getCoreRowModel() 
+    debugHeaders: true,
+    debugColumns: false,
+    state:{
+      globalFilter: filter
+    },
+    onGlobalFilterChange: setFilter
 })
+  
+
 
   return (
     <table className="w-full border-collapse rounded-xl overflow-hidden"> 

@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import { variants } from "../../types"
 import { useSelector, useDispatch } from "react-redux"
 import { RootState } from "../../../../../app/store";
-import { setIsOpenModal, clearTargetCourse } from "../../../../../features/class-record";
+import { setIsOpenModal, clearTargetCourse } from "../../../../../features/course.features";
 import { IoMdClose } from "react-icons/io";
 import { IoMdTrash } from "react-icons/io";
 import { Button } from "@material-tailwind/react";

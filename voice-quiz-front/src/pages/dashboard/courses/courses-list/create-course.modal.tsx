@@ -1,7 +1,7 @@
 import { motion } from "framer-motion" 
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux"
-import { setIsOpenModal, clearTargetCourse } from "../../../../features/class-record";
+import { setIsOpenModal, clearTargetCourse } from "../../../../features/course.features";
 import { IoMdClose } from "react-icons/io";
 import { Button } from "@material-tailwind/react";
 import { variants } from '../types';

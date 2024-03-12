@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import { variants } from "../../types"
 import { useSelector, useDispatch } from "react-redux"
 import { RootState } from "../../../../../app/store";
-import { setIsOpenModal, clearTargetCourse } from "../../../../../features/class-record";
+import { setIsOpenModal, clearTargetCourse } from "../../../../../features/course.features";
 import { IoMdClose } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { Button } from "@material-tailwind/react";
@@ -11,7 +11,7 @@ const EditCourseModal:React.FC = () => {
   const dispatch = useDispatch(); 
   const isOpenModal = useSelector((state:RootState) => state.course.isOpenModal )
   const typeModal = useSelector((state:RootState) => state.course.typeModal )
-  const targetCourse = useSelector((state:RootState) => state.course.classRecordTarget)
+  const targetCourse = useSelector((state:RootState) => state.course.CourseTarget)
   const closeModal = () => {
     dispatch(setIsOpenModal(false))
     dispatch(clearTargetCourse()); 
