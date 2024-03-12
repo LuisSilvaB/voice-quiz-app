@@ -8,9 +8,9 @@ import CoursesLayout from "../pages/dashboard/courses";
 import SaveData from "../pages/dashboard/save-data/save-data";
 import History from "../pages/dashboard/history";
 import Settings from "../pages/dashboard/settings";
-import Sessions from "../pages/dashboard/courses/sessions-list";
 import CursesList from "../pages/dashboard/courses/courses-list";
 import Course from "../pages/dashboard/courses/course";
+import Session from "../pages/dashboard/courses/session";
 
 const RoutesContainer = () => {
     const routes = useRoutes([
@@ -26,7 +26,7 @@ const RoutesContainer = () => {
               children:[
                 { path: "courses-list", element: <CursesList /> },
                 { path: "course/:id", element: <Course /> },
-                { path: "sessions-list/:id", element: <Sessions /> },
+                { path: "course/:courseid/session/:id", element: <Session /> },
               ]
             },
             { path: "save-data", element: <SaveData /> },
