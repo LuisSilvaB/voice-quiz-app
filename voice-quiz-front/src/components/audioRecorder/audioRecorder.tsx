@@ -1,11 +1,11 @@
 
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useLLM from 'usellm';
 import { FaMicrophoneAlt } from 'react-icons/fa';
 
 const AudioRecorder = () => {
-  const [isRecording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState('');
   const [transcript, setTranscript] = useState('');
   const [status, setStatus] = useState('');
