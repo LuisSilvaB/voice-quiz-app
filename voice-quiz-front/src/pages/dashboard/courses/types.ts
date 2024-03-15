@@ -1,6 +1,6 @@
 import { Variants } from "framer-motion";
 
-export interface ModalProps {
+interface ModalProps {
     id: string;
     isOpen: boolean;
     onClose: () => void;
@@ -8,7 +8,8 @@ export interface ModalProps {
     onToggle: () => void;
 }
 
-export const variants: Variants = {
+
+const variants: Variants = {
     enter: {
       opacity: 1,
       rotateX: 0,
@@ -28,3 +29,7 @@ export const variants: Variants = {
       },
     },
   };
+  
+type sessionTabs = "audio-file" | "real-time" | "record";
+
+export { type sessionTabs, variants, type ModalProps }
