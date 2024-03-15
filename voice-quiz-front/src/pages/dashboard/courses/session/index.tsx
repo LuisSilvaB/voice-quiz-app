@@ -1,32 +1,58 @@
-import { useParams } from "react-router-dom"
-import { BsRecordCircle } from "react-icons/bs";
-import { MdRecordVoiceOver } from "react-icons/md";
-import { FaFileUpload } from "react-icons/fa";
+import { useState } from "react";
+import SessionMenu from "./session-menu";
+import { useParams } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { sessionTabs } from "../types";
+import { FaCheck } from "react-icons/fa";
+import TranscriptionRecord from "./transcription-record";
+import TranscriptionAudioFile from "./transcription-audio-file";
+import TranscriptionRealTime from "./transcription-real-time";
+import { Button } from "@material-tailwind/react";
 
 const Session = () => {
-  const { courseid, id } = useParams()
-  console.log(courseid, id);
-  
+  const [targetTab, setTargetTab] = useState<sessionTabs>("record"); 
+  const [currentComponent, setCurrentComponent] = useState<React.ReactNode>(<TranscriptionRecord />);
+  const { courseid } = useParams()
+  const navigate = useNavigate()
+  const returnToCourse = () => {
+    navigate(`/dashboard/courses/course/${courseid}`)
+  }
+  const handleTabChange = (tab: sessionTabs) => {
+    switch(tab){
+      case "audio-file":
+        setTargetTab("audio-file")
+        setCurrentComponent(<TranscriptionAudioFile />)
+        break
+      case "real-time":
+        setTargetTab("real-time")
+        setCurrentComponent(<TranscriptionRealTime />)
+        break
+      case "record":
+        setTargetTab("record")
+        setCurrentComponent(<TranscriptionRecord />)
+        break
+    }
+  }
   return (
-    <div className="w-full h-full max-h-screen-sm flex justify-center items-center flex-col gap-16 select-none">
-      <p className="font-normal text-4xl ">Crea tus pregutas utilizando <span className="bg-gradient-to-r from-pink-400 to-purple-400 via-red-400 text-transparent bg-clip-text font-bold">inteligencia artificial</span></p>
-      <div className="flex h-fit w-full items-center justify-center gap-10 font-montserrat">
-        <div className="flex flex-col gap-5 justify-center items-center w-full h-full max-w-[300px] min-h-[300px] shadow-lg bg-gradient-to-r from-cyan-300 to-blue-500 text-white font-bold rounded-xl cursor-pointer group/item">
-          <div className="flex-1 flex justify-end items-end">
-            <BsRecordCircle className="w-12 h-12 group-hover/item:animate-pulse"/>
-          </div>
-          <p className="w-[80%] text-center text-xl flex-1">Grabación y transcripción de audio</p>
+    <div className="flex h-full w-full">
+      <SessionMenu
+        returnToCourse={returnToCourse}
+        handleTabChange={handleTabChange}
+      />
+      <div className="flex h-full w-full flex-col items-start p-3 justify-center">
+        <div className="flex w-full items-center justify-between px-4">          
+          <p className="text-2xl font-normal">
+            Crea tus pregutas utilizando{" "}
+            <span className="bg-gradient-to-r from-pink-400 via-red-400 to-purple-400 bg-clip-text font-bold text-transparent">
+              inteligencia artificial
+            </span>
+          </p>
+          <Button placeholder={""} className="flex items-center gap-2">
+            <FaCheck />
+            Guardado
+          </Button>
         </div>
-        <div className="flex flex-col gap-5 justify-center items-center w-full h-full max-w-[300px] min-h-[300px] shadow-lg bg-gradient-to-r from-orange-300 to-pink-400 text-white font-bold rounded-xl cursor-pointer group/item ">
-          <div className="flex-1 flex justify-end items-end">
-            <FaFileUpload className="w-12 h-12  group-hover/item:animate-bounce" />
-          </div>
-          <p className="w-[80%] text-center text-xl flex-1">Transcripción mediante archivo de audio</p>
-        </div>
-        <div className="flex flex-col gap-5 justify-center items-center w-full h-full max-w-[300px] min-h-[300px] shadow-lg bg-gradient-to-r from-purple-500 to-purple-900 text-white font-bold rounded-xl cursor-pointer group/item">
-          <MdRecordVoiceOver className="w-12 h-12 group-hover/item:animate-pulse"/>
-          <p className="w-[80%] text-center text-xl">Transcripción de audio en tiempo real</p>
-        </div>
+        {currentComponent}
       </div>
     </div>
   );
