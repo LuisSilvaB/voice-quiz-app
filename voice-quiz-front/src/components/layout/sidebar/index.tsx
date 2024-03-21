@@ -3,7 +3,6 @@ import { TfiSave } from "react-icons/tfi";
 import { CiSettings } from "react-icons/ci";
 import { BsGrid1X2 } from "react-icons/bs";
 import { VscHistory } from "react-icons/vsc";
-import { Button } from '@material-tailwind/react';
 import cx from '../../../libs/cx';
 // import { useState } from 'react';
 // import { useLocation } from 'react-router-dom';
@@ -89,17 +88,6 @@ const SidebarComponent = () => {
           </ul>
         </aside>
       </main>
-      <footer className="flex h-[40%] w-full items-center  justify-center">
-        <div className="flex h-[80%] w-[80%] flex-col justify-center rounded-lg bg-black p-6 text-white">
-          <p className="text-2xl font-bold">Actualiza a pro</p>
-          <p className="text-base">
-            Descubre nuestros beneficios adicionales que tenemos para ti
-          </p>
-          <Button className="mt-10" placeholder={"Actualiza"}>
-            Actualiza
-          </Button>
-        </div>
-      </footer>
     </nav>
   );
 }
