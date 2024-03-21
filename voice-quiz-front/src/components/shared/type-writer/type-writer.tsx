@@ -7,7 +7,7 @@ interface Props {
 const TypeWriter:React.FC<Props> = ({text, speed}) => {
     const displayText = useTypewriter(text, speed);
   
-    return <p>{displayText}</p>;
+    return <span className="h-full">{displayText}</span>;
   };
   
   export default TypeWriter;

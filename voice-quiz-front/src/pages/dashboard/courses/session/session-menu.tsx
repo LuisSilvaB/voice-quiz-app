@@ -18,44 +18,51 @@ const SessionMenu:React.FC<Props> = ({returnToCourse, handleTabChange}) => {
 //     </span>
 //   </p>
   return (
-    <div className="max-h-screen-sm flex h-full w-[300px] select-none flex-col items-center justify-start gap-6 border-r">
-      <div className="w-fit">
+    <div className="max-h-screen-sm flex h-fit py-2 w-full select-none flex-row items-center justify-start gap-6 px-4">
+      <div className="w-[300px]">
         <Button
           placeholder={""}
           onClick={returnToCourse}
-          className="my-2 ml-2 flex flex-row items-center gap-2"
+          className="my-2 flex flex-row items-center gap-2"
         >
           <PiKeyReturnFill className="h-auto w-5" />
           <p>Regrasar al curso</p>
         </Button>
       </div>
-      <div className="flex h-fit w-full flex-col items-center justify-center gap-6 font-montserrat">
-
-        <div className="group/item flex  h-full min-h-[230px] w-[200px] cursor-pointer flex-col items-center justify-center gap-5 rounded-xl bg-gradient-to-r from-cyan-300 to-blue-500 pb-4 font-bold text-white shadow-lg" onClick={()=> handleTabChange("record")}>
-          <div className="flex flex-1 items-end justify-end">
-            <BsRecordCircle className="h-12 w-12 group-hover/item:animate-pulse" />
+      <div className="flex h-fit w-full flex-row items-center justify-end gap-6 font-montserrat">
+        <div
+          className="group/item flex h-full  max-h-[50px] transition-all max-w-[250px] cursor-pointer flex-row items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-cyan-300 to-blue-500 p-4 font-bold text-white shadow-lg"
+          onClick={() => handleTabChange("record")}
+        >
+          <div className="flex items-end justify-end">
+            <BsRecordCircle className="h-8 w-8 group-hover/item:animate-pulse" />
           </div>
-          <p className="w-[80%] flex-1 text-center text-lg">
+          <p className="text-xs text-center">
             Grabación y transcripción de audio
           </p>
         </div>
 
-        <div className="group/item flex h-full min-h-[230px] w-[200px] cursor-pointer flex-col items-center justify-center gap-5 rounded-xl bg-gradient-to-r from-orange-300 to-pink-400 pb-4 font-bold text-white shadow-lg " onClick={()=> handleTabChange("audio-file")}>
+        <div
+          className="group/item flex h-full  max-h-[50px] transition-all max-w-[250px] cursor-pointer flex-row items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-300 to-pink-400 p-4 font-bold text-white shadow-lg "
+          onClick={() => handleTabChange("audio-file")}
+        >
           <div className="flex flex-1 items-end justify-end">
-            <FaFileUpload className="h-12 w-12  group-hover/item:animate-bounce" />
+            <FaFileUpload className="h-8 w-8  group-hover/item:animate-bounce" />
           </div>
-          <p className="w-[80%] flex-1 text-center text-lg">
+          <p className=" text-center text-xs">
             Transcripción mediante archivo de audio
           </p>
         </div>
 
-        <div className="group/item flex h-full min-h-[230px] w-[200px] cursor-pointer flex-col items-center justify-center gap-5 rounded-xl bg-gradient-to-r from-purple-500 to-purple-900 font-bold text-white shadow-lg" onClick={()=> handleTabChange("real-time")}>
-          <MdRecordVoiceOver className="h-12 w-12 group-hover/item:animate-pulse" />
-          <p className="w-[80%] text-center text-lg">
+        <div
+          className="group/item flex h-full  max-h-[50px] transition-all max-w-[250px] cursor-pointer flex-row items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-purple-500 to-purple-900 p-4 font-bold text-white shadow-lg"
+          onClick={() => handleTabChange("real-time")}
+        >
+          <MdRecordVoiceOver className="h-8 w-8 group-hover/item:animate-pulse" />
+          <p className="w-[80%] text-center text-xs">
             Transcripción de audio en tiempo real
           </p>
         </div>
-
       </div>
     </div>
   );
