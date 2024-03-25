@@ -1,6 +1,4 @@
-import { BsRecordCircle } from "react-icons/bs";
 import { MdRecordVoiceOver } from "react-icons/md";
-import { FaFileUpload } from "react-icons/fa";
 import { Button } from "@material-tailwind/react";
 import { PiKeyReturnFill } from "react-icons/pi";
 import { sessionTabs } from "../types";
@@ -30,7 +28,7 @@ const SessionMenu:React.FC<Props> = ({returnToCourse, handleTabChange}) => {
         </Button>
       </div>
       <div className="flex h-fit w-full flex-row items-center justify-end gap-6 font-montserrat">
-        <div
+        {/* <div
           className="group/item flex h-full  max-h-[50px] transition-all max-w-[250px] cursor-pointer flex-row items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-cyan-300 to-blue-500 p-4 font-bold text-white shadow-lg"
           onClick={() => handleTabChange("record")}
         >
@@ -52,7 +50,7 @@ const SessionMenu:React.FC<Props> = ({returnToCourse, handleTabChange}) => {
           <p className=" text-center text-xs">
             Transcripción mediante archivo de audio
           </p>
-        </div>
+        </div> */}
 
         <div
           className="group/item flex h-full  max-h-[50px] transition-all max-w-[250px] cursor-pointer flex-row items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-purple-500 to-purple-900 p-4 font-bold text-white shadow-lg"

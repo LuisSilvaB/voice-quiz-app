@@ -96,14 +96,14 @@ const AudioRecorderNav = () => {
   const submitTranscription = async () => {
     try {
       const formData = new FormData();
-      formData.append('session_name', 'Nombre de la sesión'); // Nombre de la sesión
+      formData.append('question_type', 'multiple_answer'); // Nombre de la sesión
       formData.append('documents', new Blob([finalTranscript], { type: 'text/plain' }), 'transcript.txt'); // Agrega el archivo de transcripción
 
           // Verifica que el texto obtenido del componente sea el mismo que el texto agregado al formulario
       const textToSend = await finalTranscript.toString()
       console.log('Texto obtenido del componente:', textToSend)
 
-      const response = await fetch('http://localhost:5000/api/docs', {
+      const response = await fetch('http://127.0.0.1:8000/api/docs/v1', {
         method: 'POST',
         body: formData
       });

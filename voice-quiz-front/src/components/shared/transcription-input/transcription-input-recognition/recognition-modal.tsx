@@ -5,6 +5,8 @@ import { IoClose } from "react-icons/io5";
 import useRecognition from '../../../../hooks/useRecognition';
 import { useSpeechRecognition } from 'react-speech-recognition';
 import { Button, IconButton } from '@material-tailwind/react';
+import { FaMicrophoneAlt } from 'react-icons/fa';
+
 
 interface Props {
     onClose: () => void;
@@ -25,7 +27,7 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
       className="fixed left-0 top-0 h-full w-full"
     >
       <div className="flex h-full w-full items-center justify-center">
-        <div className="z-20 flex h-[700px] max-h-[700px] w-[1000px] max-w-[1000px] flex-col gap-2 rounded-xl bg-white p-3">
+        <div className="z-20 flex h-[700px] max-h-[700px] w-[1000px] overflow-y-auto  max-w-[1000px] flex-col gap-2 rounded-xl bg-white p-3">
           <div className="flex w-full justify-end ">
             <IconButton placeholder={""} onClick={onClose}>
               <IoClose />
@@ -38,13 +40,14 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
           {isListening ? (
               <Button
                 placeholder={""}
-                className="bg-red-500"
+                className="bg-red-500 flex items-center gap-3"
                 onClick={() => {
                     recognitionFns.onStopListening();
                     setListening(false) 
                 }}
               >
-                Detener grabación
+                <p>Detener grabación</p>
+                <FaMicrophoneAlt />
               </Button>
             ) : (
               <Button

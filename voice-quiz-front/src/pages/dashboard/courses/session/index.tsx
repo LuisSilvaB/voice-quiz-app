@@ -8,8 +8,8 @@ import TranscriptionAudioFile from "./transcription-audio-file";
 import TranscriptionRealTime from "./transcription-real-time";
 
 const Session = () => {
-  const [targetTab, setTargetTab] = useState<sessionTabs>("record"); 
-  const [currentComponent, setCurrentComponent] = useState<React.ReactNode>(<TranscriptionRecord />);
+  // const [targetTab, setTargetTab] = useState<sessionTabs>("record"); 
+  const [currentComponent, setCurrentComponent] = useState<React.ReactNode>(<TranscriptionRealTime />);
   const { courseid } = useParams()
   const navigate = useNavigate()
   const returnToCourse = () => {
@@ -18,15 +18,15 @@ const Session = () => {
   const handleTabChange = (tab: sessionTabs) => {
     switch(tab){
       case "audio-file":
-        setTargetTab("audio-file")
+        // setTargetTab("audio-file")
         setCurrentComponent(<TranscriptionAudioFile />)
         break
       case "real-time":
-        setTargetTab("real-time")
+        // setTargetTab("real-time")
         setCurrentComponent(<TranscriptionRealTime />)
         break
       case "record":
-        setTargetTab("record")
+        // setTargetTab("record")
         setCurrentComponent(<TranscriptionRecord />)
         break
     }
