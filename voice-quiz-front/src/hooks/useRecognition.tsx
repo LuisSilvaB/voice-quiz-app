@@ -1,13 +1,22 @@
 import {useCallback, useEffect, useState} from 'react'
 import SpeechRecognition, {useSpeechRecognition} from 'react-speech-recognition';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../app/store';
+import { setFragments } from '../features/fragments.features';
+import { RootState } from '../app/store';
+import { fragmentShape } from '../interface/types';
+import { nanoid } from '@reduxjs/toolkit';
+
 const useRecognition = () => {
   const [loadingListening, setLoadingListening] = useState<boolean>(false);
   const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
-  const [fragments, setFragments] = useState<string[]>([])
   const [processedCharacters, setProcessedCharacters ] = useState<number>(0);
   const { resetTranscript, transcript } = useSpeechRecognition()
   
+  const dispatch = useDispatch<AppDispatch>()
+  const fragments = useSelector((state:RootState) => state.fragments.fragments)
+
   const onListening = () => {
     try {
         setLoadingListening(true);
@@ -44,21 +53,23 @@ const useRecognition = () => {
   
     if (transcript && audioStream) {
       try {
-        let newProcessedCharacters: number = processedCharacters; 
+        let newProcessedCharacters: number = processedCharacters;
         while (transcript.length - newProcessedCharacters >= fragmentSize) {
-          const fragment: string = transcript.slice(newProcessedCharacters, newProcessedCharacters + fragmentSize);
-          setFragments((prevFragments: string[]) => [...prevFragments, fragment]);
+          const fragment: fragmentShape = {
+            id: nanoid(),
+            content: transcript.slice(newProcessedCharacters, newProcessedCharacters + fragmentSize),
+          };
+          dispatch(setFragments([...fragments, fragment]))
           newProcessedCharacters += fragmentSize;
-          console.log('Fragmento:', fragment);
         }
         setProcessedCharacters(newProcessedCharacters);
       } catch (error) {
         console.error(error);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transcript, audioStream, processedCharacters]);
   
-
  useEffect(()=>{
   onGenerateFragments();
 },[onGenerateFragments])
