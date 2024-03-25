@@ -37,28 +37,30 @@ service_together = openai.OpenAI(
 
 # System role templates for different question types
 template_system_multiple_answer_questions = """
-Eres una api que analiza transcripciones de audio de sesiones de clase y crea cuestionarios de preguntas de respuesta multiples con el fin de retroalimentar a los estudiantes siguiendo este formato JSON como respuesta.
+Eres una api que analiza transcripciones de audio de sesiones de clase y crea cuestionarios de preguntas de respuesta multiples con el solo envias formatos JSON en español, a fin de retroalimentar a los estudiantes siguiendo este formato JSON como respuesta, en tu respuesta solo mandarás un JSON sin ningun comentario adicional.
 
-ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA PARA FACILITAR LA LECTURA:
+TODO LO QUE MANDES DEBE COMENZAR POR [ Y TERMINAR POR ] Y NO DEBES INCLUIR NINGUN COMENTARIO ADICIONAL, SOLO EL JSON CON EL FORMATO INDICADO.
+
+ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
 
 [
     {
-        "titulo": "<Titulo general para toda la trancripcion>",
-        "preguntas":    [   
+        "title": "<Titulo general para toda el fragmento>",
+        "questions":    [   
                             {
-                                "pregunta": "<Aqui va una pregunta>",
-                                "alternativas": ["a)...", "b)...", "c)...", "d)..."],
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va una pregunta>",
+                                "alternatives": ["a)...", "b)...", "c)...", "d)..."],
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                             {
-                                "pregunta": "<Aqui va una pregunta>",
-                                "alternativas": ["a)...", "b)...", "c)...", "d)..."],
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va una pregunta>",
+                                "alternatives": ["a)...", "b)...", "c)...", "d)..."],
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                             {
-                                "pregunta": "<Aqui va una pregunta>",
-                                "alternativas": ["a)...", "b)...", "c)...", "d)..."],
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va una pregunta>",
+                                "alternatives": ["a)...", "b)...", "c)...", "d)..."],
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                         ]
     }
@@ -68,59 +70,63 @@ Los clientes te enviarán una transcripcion de una clase y tu debes responder ú
 """
 
 template_system_open_questions = """
-Eres una api que analiza transcripciones de audio de sesiones de clase y crea cuestionarios de preguntas del tipo abiertas con el fin de retroalimentar a los estudiantes siguiendo este formato JSON como respuesta.
+Eres una api que analiza transcripciones de audio de sesiones de clase y crea cuestionarios de preguntas de respuesta multiples con el solo envias formatos JSON en español, a fin de retroalimentar a los estudiantes siguiendo este formato JSON como respuesta, en tu respuesta solo mandarás un JSON sin ningun comentario adicional.
 
-ESTRUCTURA DE RESPUESTA, CON ESPACIADO, MARGEN Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
+TODO LO QUE MANDES DEBE COMENZAR POR [ Y TERMINAR POR ] Y NO DEBES INCLUIR NINGUN COMENTARIO ADICIONAL, SOLO EL JSON CON EL FORMATO INDICADO.
+
+ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
 
 [
     {
-        "titulo": "<Titulo general para toda la trancripcion>",
-        "preguntas":    [   
+        "title": "<Titulo general para toda la trancripcion>",
+        "questions":    [   
                             {
-                                "pregunta": "<Aqui va una pregunta abierta>",
-                                "alternativas": null,
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va una pregunta abierta>",
+                                "alternatives": null,
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                             {
-                                "pregunta": "<Aqui va una pregunta abierta>",
-                                "alternativas": null,
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va una pregunta abierta>",
+                                "alternatives": null,
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                             {
-                                "pregunta": "<Aqui va una pregunta abierta>",
-                                "alternativas": null,
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va una pregunta abierta>",
+                                "alternatives": null,
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                         ]
     }
 ]
 
-Los clientes te enviarán una transcripcion de una clase y tu debes responder únicamente en esta plantilla JSON con el titulo del cuestionario y varias preguntas con sus respectivas respuestas.
+Los clientes te enviarán una transcripcion de una clase y tu debes responder únicamente en esta plantilla JSON con el titulo del cuestionario y varias preguntas con sus respectivas respuestas,  solo dame el json sin ningun comentario adicional.
 """
 
 template_system_true_or_false = """
-Eres una api que analiza transcripciones de audio de sesiones de clase y crea cuestionarios de preguntas del tipo verdadero o falso con el fin de retroalimentar a los estudiantes siguiendo este formato JSON como respuesta.
+Eres una api que analiza transcripciones de audio de sesiones de clase y crea cuestionarios de preguntas de respuesta multiples con el solo envias formatos JSON en español, a fin de retroalimentar a los estudiantes siguiendo este formato JSON como respuesta, en tu respuesta solo mandarás un JSON sin ningun comentario adicional.
 
-FORMATO JSON:
+TODO LO QUE MANDES DEBE COMENZAR POR [ Y TERMINAR POR ] Y NO DEBES INCLUIR NINGUN COMENTARIO ADICIONAL, SOLO EL JSON CON EL FORMATO INDICADO.
+
+ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
 
 [
     {
-        "titulo": "<Titulo general para toda la trancripcion>",
-        "preguntas":    [   
+        "title": "<Titulo general para toda la trancripcion>",
+        "questions":    [   
                             {
-                                "pregunta": "<Aqui va la afirmación>",
-                                "alternativas": ["Verdadero", "Falso"],
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va la afirmación>",
+                                "alternatives": ["Verdadero", "Falso"],
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                             {
-                                "pregunta": "<Aqui va la afirmación>",
-                                "alternativas": ["Verdadero", "Falso"],
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va la afirmación>",
+                                "alternatives": ["Verdadero", "Falso"],
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                             {
-                                "pregunta": "<Aqui va la afirmación>",
-                                "alternativas": ["Verdadero", "Falso"],
-                                "respuesta": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "questionTitle": "<Aqui va la afirmación>",
+                                "alternatives": ["Verdadero", "Falso"],
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
                             },
                         ]
     }
@@ -248,7 +254,7 @@ def process_docs_v2():
     #model="accounts/fireworks/models/mixtral-8x7b-instruct-hf",
     # Prepare the options
     client_fireworks = service_fireworks.chat.completions.create(
-        model="accounts/fireworks/models/mistral-7b-instruct-v0p2",
+        model="accounts/fireworks/models/mixtral-8x7b-instruct",
         messages=messages,
         max_tokens=4096,
     )
@@ -336,4 +342,4 @@ def process_docs_v3():
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port = 8000)
