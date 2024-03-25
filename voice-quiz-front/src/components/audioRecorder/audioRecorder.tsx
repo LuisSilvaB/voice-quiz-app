@@ -48,7 +48,9 @@ const AudioRecorder = () => {
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             onClick={stopRecording}
           >
-            Detener Grabación
+            <p>Detener Grabación</p>
+            <FaMicrophoneAlt />
+
           </button>
           <div className="mt-4">
             <FaMicrophoneAlt className="text-6xl animate-pulse" />
