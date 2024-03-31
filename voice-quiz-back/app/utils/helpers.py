@@ -10,7 +10,7 @@ def select_template_system(kindquestion):
         return template_system_multiple_answer_questions
     elif kindquestion == "open_answer":
         return template_system_open_questions
-    else:
+    elif kindquestion == "true_or_false":
         return template_system_true_or_false
 
 def validate_documents(files):
