@@ -27,40 +27,49 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
       className="fixed left-0 top-0 h-full w-full"
     >
       <div className="flex h-full w-full items-center justify-center">
-        <div className="z-20 flex h-[700px] max-h-[700px] w-[1000px] overflow-y-auto  max-w-[1000px] flex-col gap-2 rounded-xl bg-white p-3">
+        <div className="z-20 flex h-[700px] max-h-[700px] w-[1000px] max-w-[1000px]  flex-col gap-2 overflow-y-auto rounded-xl bg-white p-3">
           <div className="flex w-full justify-end ">
-            <IconButton placeholder={""} onClick={onClose}>
+            <IconButton
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+              placeholder={""}
+              onClick={onClose}
+            >
               <IoClose />
             </IconButton>
           </div>
-          <p className='text-xl'>Transcripción</p>
-          <div className="h-full w-full rounded-lg border p-4 text-lg font-normal max-h-[600px] overflow-y-auto">
+          <p className="text-xl">Transcripción</p>
+          <div className="h-full max-h-[600px] w-full overflow-y-auto rounded-lg border p-4 text-lg font-normal">
             {transcript}
           </div>
           {isListening ? (
-              <Button
-                placeholder={""}
-                className="bg-red-500 flex items-center gap-3"
-                onClick={() => {
-                    recognitionFns.onStopListening();
-                    setListening(false) 
-                }}
-              >
-                <p>Detener grabación</p>
-                <FaMicrophoneAlt />
-              </Button>
-            ) : (
-              <Button
-                placeholder={""}
-                className="bg-green-500"
-                onClick={()=>{
-                    recognitionFns.onListening();
-                    setListening(true)
-                }}
-              >
-                Iniciar grabación
-              </Button>
-            )}
+            <Button
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+              placeholder={""}
+              className="flex items-center gap-3 bg-red-500"
+              onClick={() => {
+                recognitionFns.onStopListening();
+                setListening(false);
+              }}
+            >
+              <p>Detener grabación</p>
+              <FaMicrophoneAlt />
+            </Button>
+          ) : (
+            <Button
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+              placeholder={""}
+              className="bg-green-500"
+              onClick={() => {
+                recognitionFns.onListening();
+                setListening(true);
+              }}
+            >
+              Iniciar grabación
+            </Button>
+          )}
         </div>
         <div className="fixed z-0 h-full w-full bg-[#00000067]" />
       </div>

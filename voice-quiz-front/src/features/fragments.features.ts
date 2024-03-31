@@ -4,22 +4,19 @@ import { multipleAnswers, quetionsMultipleAnswers } from "../interface/questions
 
 export const submitFragment = createAsyncThunk('fragments/submitFragments', async (payload: { fragment: fragmentShape, kindquestion: kindQuestion }) => {
     const { fragment, kindquestion } = payload;
-
-    console.log("mandandoa soli")
     try{
         const formData = new FormData();
-        formData.append('question_type', 'multiple_answer'); // Nombre de la sesión
+        formData.append('kindquestion', kindquestion); // Nombre de la sesión
         formData.append('documents', new Blob([fragment.content], { type: 'text/plain' }), 'transcript.txt');  
         const textToSend = await fragment.content.toString()
         console.log('Texto obtenido del componente:', textToSend)
-        const response = await fetch('http://127.0.0.1:8000/api/docs/v3', {
+        const response = await fetch('http://127.0.0.1:8000/api/docs/v2', {
             method: 'POST',
             body: formData
           });
           if (!response.ok) {
             throw new Error('Error al enviar la transcripción');
           }
-    
           const data = await response.json();
           console.log('Transcripción enviada correctamente:', data);
           return { data , fragment, kindquestion }
@@ -41,6 +38,10 @@ const fragmentsSlice = createSlice({
             //     id: '1',
             //     content: 'Construirás un pequeño juego de tres en raya durante este tutorial. Este tutorial no asume ningún conocimiento existente de React. Las técnicas que aprenderá en el tutorial son fundamentales para crear cualquier aplicación React, y comprenderlas por completo le brindará una comprensión profunda de React.',
             // }
+            {
+                id:"2" ,
+                content:"Hace tiempo que la inteligencia artificial abandonó el espectro de la ciencia ficción para colarse en nuestras vidas y, aunque todavía en una fase muy inicial, está llamada a protagonizar una revolución equiparable a la que generó Internet. Sus aplicaciones en múltiples sectores —como salud, finanzas, transporte o educación, entre otros— han provocado que la Unión Europea desarrolle sus propias Leyes de la Robótica."
+            }
         ] as fragmentShape[], 
         targetFragment: {} as fragmentShape,
     }, 
@@ -83,7 +84,7 @@ const fragmentsSlice = createSlice({
                 questionTitle: question.questionTitle,
                 alternatives: question.alternatives,
                 answer: question.answer,
-                kindQuestion: action.payload?.kindquestion ?? "alternatives" 
+                kindQuestion: action.payload?.kindquestion ?? "multiple_answer" 
             }));
         
             const newFragment: fragmentShape = {

@@ -39,23 +39,37 @@ const Navbar = () => {
   if (location.pathname === "/auth/login") return null
 
   return (
-    <nav className={cx("flex sticky top-0 z-30 h-[60px] w-full items-center justify-between px-2 lg:px-10 bg-white shadow-lg",
-    )}>
-      <div className="flex flex-row justify-center items-center">
+    <nav
+      className={cx(
+        "sticky top-0 z-30 flex h-[60px] w-full items-center justify-between bg-white px-2 shadow-lg lg:px-10",
+      )}
+    >
+      <div className="flex flex-row items-center justify-center">
         {/* <img src={Logo} className="w-16 h-16 lg:w-24 lg:h-24"/> */}
-        <h1 className={"Montserrat font-black z-10 text-xl text-[#598392] lg:text-4xl"}>
+        <h1
+          className={
+            "Montserrat z-10 text-xl font-black text-[#598392] lg:text-4xl"
+          }
+        >
           VQ
         </h1>
       </div>
       <div className="flex w-auto justify-end gap-6">
         <NavbarOptions isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
         <Link to={"/auth/login"} className="z-10 flex items-center">
-          <Button placeholder={"Iniciar Sesión"} className=" bg-[#598392]">
+          <Button
+            onPointerEnterCapture={() => {}}
+            onPointerLeaveCapture={() => {}}
+            placeholder={"Iniciar Sesión"}
+            className=" bg-[#598392]"
+          >
             Iniciar Sesión
           </Button>
         </Link>
-        <Link to = {"/auth/register"} className="z-10 flex items-center">
+        <Link to={"/auth/register"} className="z-10 flex items-center">
           <Button
+            onPointerEnterCapture={() => {}}
+            onPointerLeaveCapture={() => {}}
             placeholder={"Registro"}
             className="hidden items-center justify-center bg-[#F3F4F6] text-[#598392] lg:flex"
           >

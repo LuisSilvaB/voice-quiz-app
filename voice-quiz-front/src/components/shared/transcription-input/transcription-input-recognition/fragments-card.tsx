@@ -16,43 +16,53 @@ const FragmentsCard:React.FC<Props> = ({fragment}) => {
     const handleTargetFragment = (fragment:fragmentShape) => {
         dispatch(setTargetFragment({
             id:fragment.id, 
+            title:fragment.title, 
             content:fragment.content, 
         }))
     }
   return (
-    <div className='w-full flex flex-col gap-4 max-w-[300px] h-[200px] p-4 shadow-sm transition-all hover:shadow-2xl hover:border-none cursor-pointer border rounded-2xl'>
-        <p className="font-bold">
-            Fragmento número <span>{fragment.id}</span>
-        </p>
-        <p className="max-h-[150px] h-full text-clip flex-nowrap font-normal">
-            <span className="font-bold">
-                Idea principal:      
-            </span>
-            {fragment.content}
-        </p>
-        <div className="flex justify-between items-center gap-2">
-            <IconButton
-              placeholder={""}
-              className="bg-gray-200"
-            >
-              <IoCopy className="text-blue-500" />
-            </IconButton>
-            <IconButton
-              placeholder={""}
-              className="bg-gray-200"
-            >
-              <FaTrash className="text-red-500" />
-            </IconButton>
-            <Button
-              placeholder={""}
-              className="text-[10px]"
-              onClick={() => handleTargetFragment(fragment)}
-            >
-              Generar preguntas
-            </Button>
-          </div>
+    <div className="flex h-fit w-full max-w-[350px] cursor-pointer flex-col gap-4 rounded-2xl border p-4 shadow-sm transition-all hover:border-none hover:shadow-2xl">
+      <p className="font-bold">
+        Fragmento número <span>{fragment.id}</span>
+      </p>
+      <p className="text-sm text-bold">
+        Título: <span className="font-light">{fragment.title}</span>
+      </p>
+      <p className="h-full max-h-[100px] flex-nowrap text-ellipsis font-normal overflow-y-hidden">
+        <span className="font-bold">Contenido del fragmento: </span>
+        {fragment.content}
+      </p>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-row gap-2">
+          <IconButton
+            onPointerEnterCapture={() => {}}
+            onPointerLeaveCapture={() => {}}
+            placeholder={""}
+            className="bg-gray-200"
+          >
+            <IoCopy className="text-blue-500" />
+          </IconButton>
+          <IconButton
+            onPointerEnterCapture={() => {}}
+            onPointerLeaveCapture={() => {}}
+            placeholder={""}
+            className="bg-gray-200"
+          >
+            <FaTrash className="text-red-500" />
+          </IconButton>
+        </div>
+        <Button
+          onPointerEnterCapture={() => {}}
+          onPointerLeaveCapture={() => {}}
+          placeholder={""}
+          className="text-[10px]"
+          onClick={() => handleTargetFragment(fragment)}
+        >
+          Generar preguntas
+        </Button>
+      </div>
     </div>
-  )
+  );
 }
 
 export default FragmentsCard
