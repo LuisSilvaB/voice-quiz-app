@@ -5,7 +5,6 @@ const useLLMHook = () => {
   const [loadingTranscript, setLoadingTranscript] = useState(false);
   const [loadingRecord, setLoadingRecord] = useState(false);
   const [transcription, setTranscription] = useState<string>('');
-  const [fragments, setFragments] = useState<string[]>([]); 
   const [audioUrl, setAudioUrl] = useState<string>('');
   // const [error, setError] = useState(null);
   const llm = useLLM({ serviceUrl: 'https://usellm.org/api/llm' });
@@ -43,10 +42,7 @@ const useLLMHook = () => {
     }
   };
 
-  const onGreneateFragments = () => {
 
-  }
-  
   return { loadingTranscript, loadingRecord, record, stopRecording, onTranscribe, transcription, audioUrl };
 };
 

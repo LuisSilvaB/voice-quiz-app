@@ -13,6 +13,7 @@ const useRecognition = () => {
   const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
   const [processedCharacters, setProcessedCharacters ] = useState<number>(0);
   const { resetTranscript, transcript } = useSpeechRecognition()
+  const [requestSent, setRequestSent] = useState<boolean>(false);
   
   const dispatch = useDispatch<AppDispatch>()
   const fragments = useSelector((state:RootState) => state.fragments.fragments)
@@ -48,32 +49,52 @@ const useRecognition = () => {
     }
   
   }
-  const onGenerateFragments = useCallback(() => {
+  const onGenerateFragments = useCallback(async () => {
     const fragmentSize: number = 100;
   
-    if (transcript && audioStream) {
+    if (transcript && audioStream && !requestSent) {
       try {
         let newProcessedCharacters: number = processedCharacters;
-        while (transcript.length - newProcessedCharacters >= fragmentSize) {
-          const fragment: fragmentShape = {
-            id: nanoid(),
-            content: transcript.slice(newProcessedCharacters, newProcessedCharacters + fragmentSize),
-          };
-          dispatch(setFragments([...fragments, fragment]))
-          newProcessedCharacters += fragmentSize;
+        if (transcript.length - newProcessedCharacters >= fragmentSize) {
+          const fragmentContent = transcript.slice(newProcessedCharacters, newProcessedCharacters + fragmentSize);  
+          const formData = new FormData();
+          formData.append('documents', new Blob([fragmentContent], { type: 'text/plain' }), 'transcript.txt');  
+  
+          // Marcar la solicitud como enviada para evitar múltiples envíos
+          setRequestSent(true);
+  
+          const response = await fetch("http://127.0.0.1:8000/api/title", {
+            method: "POST",
+            body: formData,   
+          });
+  
+          if (response.ok) {            
+            const fragment: fragmentShape = {
+              id: nanoid(),
+              title: await response.json().then(data => JSON.parse(data.title)) || "", 
+              content: fragmentContent,
+            };
+            dispatch(setFragments([...fragments, fragment]));
+            newProcessedCharacters += fragmentSize;
+            setProcessedCharacters(newProcessedCharacters);
+          }
         }
-        setProcessedCharacters(newProcessedCharacters);
       } catch (error) {
         console.error(error);
+      } finally {
+        // Restablecer el estado de la solicitud después de un tiempo para permitir nuevas solicitudes
+        setTimeout(() => {
+          setRequestSent(false);
+        }, 1000); // ajusta este tiempo según sea necesario
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transcript, audioStream, processedCharacters]);
+  }, [transcript, audioStream, processedCharacters, requestSent, dispatch]);
   
- useEffect(()=>{
-  onGenerateFragments();
-},[onGenerateFragments])
-
+  // Llamar a onGenerateFragments cuando cambie transcript o audioStream
+  useEffect(() => {
+    onGenerateFragments();
+  }, [transcript, audioStream]);
+  
   return { loadingListening, audioStream,  transcript , onListening, onStopListening, onResetTranscription, fragments };
 }
 
