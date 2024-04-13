@@ -30,8 +30,6 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
         <div className="z-20 flex h-[700px] max-h-[700px] w-[1000px] max-w-[1000px]  flex-col gap-2 overflow-y-auto rounded-xl bg-white p-3">
           <div className="flex w-full justify-end ">
             <IconButton
-              onPointerEnterCapture={() => {}}
-              onPointerLeaveCapture={() => {}}
               placeholder={""}
               onClick={onClose}
             >
@@ -44,8 +42,6 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
           </div>
           {isListening ? (
             <Button
-              onPointerEnterCapture={() => {}}
-              onPointerLeaveCapture={() => {}}
               placeholder={""}
               className="flex items-center gap-3 bg-red-500"
               onClick={() => {
@@ -58,8 +54,6 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
             </Button>
           ) : (
             <Button
-              onPointerEnterCapture={() => {}}
-              onPointerLeaveCapture={() => {}}
               placeholder={""}
               className="bg-green-500"
               onClick={() => {

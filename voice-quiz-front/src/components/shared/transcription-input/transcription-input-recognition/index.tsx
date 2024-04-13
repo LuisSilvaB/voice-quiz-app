@@ -40,8 +40,6 @@ const InputRecognition = () => {
           <div className="mt-4 flex w-full items-center justify-between text-sm font-normal">
             <p>Cantidad de caratéres: {recognitionFns.transcript.length}</p>
             <IconButton
-              onPointerEnterCapture={() => {}}
-              onPointerLeaveCapture={() => {}}
               placeholder={""}
               onClick={transcriptionModal.onOpen}
             >
@@ -56,8 +54,6 @@ const InputRecognition = () => {
                 Fragment: {targetFrament.id}
               </p>
               <IconButton
-                onPointerEnterCapture={() => {}}
-                onPointerLeaveCapture={() => {}}
                 placeholder={""}
                 className="bg-red-500"
                 onClick={handleClearTargetFragment}
@@ -75,8 +71,6 @@ const InputRecognition = () => {
             </p>
             <div className="mt-4 flex w-full gap-4">
               <Button
-                onPointerEnterCapture={() => {}}
-                onPointerLeaveCapture={() => {}}
                 placeholder={""}
                 onClick={() =>
                   dispatch(
@@ -91,8 +85,6 @@ const InputRecognition = () => {
                 Alternativas
               </Button>
               <Button
-                onPointerEnterCapture={() => {}}
-                onPointerLeaveCapture={() => {}}
                 placeholder={""}
                 onClick={() =>
                   dispatch(
@@ -106,8 +98,6 @@ const InputRecognition = () => {
                 Pregunta y respuesta
               </Button>
               <Button
-                onPointerEnterCapture={() => {}}
-                onPointerLeaveCapture={() => {}}
                 placeholder={""}
                 onClick={() =>
                   dispatch(
@@ -145,8 +135,6 @@ const InputRecognition = () => {
           <div className="flex w-auto justify-start gap-4">
             {isListening ? (
               <Button
-                onPointerEnterCapture={() => {}}
-                onPointerLeaveCapture={() => {}}
                 placeholder={""}
                 className="flex items-center gap-3 bg-red-500"
                 onClick={() => {
@@ -159,8 +147,6 @@ const InputRecognition = () => {
               </Button>
             ) : (
               <Button
-                onPointerEnterCapture={() => {}}
-                onPointerLeaveCapture={() => {}}
                 placeholder={""}
                 className="bg-green-500"
                 onClick={() => {

@@ -11,11 +11,11 @@ const DashboardLayout:React.FC<DashboardProps> = () => {
   const location = useLocation(); 
   
   if (location.pathname === "/dashboard" || location.pathname === "/dashboard/"  ) {
-    navigate('/dashboard/class-record')
+    navigate('/dashboard/courses')
   }
   useEffect(()=>{
     if (location.pathname === "/dashboard") {
-      navigate('/dashboard/class-record')
+      navigate('/dashboard/courses')
     }
   },[location.pathname, navigate])
   return (

@@ -7,6 +7,7 @@ import useToggle from '../../../hooks/useToggle';
 import useDevice from "../../../hooks/useDevice";
 import cx from "../../../libs/cx";
 
+
 // const hiddenRoutes:string[] = [
 //   "/auth/login", 
 // ]
@@ -58,8 +59,6 @@ const Navbar = () => {
         <NavbarOptions isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
         <Link to={"/auth/login"} className="z-10 flex items-center">
           <Button
-            onPointerEnterCapture={() => {}}
-            onPointerLeaveCapture={() => {}}
             placeholder={"Iniciar Sesión"}
             className=" bg-[#598392]"
           >
@@ -68,8 +67,6 @@ const Navbar = () => {
         </Link>
         <Link to={"/auth/register"} className="z-10 flex items-center">
           <Button
-            onPointerEnterCapture={() => {}}
-            onPointerLeaveCapture={() => {}}
             placeholder={"Registro"}
             className="hidden items-center justify-center bg-[#F3F4F6] text-[#598392] lg:flex"
           >

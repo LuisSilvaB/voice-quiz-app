@@ -35,16 +35,12 @@ const FragmentsCard:React.FC<Props> = ({fragment}) => {
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-row gap-2">
           <IconButton
-            onPointerEnterCapture={() => {}}
-            onPointerLeaveCapture={() => {}}
             placeholder={""}
             className="bg-gray-200"
           >
             <IoCopy className="text-blue-500" />
           </IconButton>
           <IconButton
-            onPointerEnterCapture={() => {}}
-            onPointerLeaveCapture={() => {}}
             placeholder={""}
             className="bg-gray-200"
           >
@@ -52,8 +48,6 @@ const FragmentsCard:React.FC<Props> = ({fragment}) => {
           </IconButton>
         </div>
         <Button
-          onPointerEnterCapture={() => {}}
-          onPointerLeaveCapture={() => {}}
           placeholder={""}
           className="text-[10px]"
           onClick={() => handleTargetFragment(fragment)}
