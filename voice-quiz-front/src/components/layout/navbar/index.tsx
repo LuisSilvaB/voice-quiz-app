@@ -1,22 +1,35 @@
-import { Button } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom"; 
 import Hamburger from 'hamburger-react'
 import useToggle from '../../../hooks/useToggle';
 import useDevice from "../../../hooks/useDevice";
 import cx from "../../../libs/cx";
-
-
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
+import { motion } from 'framer-motion';
+import { useAuth } from '../../../hooks/useAuth';
+import {
+  Button,
+  Card,
+  List,
+  ListItem
+} from "@material-tailwind/react";
+import { variants } from "../../../libs/animate";
+import NavbarOptions from "./navbar-options";
 // const hiddenRoutes:string[] = [
 //   "/auth/login", 
 // ]
 
 const Navbar = () => {
+  const userAuth = useSelector((state:RootState) => state.userAuth);
+  const auth = useAuth(); 
   const {isOpen, onClose, onToggle} = useToggle();
+  const toggleOptions = useToggle();
   // const [hiddenSidebar, setHiddenSidebar] = useState<boolean>() 
   const device = useDevice(); 
   const location = useLocation();
+  const cardRef = useRef<HTMLDivElement>(null);
   useEffect(()=>{
     const handleDeviceDetection = () => {
       switch(device){
@@ -25,17 +38,7 @@ const Navbar = () => {
     }
     handleDeviceDetection();
   },[device]); 
-
-  // useEffect(()=>{
-  //   const detectionRoute = () => {
-  //     hiddenRoutes.forEach( route => {
-  //       if(location.pathname === route){
-  //         setHiddenSidebar(true); 
-  //       }
-  //     })
-  //   }
-  //   detectionRoute(); 
-  // },[location.pathname])
+  
 
   if (location.pathname === "/auth/login") return null
 
@@ -57,113 +60,74 @@ const Navbar = () => {
       </div>
       <div className="flex w-auto justify-end gap-6">
         <NavbarOptions isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
-        <Link to={"/auth/login"} className="z-10 flex items-center">
-          <Button
-            placeholder={"Iniciar Sesión"}
-            className=" bg-[#598392]"
-          >
-            Iniciar Sesión
-          </Button>
-        </Link>
-        <Link to={"/auth/register"} className="z-10 flex items-center">
-          <Button
-            placeholder={"Registro"}
-            className="hidden items-center justify-center bg-[#F3F4F6] text-[#598392] lg:flex"
-          >
-            Registro
-          </Button>
-        </Link>
+        {userAuth.userAuthInfo ? (
+            <div className="h-full">
+            <div
+              className={cx(
+                "flex h-12 cursor-pointer items-center gap-4 rounded-xl border bg-white pl-6 text-gray-400 transition-all ease-in-out",
+                toggleOptions.isOpen ? "rounded-b-none" : "",
+              )}
+              onClick={toggleOptions.onToggle}
+            >
+              <img
+                className="h-8 w-8 rounded-full "
+                src={userAuth?.userAuthInfo?.user_metadata?.picture}
+                alt=""
+              />
+              <p className="hidden font-inter text-sm text-gray-600 lg:flex">
+                {userAuth?.userAuthInfo?.user_metadata.name}
+              </p>
+              <div className="flex h-full items-center justify-center rounded-r-xl border-l px-4 transition-all ease-in-out hover:bg-gray-200">
+                {/* <MdOutlineArrowDropDownCircle className="text-gray-600" /> */}
+              </div>
+            </div>
+            <motion.div
+              variants={variants}
+              initial="exit"
+              onBlur={toggleOptions.onClose}
+              animate={toggleOptions.isOpen ? "enter" : "exit"}
+              className="fixed h-auto w-auto"
+            >
+              <Card
+                placeholder={""}
+                tabIndex={0}
+                ref={cardRef}
+                className="w-[123px] rounded-none rounded-b-xl lg:w-[336px]"
+              >
+                <List placeholder={""}>
+                  <ListItem
+                    placeholder={""}
+                    className="text-xs text-red-500 hover:text-red-800"
+                    onClick={() => auth.handleLogout()}
+                  >
+                    Cerrar sesión
+                  </ListItem>
+                </List>
+              </Card>
+            </motion.div>
+          </div>
+        ) : (
+          <>
+            <Link to={"/auth/login"} className="z-10 flex items-center">
+              <Button placeholder={"Iniciar Sesión"} className=" bg-[#598392]">
+                Iniciar Sesión
+              </Button>
+            </Link>
+            <Link to={"/auth/register"} className="z-10 flex items-center">
+              <Button
+                placeholder={"Registro"}
+                className="hidden items-center justify-center bg-[#F3F4F6] text-[#598392] lg:flex"
+              >
+                Registro
+              </Button>
+            </Link>
+          </>
+        )}
         <div className="flex items-center justify-center text-gray-500 lg:hidden">
           <Hamburger size={25} toggled={isOpen} onToggle={onToggle} />
         </div>
       </div>
     </nav>
-  );
-}
-interface NavbarOptiosInterface extends  React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement> {
-  onToggle: () => void;
-  onClose: () => void;
-  isOpen: boolean;
-}
-
-const NavbarOptions:React.FC<NavbarOptiosInterface> = ({isOpen, onClose}) => {
-  return (
-    <ul
-      className={cx(
-        "Inter relative bg-white hidden flex-row text-xs text-[#598392] transition-all lg:flex",
-        isOpen && 
-          "fixed top-0 right-0 flex h-full w-[70%] flex-col items-center bg-white pt-[80px]",
-      )}
-    >
-      <Link
-        to={"/"}
-        onClick={onClose}
-        className={cx(
-          "group flex flex-col rounded-lg p-3 text-base font-medium text-[#598392] transition-all hover:cursor-pointer hover:text-[#bac1c4]",
-          isOpen && 
-            "w-full px-6 text-xl focus:text-[#598392] active:bg-blue-gray-600 active:text-white",
-        )}
-      >
-        Inicio
-        <span
-          className={cx(
-            "h-[2px] w-full transition-all  group-hover:bg-[#598392]",
-            isOpen && "hidden",
-          )}
-        />
-      </Link>
-      <Link
-        to={"/"}
-        onClick={onClose}
-        className={cx(
-          "group flex flex-col rounded-lg p-3 text-base font-medium text-[#598392] transition-all hover:cursor-pointer hover:text-[#bac1c4]",
-          isOpen &&
-            "w-full px-6 text-xl focus:text-[#598392] active:bg-blue-gray-600 active:text-white",
-        )}
-      >
-        Galería
-        <span
-          className={cx(
-            "h-[2px] w-full transition-all  group-hover:bg-[#598392]",
-            isOpen && "hidden",
-          )}
-        />
-      </Link>
-      <Link
-        to={"/dashboard/courses/courses-list"}
-        onClick={onClose}
-        className={cx(
-          "group flex flex-col rounded-lg p-3 text-base font-medium text-[#598392] transition-all hover:cursor-pointer hover:text-[#bac1c4]",
-          isOpen &&
-            "w-full px-6 text-xl focus:text-[#598392] active:bg-blue-gray-600 active:text-white",
-        )}
-      >
-        Dashboard
-        <span
-          className={cx(
-            "h-[2px] w-full transition-all  group-hover:bg-[#598392]",
-            isOpen && "hidden",
-          )}
-        />
-      </Link>
-      <Link
-        to={"/"}
-        onClick={onClose}
-        className={cx(
-          "group flex flex-col rounded-lg p-3 text-base font-medium text-[#598392] transition-all hover:cursor-pointer hover:text-[#bac1c4]",
-          isOpen &&
-            "w-full px-6 text-xl focus:text-[#598392] active:bg-blue-gray-600 active:text-white",
-        )}
-      >
-        Features
-        <span
-          className={cx(
-            "h-[2px] w-full transition-all  group-hover:bg-[#598392]",
-            isOpen && "hidden",
-          )}
-        />
-      </Link>
-    </ul>
   );
 }
 

@@ -36,6 +36,7 @@ const userSlice = createSlice({
         }, 
         clearUserData: (state) => {
             state.user = null;
+            state.userLoading = false;
         } 
     },
     extraReducers:(builder) => {

@@ -31,6 +31,8 @@ import TeacherModal from "../teacher.modal";
 import { useAuth } from "../../../hooks/useAuth";
 import { CgSpinner } from "react-icons/cg";
 import { Navigate } from "react-router-dom";
+import FormUser from "./form-user";
+import { Toaster } from "sonner"
 
 const images:string[] = [Login7, Login2, Login3, Login5, Login6];
 
@@ -39,7 +41,7 @@ const Login = () => {
   const toggleOptions = useToggle(); 
   const toggleTeacherModal = useToggle(); 
   const userAuth = useSelector((state:RootState) => state.userAuth)
-  const user = useSelector((state:RootState) => state.users)
+  const userSelector = useSelector((state:RootState) => state.users)
   const user_roles = useSelector((state:RootState) => state.users_roles)
   const cardRef = useRef<HTMLDivElement>(null)
   const auth = useAuth(); 
@@ -52,17 +54,17 @@ const Login = () => {
     }
   },[toggleOptions.isOpen])
 
-  if (userAuth.userAuthInfo && user.user && user_roles.user_rol) {
+  if (userAuth.userAuthInfo && userSelector.user && user_roles.user_rol) {
     return <Navigate to={"/"}/>
   }
 
-  if (userAuth.authLoading || user.userLoading || user_roles.user_rol_loading) return (
+  if (userAuth.authLoading) return (
     <div className="fixed w-full h-full top-0 right-0 flex justify-center items-center">
       <CgSpinner className="animate-spin w-20 h-auto text-tangaroa-500"/>
     </div>
   );
 
-  if (userAuth.userAuthInfo && user.user && !user_roles.user_rol )
+  if (userAuth.userAuthInfo && (!userSelector.user || !user_roles.user_rol) )
     return (
       <div className="flex flex-col items-center justify-center bg-gradient-to-r from-tangaroa-500 to-tangaroa-900">
         <div className="flex h-full min-h-screen w-full max-w-[1440px] flex-col items-center justify-center">
@@ -116,28 +118,62 @@ const Login = () => {
               </motion.div>
             </div>
           </div>
-          <div className="mb-32 flex h-full flex-1 flex-col items-center justify-center gap-6">
-            <h3 className="font-montserrat text-3xl font-bold text-white">
-              ¿Que deseas ser?
-            </h3>
-            <div className="mt-4 flex flex-row items-center gap-10 transition-all ease-in-out">
-              <div className="flex h-32 w-32 cursor-pointer flex-col items-center justify-center rounded-full border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-[200px] lg:w-[200px] lg:p-0">
-                <PiStudent className="h-auto w-12 text-tangaroa-500 lg:w-20" />
-                <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
-                  Estudiante
-                </p>
+          <div className="flex w-[60%] flex-1 items-center justify-center  gap-10 rounded-xl">
+            <div
+              className={
+                "relative mb-10 flex h-full flex-1 flex-col items-center justify-center gap-3 rounded-lg bg-white py-10"
+              }
+            >
+              <div className="absolute -top-10 flex w-fit items-center justify-center rounded-full bg-white p-2">
+                <img
+                  className="z-20 h-16 w-16 rounded-full"
+                  src={userAuth.userAuthInfo.user_metadata.picture}
+                />
               </div>
               <div
-                className="relative flex h-32 w-32 cursor-pointer flex-col items-center justify-center rounded-full border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-[200px] lg:w-[200px] lg:p-0"
-                onClick={toggleTeacherModal.onToggle}
+                className={cx(
+                  "absolute left-0 top-0 z-10 hidden h-full w-full items-center justify-center rounded-lg bg-gray-500 opacity-25 transition-opacity",
+                  userSelector.userLoading && "flex",
+                )}
               >
-                <PiChalkboardTeacherLight className="h-auto w-12 text-tangaroa-500 lg:w-20" />
-                <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
-                  Profesor
-                </p>
+                <CgSpinner className="h-auto w-10 animate-spin text-tangaroa-950" />
+              </div>
+              <p className="mt-4 text-xl font-semibold text-tangaroa-500">
+                {userSelector.user ? "Bienvenido" : "Datos del usuario"}
+              </p>
+              <FormUser />
+            </div>
+
+            <div className="relative mb-10 flex h-full max-h-[800px] flex-1 flex-col items-center justify-center rounded-lg  bg-white py-6">
+              <div className={cx("absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-lg bg-gray-500 opacity-50", userSelector.user && "hidden")}>
+                <div className="absolute bg-black p-2">
+                  <p className="text-white">Registra tus datos</p>
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold text-tangaroa-500">
+                ¿Que deseas ser?
+              </h3>
+              <div className="mt-4 flex w-full flex-col items-center gap-10 px-4 transition-all ease-in-out">
+                <div
+                  className="flex h-32 w-full cursor-pointer flex-row items-center justify-start gap-4 rounded-lg border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-auto lg:w-full lg:py-5"
+                  onClick={toggleTeacherModal.onToggle}
+                >
+                  <PiChalkboardTeacherLight className="h-auto w-12 text-tangaroa-500 lg:w-10" />
+                  <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
+                    Profesor
+                  </p>
+                </div>
+                <div className="flex h-32 w-full cursor-pointer flex-row items-center justify-start gap-4 rounded-lg border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-auto lg:w-full lg:py-5">
+                  <PiStudent className="h-auto w-12 text-tangaroa-500 lg:w-10" />
+                  <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
+                    Estudiante
+                  </p>
+                </div>
               </div>
             </div>
           </div>
+          <Toaster richColors />
         </div>
         <TeacherModal
           isOpen={toggleTeacherModal.isOpen}
@@ -247,6 +283,7 @@ const Login = () => {
           </Card>
         </section>
       </div>
+
     </div>
   );
 }

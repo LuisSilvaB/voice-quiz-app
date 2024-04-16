@@ -17,7 +17,7 @@ export const createUserRol = createAsyncThunk('userRol/createUserRol',
         if(userRol){
             try {
                 const { data } = await supabase.from('USERS_ROLES').insert(userRol).select('*'); 
-                return data && data[0]; 
+                return data ? data[0] : null; 
             } catch (error) {
                 console.error(error); 
             }
@@ -34,6 +34,10 @@ const users_roles_Slice = createSlice({
     reducers:{
         setLoadingUserRol: (state, action) => {
             state.user_rol_loading = action.payload
+        },
+        clearUserRol:(state) => {
+            state.user_rol = null;
+            state.user_rol_loading = false;
         }
     },
     extraReducers:(builder) => {
@@ -65,5 +69,5 @@ const users_roles_Slice = createSlice({
     }
 })
 
-export const { setLoadingUserRol } = users_roles_Slice.actions;
+export const { setLoadingUserRol, clearUserRol } = users_roles_Slice.actions;
 export default users_roles_Slice.reducer;

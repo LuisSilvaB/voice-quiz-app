@@ -15,9 +15,6 @@ import { useAuth } from '../../hooks/useAuth';
 
 import { motion } from "framer-motion";
 import cx from '../../libs/cx';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
-
 
 
 interface Props {
@@ -35,7 +32,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
       animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : -10 }}
       transition={{ duration: 0.3 }}
       className={cx(
-        "fixed left-0 top-0 h-full w-full",
+        "fixed z-40 left-0 top-0 h-full w-full",
         isOpen ? "flex" : "hidden",
       )}
     >
@@ -62,7 +59,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
               <Typography
                 placeholder={""}
                 color="amber"
-                className="font-normal text-gray-600"
+                className="text-md font-normal text-gray-600"
               >
                 Capta cada momento de tus clases con nuestra función de
                 grabación en tiempo real. Los profesores pueden registrar sus
@@ -85,7 +82,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
               <Typography
                 placeholder={""}
                 color="amber"
-                className="font-normal text-gray-600"
+                className="text-md font-normal text-gray-600"
               >
                 Enriquece tu enseñanza con preguntas inteligentes. Nuestra
                 herramienta de generación de preguntas automatizadas utiliza la
@@ -107,7 +104,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
               <Typography
                 placeholder={""}
                 color="amber"
-                className="font-normal text-gray-600"
+                className="text-md font-normal text-gray-600"
               >
                 Mejora tu enseñanza con retroalimentación instantánea. Nuestra
                 función de retroalimentación activa analiza las preguntas
@@ -119,8 +116,8 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
         <div className="flex h-auto w-full mt-3 justify-end gap-2">
           <button type="button" className='py-2 px-3 bg-tangaroa-950 text-white rounded' onClick={onClose}>Cancelar</button>
           <button type="button" className='py-2 px-3 bg-tangaroa-500 text-white rounded hover:bg-tangaroa-800 transition-all ease-in-out'onClick={()=>{
-            registerUserRol('TEACHER')
-          }}>Crear Cuenta</button>
+            registerUserRol('TEACHER'); 
+          }}>Confirmar</button>
         </div>
       </div>
     </motion.div>
