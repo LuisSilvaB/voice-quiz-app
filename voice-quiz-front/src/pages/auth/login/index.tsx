@@ -145,6 +145,7 @@ const Login = () => {
             </div>
 
             <div className="relative mb-10 flex h-full max-h-[800px] flex-1 flex-col items-center justify-center rounded-lg  bg-white py-6">
+
               <div className={cx("absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-lg bg-gray-500 opacity-50", userSelector.user && "hidden")}>
                 <div className="absolute bg-black p-2">
                   <p className="text-white">Registra tus datos</p>
@@ -154,6 +155,7 @@ const Login = () => {
               <h3 className="text-xl font-bold text-tangaroa-500">
                 ¿Que deseas ser?
               </h3>
+
               <div className="mt-4 flex w-full flex-col items-center gap-10 px-4 transition-all ease-in-out">
                 <div
                   className="flex h-32 w-full cursor-pointer flex-row items-center justify-start gap-4 rounded-lg border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-auto lg:w-full lg:py-5"
@@ -164,12 +166,14 @@ const Login = () => {
                     Profesor
                   </p>
                 </div>
+
                 <div className="flex h-32 w-full cursor-pointer flex-row items-center justify-start gap-4 rounded-lg border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-auto lg:w-full lg:py-5">
                   <PiStudent className="h-auto w-12 text-tangaroa-500 lg:w-10" />
                   <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
                     Estudiante
                   </p>
                 </div>
+                
               </div>
             </div>
           </div>

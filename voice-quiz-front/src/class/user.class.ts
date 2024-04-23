@@ -1,3 +1,5 @@
+type State = 'active' | 'inactive';
+
 export class User {
     ID: string; 
     name:string; 
@@ -6,7 +8,8 @@ export class User {
     config: JSON;
     password:string;
     img_url:string; 
-    constructor(ID: string, name: string, email: string, created_at: string, config: JSON, password: string, img_url:string){ 
+    state:State; 
+    constructor(ID: string, name: string, email: string, created_at: string, config: JSON, password: string, img_url:string, state:State){ 
         this.ID = ID;
         this.name = name;
         this.email = email;
@@ -14,5 +17,6 @@ export class User {
         this.config = config;
         this.password = password;
         this.img_url = img_url;
+        this.state = state;
     }     
 }

@@ -1,83 +1,130 @@
 import { useEffect } from 'react';
-import CourseClass from '../../../../class/course.class';
-import { nanoid } from '@reduxjs/toolkit';
-import ClassesMock from '../../mock/class.mock.json'
+import { Course } from '../../../../class/course.class';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux'; 
-import { setCourses, clearCourses, setTargetCourse, clearTargetCourse, setIsOpenModal, setTypeModal } from '../../../../features/course.features';
-import { RootState } from '../../../../app/store';  
+import { AppDispatch, RootState } from '../../../../app/store';  
 import { Button } from '@material-tailwind/react';
+import { setTypeModal, setToggleModal } from '../../../../features/db-features/courses.features';
 
-import EditCourseModal from './course-card/edit-course.modal';
-import DeleteCourseModal from './course-card/delete-course.modal';
+import EditCourseModal from './course-card-modals/edit-course/edit-course.modal';
+import DeleteCourseModal from './course-card-modals/delete-course.modal';
 import CourseCard from './course-card/course-card';
-import CreateCourseModal from './create-course.modal';
+import CreateCourseModal from './course-card-modals/create-course/create-course.modal';
+import { Toaster } from 'sonner';
 
+import { supabase } from '../../../../config/config';
+import { getAllCourses } from '../../../../features/db-features/courses.features';
 
 interface Props {
 
 }
 
 const CursesList:React.FC<Props> = () => {
-  const dispatch = useDispatch(); 
-  const classSelector = useSelector((state: RootState)=> state.course)
-  const handleOpenOptions = (id:string) => {
-      if (id === classSelector.CourseTarget.id) dispatch(clearTargetCourse()) 
-      else {
-      const targetClass = classSelector.Courses.find((target) => target.id === id)
-      if (targetClass) dispatch(setTargetCourse(targetClass)) 
-    }
-  }
+  const dispatch = useDispatch<AppDispatch>(); 
+  const newCoursesStore = useSelector((state: RootState) => state.courses)
+  const userStore = useSelector((state: RootState) => state.users)
+ 
   const handleCreatClass = () => {
     dispatch(setTypeModal("create"))
-    dispatch(setIsOpenModal(true))
+    dispatch(setToggleModal())
   }
+
+
   useEffect(()=>{
-    const getClasses = ClassesMock.dashboardCourses.map(item =>(
-      {
-        id: item.id,
-        title: item.title,
-        createAt: item.createAt,
-        placeholderImg: item.placeholderImg,
-        sessions: item.sessions.map( session => ({
-          id: nanoid(),
-          title: session.title,
-          createAt: session.createAt,
-          placeholderImg: session.placeholderImg
-        }))
-      }
-    )) 
-    dispatch(setCourses(getClasses as CourseClass[]));
-    return () => {dispatch(clearCourses())}
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log('first fetch')
+    dispatch(getAllCourses(userStore.user?.ID ?? ''))
   },[])
+
+  useEffect(() => {
+    const subscribeChannel = supabase
+      .channel("insert-courses")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "COURSES",
+        },
+        (payload) => {
+          if (payload.new.user_id === userStore.user?.ID) {
+            console.log('refetch')
+            dispatch(getAllCourses(userStore.user?.ID ?? ''))
+          }
+        }
+      )
+      .subscribe();
+
+      const subscribeUpdateChannel = supabase
+        .channel("update-courses")
+        .on(
+          "postgres_changes",
+          { event: "UPDATE", schema: "public", table: "COURSES" },
+          (payload) => {
+            if (payload.new.user_id === userStore.user?.ID) {
+              console.log('refetch')
+              dispatch(getAllCourses(userStore.user?.ID ?? ''))
+            }
+          },
+        ).subscribe();
+
+        const subscribeDeleteChannel = supabase
+        .channel("delete-course")
+        .on(
+          "postgres_changes",
+          { event: "DELETE", schema: "public", table: "COURSES" },
+          (payload) => {
+            console.log(payload)
+            // if (payload.new.user_id === userStore.user?.ID) {
+            //   console.log('refetch')
+            //   dispatch(getAllCourses(userStore.user?.ID ?? ''))
+            // }
+          },
+        ).subscribe();
+  
+    // Limpiar la suscripción al desmontar el componente
+    return () => {
+      subscribeChannel.unsubscribe();
+      subscribeUpdateChannel.unsubscribe();
+      subscribeDeleteChannel.unsubscribe();
+      // dispatch(clearCourses());
+    };
+  }, [dispatch, userStore.user?.ID]);
+
+
   return (
-    <div className="flex flex-col h-fit justify-start items-start lg:p-10">
-      <div className='w-full flex justify-between items-center pr-4 pb-4'>
+    <div className="flex h-fit w-full flex-col items-start justify-start lg:p-10">
+      <div className="flex w-full items-center justify-between pb-4 pr-4">
         <div>
-          <p className='font-bold text-4xl font-montserrat'>Lista de cursos</p>
+          <p className="font-montserrat text-4xl font-bold">Lista de cursos</p>
         </div>
-        <Button placeholder={""} className='bg-green-600' onClick={handleCreatClass}>
-          Añadir nuevo curso + 
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            placeholder={""}
+            className="bg-blue-gray-300"
+            loading={newCoursesStore.coursesLoading}
+          >
+            Cursos
+          </Button>
+          <Button
+            placeholder={""}
+            className="bg-green-600"
+            onClick={handleCreatClass}
+          >
+            Añadir nuevo curso +
+          </Button>
+        </div>
       </div>
-      <section className="my-auto flex h-fit max-h-[75vh] flex-1 flex-wrap items-start justify-start gap-3 overflow-y-auto lg:justify-start px-auto right-0 left-0 border">
-        {classSelector.Courses.map((item, index) => (
-          <CourseCard
-            handleOpenOptions={handleOpenOptions}
-            targetClassRecord={classSelector.CourseTarget}
-            key={index}
-            id={item.id}
-            placeholderImg={item.placeholderImg}
-            title={item.title}
-            sessions={item.sessions}
-            createAt={item.createAt}
-          />
-        ))}
+      <section className="px-auto left-0 right-0 my-auto flex h-fit max-h-[75vh] flex-1 flex-wrap items-start justify-start gap-3 overflow-y-auto lg:justify-start">
+        {newCoursesStore.courses
+          ? newCoursesStore.courses?.map((course: Course, index) => (
+              <CourseCard key={index} {...course} />
+            ))
+          : null}
       </section>
       <CreateCourseModal />
       <EditCourseModal />
       <DeleteCourseModal />
+      <Toaster richColors />
     </div>
   );
 }

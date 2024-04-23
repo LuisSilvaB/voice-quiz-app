@@ -1,23 +1,25 @@
 import { motion } from "framer-motion" 
 import { variants } from "../../types"
 import { useSelector, useDispatch } from "react-redux"
-import { RootState } from "../../../../../app/store";
-import { setIsOpenModal, clearTargetCourse } from "../../../../../features/course.features";
+import { AppDispatch, RootState } from "../../../../../app/store";
+import { setToggleModal, clearTargetCourse, deleteCourse } from "../../../../../features/db-features/courses.features";
 import { IoMdClose } from "react-icons/io";
 import { IoMdTrash } from "react-icons/io";
 import { Button } from "@material-tailwind/react";
 
 
 const DeleteCourseModal:React.FC = () => {
-  const dispatch = useDispatch(); 
-  const isOpenModal = useSelector((state:RootState) => state.course.isOpenModal )
-  const typeModal = useSelector((state:RootState) => state.course.typeModal )
+  const dispatch = useDispatch<AppDispatch>(); 
+  const isOpenModal = useSelector((state:RootState) => state.courses.isOpenModal )
+  const typeModal = useSelector((state:RootState) => state.courses.typeModal )
+  const targetCourse = useSelector((state:RootState) => state.courses.targetCourse)
   const closeModal = () => {
-    dispatch(setIsOpenModal(false))
+    dispatch(setToggleModal())
     dispatch(clearTargetCourse()); 
   }
   const handleDelete = () => {
-    dispatch(setIsOpenModal(false))
+    dispatch(deleteCourse(targetCourse))
+    dispatch(setToggleModal())
     dispatch(clearTargetCourse());
   }
   return (

@@ -12,7 +12,6 @@ const FormUser = () => {
     const userAuth = useSelector((state:RootState) => state.userAuth)
     const userSelector = useSelector((state:RootState) => state.users)
     const auth = useAuth();
-
     useEffect(()=>{
         if(userAuth.userAuthInfo){
             setInitialData({
@@ -22,21 +21,23 @@ const FormUser = () => {
                 img_url: userAuth.userAuthInfo?.user_metadata.avatar_url || userAuth.userAuthInfo?.user_metadata.picture || "",
                 password: '',
                 created_at: date.toDateString(),
-                config: {} as JSON
+                config: {} as JSON,
+                state: 'inactive'
             })
         }
     },[userAuth.userAuthInfo])
 
   const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
+    e.preventDefault()
     const user = new User(
-      initialData.ID,
+      initialData.ID || "", 
       initialData.name,
       initialData.email,
       initialData.created_at,
       initialData.config,
       initialData.password.toLowerCase(),
       initialData.img_url,
+      initialData.state
     );
     auth.handleRegisterUser(user)
   }

@@ -32,8 +32,6 @@ export const stateChangeGoogleAuth = createAsyncThunk<User | null, void>(
           if (event === 'SIGNED_OUT') {
             resolve(null);
           } else {
-            console.log(event);
-            console.log(session);
             resolve(session?.user ?? null);
           }
         });

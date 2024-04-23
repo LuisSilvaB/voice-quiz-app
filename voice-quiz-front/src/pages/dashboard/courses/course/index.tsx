@@ -6,8 +6,7 @@ import { FaMicrophone } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 
-import CourseClass from "../../../../class/course.class"
-import coursesMock from "../../mock/class.mock.json"
+import { Course } from "../../../../class/course.class"
 import CourseSessionsTable from "./curse-sessions-table"
 import useToggle from "../../../../hooks/useToggle"
 import SessionDetails from "./session-details";
@@ -15,14 +14,14 @@ import { Session } from "../../../../interface";
 import { useNavigate } from "react-router-dom"; 
 
 import { useDispatch } from "react-redux";
-import { setTypeModal, setTargetCourse, setIsOpenModal } from "../../../../features/course.features";
+import { setTypeModal, setTargetCourse, setToggleModal } from "../../../../features/db-features/courses.features";
 
-import EditCourseModal from "../courses-list/course-card/edit-course.modal";
-import DeleteCourseModal from "../courses-list/course-card/delete-course.modal";
+import EditCourseModal from "../courses-list/course-card-modals/edit-course/edit-course.modal";
+import DeleteCourseModal from "../courses-list/course-card-modals/delete-course.modal";
 import { ModalActions } from "../../../../interface/types";
 
-const Course = () => {
-  const [currentCourse, setCurrentCourse ] = useState<CourseClass>({} as CourseClass)
+const CourseView = () => {
+  const [currentCourse, setCurrentCourse ] = useState<Course>({} as Course)
   const [ filter, setFilter ] = useState<string>("")
   const [ targetSession, setTargetSession ] = useState<Session | null >()
   const navigate = useNavigate(); 
@@ -33,28 +32,28 @@ const Course = () => {
   
   
 
-  useEffect(()=>{
-    getCurrentCourse(); 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  // useEffect(()=>{
+  //   getCurrentCourse(); 
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // },[])
   
-  const getCurrentCourse = () => {
-    const data  =  coursesMock.dashboardCourses.find((course) => course.id === params.id )
-    setCurrentCourse(data as CourseClass)
-  }
+  // const getCurrentCourse = () => {
+  //   const data  =  coursesMock.dashboardCourses.find((course) => course.id === params.id )
+  //   setCurrentCourse(data as Course)
+  // }
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value)
   }; 
  
-  const openSessionDetails = (id: string) => {
-    setFilter(id)
-    const session = currentCourse.sessions.find((session) => session.id === id); 
-    setTargetSession(session); 
-    tagSession.onOpen()
-  }
+  // const openSessionDetails = (id: string) => {
+  //   setFilter(id)
+  //   const session = currentCourse.sessions.find((session) => session.id === id); 
+  //   setTargetSession(session); 
+  //   tagSession.onOpen()
+  // }
 
   const openSessionView = (id: string) => {
-    navigate(`/dashboard/courses/course/${currentCourse.id}/session/${id}`)
+    navigate(`/dashboard/courses/course/${currentCourse.ID}/session/${id}`)
   }
 
   const returnToSessions = () => {
@@ -65,7 +64,7 @@ const Course = () => {
   const openModal = (action: ModalActions) => {
     dispatch(setTypeModal(action))
     dispatch(setTargetCourse(currentCourse))
-    dispatch(setIsOpenModal(true))
+    dispatch(setToggleModal())
   }
   
   return (
@@ -83,21 +82,21 @@ const Course = () => {
               <p className="text-3xl font-bold">{currentCourse.title}</p>
               <p className="flex justify-between font-bold text-gray-500">
                 id del curso:
-                <span className="ml-4 font-normal">{currentCourse.id}</span>
+                <span className="ml-4 font-normal">{currentCourse.ID}</span>
               </p>
               <p className="flex justify-between font-bold text-gray-500">
                 N° de sesiones:{" "}
                 <span className="font-normal">
-                  {currentCourse?.sessions?.length} sesiones
+                  {currentCourse?.sessions_count} sesiones
                 </span>
               </p>
               <p className="flex justify-between font-bold text-gray-500 md:items-center">
                 Categoría/s:{" "}
-                <span className="m-1 flex flex-wrap justify-end gap-2 font-normal">
-                  {currentCourse?.sessions?.map((sesion) => (
+                {/* <span className="m-1 flex flex-wrap justify-end gap-2 font-normal">
+                  {currentCourse?.sessions_count?.map((sesion) => (
                     <Chip value={sesion.title} />
                   ))}
-                </span>
+                </span> */}
               </p>
             </div>
             <div className="flex gap-4">
@@ -151,10 +150,10 @@ const Course = () => {
           )}
         </div>
         <CourseSessionsTable
-          sessions={currentCourse.sessions}
+          sessions={[]}
           filter={filter}
           setFilter={setFilter}
-          openSessionDetails={openSessionDetails}
+          openSessionDetails={() => {}}
           openSessionView={openSessionView}
           onClose={tagSession.onClose}
           onOpen={tagSession.onOpen}
@@ -169,4 +168,4 @@ const Course = () => {
   );
 }
 
-export default Course
+export default CourseView

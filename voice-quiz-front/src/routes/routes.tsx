@@ -4,7 +4,7 @@ import Login from "../pages/auth/login/index";
 // import Audio from "../pages/audio/audio";
 import DashboardLayout from "../pages/dashboard";
 import Error from "../pages/error";
-import CoursesLayout from "../pages/dashboard/courses";
+import CoursesLayout from "../pages/dashboard/courses/layout";
 import SaveData from "../pages/dashboard/save-data/save-data";
 import History from "../pages/dashboard/history";
 import Settings from "../pages/dashboard/settings";
