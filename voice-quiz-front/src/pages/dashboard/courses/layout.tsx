@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useNavigate, useLocation } from 'react-router-dom';
+import CreateSessionModal from "./session/session-modals/create-session/create-session.modal";
+import DeleteSessionModal from "./session/session-modals/delete-session.modal";
 
 const CoursesLayout = () => {
   const navigate = useNavigate();
@@ -11,6 +13,8 @@ const CoursesLayout = () => {
   return (
     <div className="flex flex-col flex-1  justify-start items-start lg:p-0 ">
       <Outlet/>
+      <CreateSessionModal />
+      <DeleteSessionModal />
     </div>
   );
 }

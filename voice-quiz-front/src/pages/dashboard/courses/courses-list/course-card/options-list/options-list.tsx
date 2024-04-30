@@ -58,14 +58,14 @@ const OptionsList:React.FC<Props> = ({ ...course }) => {
         className="absolute right-5 top-6 z-10 flex flex-col gap-4  rounded-lg bg-white p-1 shadow-2xl"
       >
         <li
-          onClick={()=> handleSelectModal("edit")}
+          onClick={()=> {handleSelectModal("edit")}}
           className="flex w-full flex-row items-center justify-start gap-1 rounded-lg border p-2 transition-all hover:bg-blue-gray-500 hover:text-white"
         >
           <MdEdit />
           <p>Editar</p>
         </li>
         <li
-          onClick={()=> handleSelectModal("delete")}
+          onClick={()=> {handleSelectModal("delete")}}
           className="mt-1 flex w-full flex-row items-center justify-start gap-1 rounded-lg border p-2 transition-all hover:bg-red-500 hover:text-white"
         >
           <IoMdTrash />

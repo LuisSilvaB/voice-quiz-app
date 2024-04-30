@@ -15,6 +15,7 @@ import { Toaster } from 'sonner';
 import { supabase } from '../../../../config/config';
 import { getAllCourses } from '../../../../features/db-features/courses.features';
 
+import { toast } from 'sonner';
 interface Props {
 
 }
@@ -72,8 +73,8 @@ const CursesList:React.FC<Props> = () => {
         .on(
           "postgres_changes",
           { event: "DELETE", schema: "public", table: "COURSES" },
-          (payload) => {
-            console.log(payload)
+          () => {
+              toast.success("Curso eliminado con éxito")
             // if (payload.new.user_id === userStore.user?.ID) {
             //   console.log('refetch')
             //   dispatch(getAllCourses(userStore.user?.ID ?? ''))
@@ -92,7 +93,7 @@ const CursesList:React.FC<Props> = () => {
 
 
   return (
-    <div className="flex h-fit w-full flex-col items-start justify-start lg:p-10">
+    <div className="flex h-full w-full flex-col items-start justify-start lg:p-10">
       <div className="flex w-full items-center justify-between pb-4 pr-4">
         <div>
           <p className="font-montserrat text-4xl font-bold">Lista de cursos</p>
@@ -114,7 +115,7 @@ const CursesList:React.FC<Props> = () => {
           </Button>
         </div>
       </div>
-      <section className="px-auto left-0 right-0 my-auto flex h-fit max-h-[75vh] flex-1 flex-wrap items-start justify-start gap-3 overflow-y-auto lg:justify-start">
+      <section className="flex w-full flex-1 flex-wrap gap-3 overflow-y-auto pb-10">
         {newCoursesStore.courses
           ? newCoursesStore.courses?.map((course: Course, index) => (
               <CourseCard key={index} {...course} />

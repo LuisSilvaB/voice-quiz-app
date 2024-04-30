@@ -7,12 +7,19 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { Session, toggleProps } from '../../../../interface/types';
+import { ModalActions, toggleProps } from '../../../../interface/types';
+import { Session } from '../../../../class/sessions';
 import { IconButton } from '@material-tailwind/react';
 import { IoMdTrash } from "react-icons/io";
 import { RxEyeOpen } from "react-icons/rx";
 import { TbListDetails } from "react-icons/tb";
-
+import {
+  setTargetSession,
+  setSessionTypeModal,
+  setSessionToggleModal,
+} from "../../../../features/db-features/sessions.features";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../app/store";
 
 interface Props extends toggleProps {
   sessions: Session[];
@@ -22,11 +29,19 @@ interface Props extends toggleProps {
   setFilter:React.Dispatch<React.SetStateAction<string>>; 
 }
 
+
+
 const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetails, openSessionView, setFilter}) => {
   // const [targerFilter, setTargetFilter] = useState<Session | null>(null)
+  const dispatch = useDispatch<AppDispatch>()
+  const openModal = (action: ModalActions, session: Session) => {
+    dispatch(setSessionTypeModal(action));
+    dispatch(setTargetSession(session));
+    dispatch(setSessionToggleModal());
+  }
   const columnHelper = createColumnHelper<Session>()
   const columns = [
-    columnHelper.accessor("id", {
+    columnHelper.accessor("ID", {
       
       header: () => "Id",
       cell: (info) => info.getValue(),
@@ -35,22 +50,22 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
       header: () => "Título",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("createAt", {
+    columnHelper.accessor("created_at", {
       header: () => "Fecha de creación",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("id", {
+    columnHelper.accessor("ID", {
       filterFn: "auto", 
       header: () => "Acciones",
       cell: (info) => (
         <div className="flex gap-2" >
-          <IconButton className="bg-blue-500" onClick={ () => openSessionView(info.getValue()) } placeholder={""}>
+          <IconButton className="bg-blue-500" onClick={ () => openSessionView(String(info.getValue()))} placeholder={""}>
             <RxEyeOpen />
           </IconButton>
-          <IconButton className="bg-orange-500" onClick={ () => openSessionDetails(info.getValue())} placeholder={""}>
+          <IconButton className="bg-orange-500" onClick={ () => openSessionDetails(String(info.getValue()))} placeholder={""}>
             <TbListDetails />
           </IconButton>
-          <IconButton className='bg-red-500' placeholder={""}>
+          <IconButton className='bg-red-500' onClick={() => openModal("delete", info.row.original)} placeholder={""}>
             <IoMdTrash />
           </IconButton>
         </div>
@@ -59,7 +74,7 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
     }),
   ];
   const table = useReactTable({
-    data: sessions ?? [], 
+    data: sessions as Session[], 
     columns, 
     getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(), 
@@ -74,7 +89,6 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
     onGlobalFilterChange: setFilter
 })
   
-
 
   return (
     <table className="w-full border-collapse rounded-xl overflow-hidden"> 

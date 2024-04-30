@@ -196,6 +196,20 @@ const CreateCourseForm:React.FC<Props> = ({
     
     try {
       dispatch(createCourse(newCourse))
+      setCourse({
+        description: "",
+        title: "",
+        duration: "",
+        requirements: [],
+        teacher_name: currentUser?.name,
+        students_count: 0,
+        sessions_count: 0,
+        initial_date: '',
+        final_date: '',
+        created_at: new Date(), 
+        user_id: currentUser?.ID,
+        ID: v4(),
+      })
       toast.success('Curso creado correctamente')
     }catch (error) {
       toast.error('Ocurrió un error al crear el curso')
@@ -229,6 +243,7 @@ const CreateCourseForm:React.FC<Props> = ({
           color="blue-gray"
           placeholder="Título"
           required={true}
+          value={course.title}
           onChange={onChangeForm}
         />
 
@@ -246,6 +261,7 @@ const CreateCourseForm:React.FC<Props> = ({
           color="blue-gray"
           placeholder="Descripción del curso"
           required={true}
+          value={course.description}
           onChange={onChangeForm}
         />
 
@@ -260,6 +276,7 @@ const CreateCourseForm:React.FC<Props> = ({
           classNamePrefix="select"
           name="duration"
           options={weeks}
+        
           onChange={(e) => {
             setCourse((prev) => ({
               ...prev,
@@ -285,6 +302,7 @@ const CreateCourseForm:React.FC<Props> = ({
             required={true}
             onChange={onChangeForm}
             className="flex-1"
+            value={course.initial_date}
             size="md"
           />
 

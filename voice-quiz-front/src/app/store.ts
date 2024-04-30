@@ -5,7 +5,7 @@ import usersReducers from "../features/db-features/users.db.features"
 import rolesReducers from "../features/db-features/roles.db.features"
 import usersRolesReduces from "../features/db-features/users-roles.db.freatures"
 import newCoursesReducers from "../features/db-features/courses.features"
-
+import sessionsReducres from "../features/db-features/sessions.features"
 export const store = configureStore({
     reducer: {
         userAuth: userAuthReducers,
@@ -14,6 +14,7 @@ export const store = configureStore({
         users_roles: usersRolesReduces, 
         fragments: fragmentsReducers,
         courses: newCoursesReducers, 
+        sessions: sessionsReducres
     }, 
 })
 

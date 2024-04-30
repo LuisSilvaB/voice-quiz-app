@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabase } from "../../config/config";
 import { Course } from "../../class/course.class";
 import { ModalActions } from "../../interface/types";
+import { toast } from "sonner";
 
 export const createCourse = createAsyncThunk(
     'user/createCourse',
@@ -19,18 +20,16 @@ export const updateCourse = createAsyncThunk(
   'user/updateCourse', 
   async (course: Course) => {
     try {
-      const { error, data } = await supabase
+      const { data } = await supabase
         .from("COURSES")
         .update(course)
         .eq('user_id', course.user_id)
         .eq("ID", course.ID)
         .select('*');
 
-        console.log(error)
       return data as Course[];
     } catch (error) {
-      console.error("Error al actualizar el curso: ", error);
-      console.error("Error al actualizar el curso: ", error);
+      toast.error("Error al actualizar el curso");
     }
   }
 )
@@ -54,6 +53,29 @@ export const deleteCourse = createAsyncThunk(
     }
   }
 )
+
+export const getCourse = createAsyncThunk(
+  "user/getCourse",
+  async ({
+    courseId,
+    userId
+  }: {
+    courseId: string;
+    userId: string;
+  }) => {
+    console.log(courseId, userId);
+    try {
+      const { data } = await supabase
+        .from("COURSES")
+        .select("*")
+        .eq("ID", courseId)
+        .eq("user_id", userId);
+      return data?.[0] ?? ({} as Course);
+    } catch (error) {
+      toast.error("Error al obtener el curso");
+    }
+  },
+);
 
 export const getAllCourses = createAsyncThunk(
   "user/getAllCourses",
@@ -138,6 +160,22 @@ const coursesSlice = createSlice({
           .addCase(deleteCourse.fulfilled, (state, action) => {
             state.coursesLoading = false;
             state.courses = action.payload as Course[];
+          })
+          .addCase(deleteCourse.rejected, (state) => {
+            state.coursesLoading = false;
+          })
+          .addCase(updateCourse.pending, (state) => {
+            state.courseLoading = true;
+          })
+          .addCase(updateCourse.fulfilled, (state) => {
+            state.courseLoading = false;
+          })
+          .addCase(getCourse.pending, (state) => {
+            state.courseLoading = true;  
+          })
+          .addCase(getCourse.fulfilled, (state, action) => {
+            state.courseLoading = false;
+            state.course = action.payload as Course;
           })
     },
 });
