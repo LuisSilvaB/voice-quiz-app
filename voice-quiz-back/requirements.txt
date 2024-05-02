@@ -1,3 +1,6 @@
 Flask
 flask_cors
 openai
+numpy
+usellm
+python-dotenv

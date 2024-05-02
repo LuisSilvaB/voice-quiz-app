@@ -40,7 +40,7 @@ const CreateSessionForm:React.FC<Props> = ({
     if (currentSessions || params){
       setSession((prev) => ({
         ...prev,
-        COURSE_ID: params.id,
+        COURSE_ID: params.courseId,
         title:
           `Session ${(currentSessions?.length ?? "session") + 1}`.toUpperCase(),
       }));
@@ -50,7 +50,7 @@ const CreateSessionForm:React.FC<Props> = ({
   useEffect(() => {
     dispatch(getAllSessions({
       userId: currentUser?.ID ?? '',
-      courseId: params.id ?? ''
+      courseId: params.courseId ?? ''
     }));
 
     return () => {
@@ -123,7 +123,7 @@ const CreateSessionForm:React.FC<Props> = ({
         ID: v4(),
         model: '' ,
         USER_ID: currentUser?.ID,
-        COURSE_ID: params.id,
+        COURSE_ID: params.courseId,
         created_at: new Date(),
         fragments_count: 0,
         title: '',

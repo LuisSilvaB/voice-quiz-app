@@ -3,20 +3,25 @@ import SpeechRecognition, {useSpeechRecognition} from 'react-speech-recognition'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../app/store';
-import { setFragments } from '../features/fragments.features';
+import { createFragment } from '../features/fragments.features';
 import { RootState } from '../app/store';
-import { fragmentShape } from '../interface/types';
-import { nanoid } from '@reduxjs/toolkit';
+import { Fragment } from '../class/fragments';
+import { useParams } from 'react-router-dom'; 
+import { v4 } from 'uuid';
 
 const useRecognition = () => {
-  const [loadingListening, setLoadingListening] = useState<boolean>(false);
-  const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
-  const [processedCharacters, setProcessedCharacters ] = useState<number>(0);
   const { resetTranscript, transcript } = useSpeechRecognition()
+  const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
+  const [loadingListening, setLoadingListening] = useState<boolean>(false);
+  const [processedCharacters, setProcessedCharacters ] = useState<number>(0);
   const [requestSent, setRequestSent] = useState<boolean>(false);
   
   const dispatch = useDispatch<AppDispatch>()
+  const params = useParams(); 
+
   const fragments = useSelector((state:RootState) => state.fragments.fragments)
+  const fragmentLoading = useSelector((state:RootState) => state.fragments.fragmentLoading)
+  const currentUser = useSelector((state:RootState) => state.users.user)
 
   const onListening = () => {
     try {
@@ -69,23 +74,27 @@ const useRecognition = () => {
           });
   
           if (response.ok) {            
-            const fragment: fragmentShape = {
-              id: nanoid(),
+            const fragment: Fragment = {
+              ID: v4(),
               title: await response.json().then(data => JSON.parse(data.title)) || "", 
               content: fragmentContent,
+              USER_ID: currentUser?.ID || "",
+              count_questions:0, 
+              COURSE_ID: params.courseId as string || "",
+              SESSION_ID: params.sessionId as string || "", 
             };
-            dispatch(setFragments([...fragments, fragment]));
+            dispatch(createFragment(fragment));
             newProcessedCharacters += fragmentSize;
             setProcessedCharacters(newProcessedCharacters);
+            !fragmentLoading && setRequestSent(false);
           }
         }
       } catch (error) {
         console.error(error);
       } finally {
         // Restablecer el estado de la solicitud después de un tiempo para permitir nuevas solicitudes
-        setTimeout(() => {
-          setRequestSent(false);
-        }, 1000); // ajusta este tiempo según sea necesario
+        // setTimeout(() => {
+        // }, 4000); // ajusta este tiempo según sea necesario
       }
     }
   }, [transcript, audioStream, processedCharacters, requestSent, dispatch]);

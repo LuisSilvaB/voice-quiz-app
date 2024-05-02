@@ -25,8 +25,8 @@ const RoutesContainer = () => {
               element: <CoursesLayout />, 
               children:[
                 { path: "courses-list", element: <CursesList /> },
-                { path: "course/:id", element: <Course /> },
-                { path: "course/:courseid/session/:id", element: <Session /> },
+                { path: "course/:courseId", element: <Course /> },
+                { path: "course/:courseId/session/:sessionId", element: <Session /> },
               ]
             },
             { path: "save-data", element: <SaveData /> },

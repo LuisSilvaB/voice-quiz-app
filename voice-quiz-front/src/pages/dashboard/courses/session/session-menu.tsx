@@ -24,7 +24,7 @@ const SessionMenu:React.FC<Props> = ({returnToCourse, handleTabChange}) => {
           className="my-2 flex flex-row items-center gap-2"
         >
           <PiKeyReturnFill className="h-auto w-5" />
-          <p>Regrasar al curso</p>
+          <p>Regresar al curso</p>
         </Button>
       </div>
       <div className="flex h-fit w-full flex-row items-center justify-end gap-6 font-montserrat">

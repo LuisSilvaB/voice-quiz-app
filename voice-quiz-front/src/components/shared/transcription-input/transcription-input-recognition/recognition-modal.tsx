@@ -3,7 +3,6 @@ import { variants } from '../../../../pages/dashboard/courses/types'
 import { motion } from "framer-motion"
 import { IoClose } from "react-icons/io5";
 import useRecognition from '../../../../hooks/useRecognition';
-import { useSpeechRecognition } from 'react-speech-recognition';
 import { Button, IconButton } from '@material-tailwind/react';
 import { FaMicrophoneAlt } from 'react-icons/fa';
 
@@ -13,12 +12,12 @@ interface Props {
     isOpen: boolean;
     isListening: boolean;
     setListening: React.Dispatch<React.SetStateAction<boolean>>; 
+    currentTranscript: string;
 }
 
 
-const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setListening}) => {
+const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setListening, currentTranscript}) => {
     const recognitionFns = useRecognition(); 
-    const { transcript  } = useSpeechRecognition(); 
   return (
     <motion.div
       variants={variants}
@@ -38,7 +37,7 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
           </div>
           <p className="text-xl">Transcripción</p>
           <div className="h-full max-h-[600px] w-full overflow-y-auto rounded-lg border p-4 text-lg font-normal">
-            {transcript}
+            {currentTranscript}
           </div>
           {isListening ? (
             <Button

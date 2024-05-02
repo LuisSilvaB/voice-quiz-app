@@ -4,18 +4,18 @@ import { FaTrash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setTargetFragment } from "../../../../features/fragments.features";
 import { AppDispatch } from "../../../../app/store";
-import { fragmentShape } from "../../../../interface/types";
+import { Fragment } from "../../../../class/fragments";
 
 interface Props {
-    fragment: fragmentShape;
+    fragment: Fragment;
     position: number;
 }
 
 const FragmentsCard:React.FC<Props> = ({fragment}) => {
     const dispatch = useDispatch<AppDispatch>()
-    const handleTargetFragment = (fragment:fragmentShape) => {
+    const handleTargetFragment = (fragment:Fragment) => {
         dispatch(setTargetFragment({
-            id:fragment.id, 
+            id:fragment.ID, 
             title:fragment.title, 
             content:fragment.content, 
         }))
@@ -23,7 +23,7 @@ const FragmentsCard:React.FC<Props> = ({fragment}) => {
   return (
     <div className="flex h-fit w-full max-w-[350px] cursor-pointer flex-col gap-4 rounded-2xl border p-4 shadow-sm transition-all hover:border-none hover:shadow-2xl">
       <p className="font-bold">
-        Fragmento número <span>{fragment.id}</span>
+        Fragmento número <span>{fragment.ID}</span>
       </p>
       <p className="text-sm text-bold">
         Título: <span className="font-light">{fragment.title}</span>

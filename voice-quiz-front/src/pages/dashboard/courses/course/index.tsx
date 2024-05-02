@@ -37,17 +37,23 @@ const CourseView = () => {
   const sessionsLoading = useSelector((state: RootState) => state.sessions.sessionsLoading)
   const [ filter, setFilter ] = useState<string>("")
   const navigate = useNavigate(); 
-  const tagSession = useToggle(); 
+  const toggleSession = useToggle(); 
   const params = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(()=> {
-    if (!currentCourse.ID && params.id && currentUser?.ID) {
-      dispatch(getCourse({courseId: params.id ?? "", userId: currentUser?.ID ?? ""}));
+    if (!currentCourse.ID && params.courseId && currentUser?.ID) {
+      dispatch(getCourse({courseId: params.courseId ?? "", userId: currentUser?.ID ?? ""}));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.ID, params.id])
+  }, [currentUser?.ID, params.courseId])
+
+  useEffect(()=> {
+    dispatch(getCourse({courseId: params.courseId ?? "", userId: currentUser?.ID ?? ""}));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  
 
   useEffect(()=>{
     if (currentCourse.ID && currentUser?.ID) {
@@ -69,7 +75,7 @@ const CourseView = () => {
         if (currentUser && (payload.new.user_id === currentUser?.ID)) {
           dispatch(
             getCourse({
-              courseId: params.id ?? "",
+              courseId: params.courseId ?? "",
               userId: currentUser?.ID ?? "",
             }),
           );
@@ -137,11 +143,11 @@ const CourseView = () => {
   // }
 
   const openSessionView = (id: string) => {
-    navigate(`/dashboard/courses/course/${currentCourse.ID}/session/${id}`)
+    navigate(`/dashboard/courses/course/${params.courseId}/session/${id}`)
   }
 
   const returnToSessions = () => {
-    tagSession.onClose(); 
+    toggleSession.onClose(); 
     setFilter("")
   }
 
@@ -270,7 +276,6 @@ const CourseView = () => {
                     </span>
                   )}
                 </p>
-
               </div>
               <div className="flex gap-4">
                 <Button
@@ -301,7 +306,7 @@ const CourseView = () => {
       <div className="flex max-h-[80vh] flex-1 flex-col overflow-y-auto px-4 pt-5">
         <div className="flex items-center  justify-between py-4 ">
           <div className="relative flex w-[60%] ">
-            {tagSession.isOpen ? (
+            {toggleSession.isOpen ? (
               <></>
             ) : (
               <>
@@ -320,7 +325,7 @@ const CourseView = () => {
             <Button loading={sessionsLoading} placeholder={""}>
               SESSIONS
             </Button>
-            {tagSession.isOpen ? (
+            {toggleSession.isOpen ? (
               <Button
                 placeholder={""}
                 className="flex h-10 w-32 items-center gap-2"
@@ -347,10 +352,7 @@ const CourseView = () => {
           setFilter={setFilter}
           openSessionDetails={() => {}}
           openSessionView={openSessionView}
-          onClose={tagSession.onClose}
-          onOpen={tagSession.onOpen}
-          isOpen={tagSession.isOpen}
-          onToggle={tagSession.onToggle}
+          {...toggleSession}
         />
         {/* <SessionDetails targetSession={targetSession ?? {} as Session} isOpen = {tagSession.isOpen}/>  */}
       </div>

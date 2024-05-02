@@ -1,8 +1,8 @@
 import { useState } from "react";
-import SessionMenu from "./session-menu";
 import { useParams } from "react-router-dom"; 
-import { useNavigate } from "react-router-dom";
+import { useNavigate,  } from "react-router-dom";
 import { sessionTabs } from "../types";
+import SessionMenu from "./session-menu";
 import TranscriptionRecord from "./transcription-record";
 import TranscriptionAudioFile from "./transcription-audio-file";
 import TranscriptionRealTime from "./transcription-real-time";
@@ -10,10 +10,10 @@ import TranscriptionRealTime from "./transcription-real-time";
 const Session = () => {
   // const [targetTab, setTargetTab] = useState<sessionTabs>("record"); 
   const [currentComponent, setCurrentComponent] = useState<React.ReactNode>(<TranscriptionRealTime />);
-  const { courseid } = useParams()
+  const params = useParams()
   const navigate = useNavigate()
   const returnToCourse = () => {
-    navigate(`/dashboard/courses/course/${courseid}`)
+    navigate(`/dashboard/courses/course/${params.courseId}`)
   }
   const handleTabChange = (tab: sessionTabs) => {
     switch(tab){
@@ -31,6 +31,7 @@ const Session = () => {
         break
     }
   }
+
   return (
     <div className="flex flex-col h-full w-full">
       <SessionMenu

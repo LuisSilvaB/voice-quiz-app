@@ -273,15 +273,9 @@ const Login = () => {
                 </p>
               </div>
               <div className="flex flex-col">
-                <button
+                <GoogleLoginButton 
                   onClick={() => dispatch(signInWithGoogleAsync())}
-                  className="border bg-black p-4 text-white"
-                >
-                  Login with google
-                </button>
-                <GoogleLoginButton />
-                <FacebookLoginButton />
-                <GithubLoginButton />
+                />
               </div>
             </div>
           </Card>

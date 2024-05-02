@@ -10,19 +10,20 @@ const TranscriptionRealTime = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<question | null >(null)
   const [reverseQuestions, setResverseQuestions] = useState<question[]>([])
   const targetFrament = useSelector((state:RootState) => state.fragments.targetFragment); 
-  const onReverseQuestions = useCallback(() => {
-    if (targetFrament.questions) {      
-      const reverseArray: question[] = [];
-      for (let i = targetFrament.questions.length - 1; i >= 0; i--) {
-        reverseArray.push(targetFrament.questions[i]);
-      }
-      setResverseQuestions(reverseArray)
-    }
-  }, [targetFrament]);
+  // const onReverseQuestions = useCallback(() => {
+  //   if (targetFrament.questions) {      
+  //     const reverseArray: question[] = [];
+  //     for (let i = targetFrament.questions.length - 1; i >= 0; i--) {
+  //       reverseArray.push(targetFrament.questions[i]);
+  //     }
+  //     setResverseQuestions(reverseArray)
+  //   }
+  // }, [targetFrament]);
 
-  useEffect(() => {
-    onReverseQuestions()
-  },[onReverseQuestions])
+  // useEffect(() => {
+  //   onReverseQuestions()
+  // },[onReverseQuestions])
+
     
   return (
     <div className="flex h-full w-full items-center justify-center gap-2 p-4 pt-0 text-black">
