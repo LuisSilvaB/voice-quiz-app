@@ -7,6 +7,7 @@ from app.services.usellm_service import process_docs as process_docs_usellm
 from app.services.usellm_service import process_title_docs as process_title_docs_usellm
 from app.services.fireworks_service import process_docs as process_docs_fireworks
 from app.services.together_service import process_docs as process_docs_together
+from app.services.together_service import process_title_docs as process_title_docs_together
 
 @api_blueprint.route('/api/example', methods=['GET'])
 def get_example():
@@ -19,6 +20,10 @@ def get_example():
 @api_blueprint.route('/api/title', methods=['POST'])
 def process_title():
     return process_title_docs_usellm()
+
+@api_blueprint.route('/api/title/v2', methods=['POST'])
+def process_title_v2():
+    return process_title_docs_together()
 
 @api_blueprint.route('/api/docs/v1', methods=['POST'])
 def process_docs_v1():

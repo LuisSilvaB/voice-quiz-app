@@ -38,3 +38,34 @@ def process_docs():
         'data': response_content,
         'status': 'success'
     })
+
+def process_title_docs():
+    if not validate_documents(request.files):
+        return 'No documents found', 400
+    
+    transcript_text = "".join(read_documents(request.files))
+    
+    template_system="Eres un asistente que analiza fragmentos de sesiones de clase y responde un título adecuado para cada uno de ellos."
+    template_user = f"Dame el enunciado de un titulo de no mas de 20 palabras acorde al siguiente texto: {transcript_text}"
+
+    # Prepare the messages
+    messages = [
+        {
+            "role": "system",
+            "content": template_system,
+        },
+        {
+            "role": "user",
+            "content": template_user,
+        }
+    ]
+    
+    response_content = query_together(messages)  # AI Model call
+
+    print("respuesta del modelo 2: ", response_content)
+
+    # Prepare and return response
+    return jsonify({
+        'title': response_content,
+        'status': 'success'
+    })
