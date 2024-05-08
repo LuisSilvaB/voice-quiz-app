@@ -68,7 +68,7 @@ const useRecognition = () => {
           // Marcar la solicitud como enviada para evitar múltiples envíos
           setRequestSent(true);
   
-          const response = await fetch("http://127.0.0.1:8000/api/title", {
+          const response = await fetch("http://127.0.0.1:8000/api/title/v2", {
             method: "POST",
             body: formData,   
           });

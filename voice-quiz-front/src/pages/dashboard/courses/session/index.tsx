@@ -5,7 +5,7 @@ import { sessionTabs } from "../types";
 import SessionMenu from "./session-menu";
 import TranscriptionRecord from "./transcription-record";
 import TranscriptionAudioFile from "./transcription-audio-file";
-import TranscriptionRealTime from "./transcription-real-time";
+import TranscriptionRealTime from "./transcription-real-time/transcription-real-time";
 
 const Session = () => {
   // const [targetTab, setTargetTab] = useState<sessionTabs>("record"); 

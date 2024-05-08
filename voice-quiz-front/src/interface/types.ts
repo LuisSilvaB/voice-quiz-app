@@ -40,11 +40,9 @@ export interface fragmentShape {
   questions?: question[];
 }
 export interface question {
-  id:string; 
   questionTitle:string;
   alternatives: string[] | null;
   answer:string;
-  kindQuestion: kindQuestion;
 }
 
 export type kindQuestion = "multiple_answer" | "open_answer" | "true_or_false"

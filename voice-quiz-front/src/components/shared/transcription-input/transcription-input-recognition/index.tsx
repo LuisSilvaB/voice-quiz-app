@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { IconButton, Button } from '@material-tailwind/react'
+import { IconButton, Button, Chip } from '@material-tailwind/react'
 import { FaExpandAlt } from "react-icons/fa";
 import useRecognition from '../../../../hooks/useRecognition'
 import { FaMicrophoneAlt } from 'react-icons/fa';
@@ -15,6 +15,9 @@ import { useParams } from 'react-router-dom';
 import { getCourse } from '../../../../features/db-features/courses.features';
 import { clearSessionData, getSession, updateSession } from '../../../../features/db-features/sessions.features';
 import { Fragment } from '../../../../class/fragments';
+import { FaQuestionCircle } from "react-icons/fa";
+import { CgSpinner } from "react-icons/cg";
+import cx from '../../../../libs/cx';
 
 const InputRecognition = () => {
   const recognitionFns = useRecognition();  
@@ -31,7 +34,6 @@ const InputRecognition = () => {
   const fragments = useSelector((state:RootState)=> state.fragments.fragments)
   const loading = useSelector((state:RootState) => state.fragments.loading)
   const currentUser = useSelector((state:RootState) => state.users.user)
-  const curretCourse = useSelector((state:RootState) => state.courses.course)
   const currentSession = useSelector((state:RootState) => state.sessions.session)
 
 
@@ -53,55 +55,63 @@ const InputRecognition = () => {
     dispatch(getFragments(params.sessionId as string ?? ""))
   },[params.sessionId])
 
-  useEffect(()=> {
-    getCourseQuerie()
-    getSessionQuerie()
-  },[params.courseId])
 
-  useEffect(()=>{
+
+  const getCurrenTranscript = useCallback(()=>{
     if (currentSession) {
       setCurrentTranscript(currentSession.transcription ?? "");
-    }
+    }    
   },[currentSession])
+
+  useEffect(()=>{
+    getCurrenTranscript(); 
+  },[getCurrenTranscript])
   
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
   
     const onChangeTranscript = () => {
-      setIsRecording(true);
-      const charactersTranscript = recognitionFns.transcript.length;
-
-      if (processedCharacters < charactersTranscript) {
-        const newTranscriptEntrie = recognitionFns.transcript.substring(processedCharacters, charactersTranscript);
-        setCurrentTranscript(prev => prev + newTranscriptEntrie);
-        setProcessedCharacters(charactersTranscript);
+      if (recognitionFns.loadingListening) {        
+        setIsRecording(true);
+        const charactersTranscript = recognitionFns.transcript.length;
+  
+        if (processedCharacters < charactersTranscript) {
+          const newTranscriptEntrie = recognitionFns.transcript.substring(processedCharacters, charactersTranscript);
+          setCurrentTranscript(prev => prev + newTranscriptEntrie);
+          setProcessedCharacters(charactersTranscript);
+        }
+    
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          setIsRecording(false);
+        }, 5000);
       }
-  
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setIsRecording(false);
-      }, 5000);
-    };
-  
+    
+    }
     onChangeTranscript();
   
     return () => clearTimeout(timeoutId);
-  }, [recognitionFns.transcript, processedCharacters]);
+  }, [recognitionFns.transcript, isRecording]);
+
 
   useEffect(() => {
+    
     if (!isRecording) {
-      const currentCharacteres = currentTranscript.length;
-      const transcription = currentTranscript.substring(0, currentCharacteres - 1);
+      console.log("ejecutandome")
+      // const transcription = currentTranscript.substring(0, currentCharacteres - 1);
       dispatch(
         updateSession({
           ...currentSession, 
-          transcription: currentSession.transcription + transcription,
+          transcription: currentSession.transcription + recognitionFns.transcript ,
         })
       )
     }
+
   }, [isRecording]);
 
   useEffect(()=>{
+    getCourseQuerie()
+    getSessionQuerie()
     return () => {
       dispatch(clearSessionData());
       dispatch(clearTargetFragment());
@@ -112,47 +122,83 @@ const InputRecognition = () => {
 
   return (
     <div className="flex h-full w-full max-w-[60%] flex-col">
-      <div className="flex h-full w-full flex-col rounded-lg border p-4">
-        <h3 className="text-lg">Transcripción</h3>
+      <div className="flex h-full w-full flex-col rounded-lg border border-gray-400 p-4">
+        <h3 className="text-lg font-medium text-gray-700">TRANSCRIPCIÓN</h3>
         <div className="flex min-h-[200px] flex-col">
-          <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg border p-2 text-base font-normal">
+          <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg border border-gray-400 p-2 text-base font-normal">
             {currentTranscript}
           </div>
-          <div className="mt-4 flex w-full items-center justify-between text-sm font-normal">
-            <p>Cantidad de caratéres: {recognitionFns.transcript.length}</p>
-            <IconButton
-              placeholder={""}
-              onClick={transcriptionModal.onOpen}
-            >
+          <div className="mt-4 flex w-full items-center justify-between text-sm font-normal text-gray-600">
+            <p>Cantidad de caratéres: {currentTranscript.length}</p>
+            <IconButton placeholder={""} onClick={transcriptionModal.onOpen}>
               <FaExpandAlt />
             </IconButton>
           </div>
         </div>
         {targetFrament.ID ? (
-          <div className="mt-2 flex h-full w-full flex-col rounded-lg border p-4">
+          <div className="border-gray- mt-2 flex h-full w-full flex-col rounded-lg border bg-white p-4">
             <div className="flex w-full items-center justify-between">
-              <p className="text-lg font-semibold">
-                Fragment: {targetFrament.ID}
-              </p>
-              <IconButton
-                placeholder={""}
-                className="bg-red-500"
-                onClick={handleClearTargetFragment}
-              >
-                <CgClose />
-              </IconButton>
-            </div>
-  
-              <div className="h-fit w-fit">
-                  <p className="text-sm"> Title: {targetFrament.title} </p>
+              <div className="flex items-center gap-2">
+                <Chip
+                  value="Fragment: "
+                  className="w-fit"
+                  variant="outlined"
+                  size="sm"
+                />
+                <Chip
+                  value={targetFrament.ID}
+                  className="w-fit"
+                  variant="ghost"
+                  size="sm"
+                  color="deep-purple"
+                />
               </div>
-        
-            <p className="mb-2 mt-1 max-h-10 overflow-hidden truncate text-clip text-wrap text-sm font-normal">
-              {targetFrament.content}
-            </p>
+              <div className="flex gap-2">
+                <IconButton placeholder={""} className="bg-green-500">
+                  {loading ? (
+                    <CgSpinner className={cx(loading ? "animate-spin" : "")} />
+                  ) : (
+                    <FaQuestionCircle />
+                  )}
+                </IconButton>
+
+                <IconButton
+                  placeholder={""}
+                  className="bg-red-500"
+                  onClick={handleClearTargetFragment}
+                >
+                  <CgClose />
+                </IconButton>
+              </div>
+            </div>
+
+            <div className="h-fit w-fit mt-2 flex flex-col gap-2">
+              <Chip
+                value="Título "
+                className="w-fit"
+                variant="ghost"
+                size="sm"
+              />
+
+              <p className="text-sm">{targetFrament.title} </p>
+            </div>
+
+            <div className="h-fit w-fit mt-2 flex flex-col gap-2">
+              <Chip
+                value="Contenido del fragmento "
+                className="w-fit"
+                variant="ghost"
+                size="sm"
+              />
+              <p className="mb-2 mt-1 max-h-10 overflow-hidden truncate text-clip text-wrap text-sm font-normal">
+                {targetFrament.content}
+              </p>
+            </div>
             <div className="mt-4 flex w-full gap-4">
               <Button
                 placeholder={""}
+                color="pink"
+                variant="outlined"
                 onClick={() =>
                   dispatch(
                     createQuestions({
@@ -161,12 +207,13 @@ const InputRecognition = () => {
                     }),
                   )
                 }
-                loading={loading}
               >
-                Alternativas
+                Preguntas múltiples
               </Button>
               <Button
                 placeholder={""}
+                variant="outlined"
+                color="green"
                 onClick={() =>
                   dispatch(
                     createQuestions({
@@ -176,10 +223,12 @@ const InputRecognition = () => {
                   )
                 }
               >
-                Pregunta y respuesta
+                Pregunta abierta
               </Button>
               <Button
                 placeholder={""}
+                variant="outlined"
+                color="gray"
                 onClick={() =>
                   dispatch(
                     createQuestions({
@@ -192,16 +241,18 @@ const InputRecognition = () => {
                 Verdadero o falso
               </Button>
             </div>
+
+            {targetFrament.content.length}
           </div>
         ) : (
           <div className="flex h-full w-auto flex-col">
             <div className="mt-4 flex flex-row items-center justify-between">
-              <h3 className="text-lg">Fragmentos</h3>
-              <p className="text-xs">
+              <h3 className="text-lg font-medium text-gray-700">FRAGMENTOS</h3>
+              <p className="text-sm font-normal text-gray-600">
                 Cantidad de fragmentos: {recognitionFns.fragments.length}
               </p>
             </div>
-            <div className="mb-2 flex h-full max-h-[400px]  w-full flex-row  flex-wrap justify-around gap-4 overflow-y-auto rounded-md  border p-2 pt-10 text-sm">
+            <div className="mb-2 flex h-full max-h-[400px]  w-full flex-row  flex-wrap justify-around gap-4 overflow-y-auto rounded-md  border p-2 pt-10 text-sm text-gray-600">
               {fragments.map((fragment: Fragment, index: number) => (
                 <FragmentsCard
                   key={index}

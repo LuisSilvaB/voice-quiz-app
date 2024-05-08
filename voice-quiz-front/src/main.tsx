@@ -14,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
       <ThemeProvider>
         <App />
+        <div id="portal"></div>
       </ThemeProvider>
       </BrowserRouter>
     </Provider>

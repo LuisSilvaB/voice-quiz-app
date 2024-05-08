@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice  } from "@reduxjs/toolkit";
-import { kindQuestion } from '../interface/types';
+import { kindQuestion, question } from '../interface/types';
 import { Fragment } from '../class/fragments';
 import { supabase } from "../config/config";
 import { Question } from '../class/questions.class';
+import { v4 } from "uuid";
 
 export const createFragment = createAsyncThunk('fragments/createFragment', async(fragment:Fragment) => {
     try{
@@ -25,42 +26,61 @@ export const getFragments = createAsyncThunk('fragments/getFragments', async(ses
 
 
 
-export const createQuestions = createAsyncThunk('fragments/submitFragments', async (payload: { fragment: Fragment, kindquestion: kindQuestion }) => {
+export const createQuestions = createAsyncThunk(
+  "fragments/submitFragments",
+  async (payload: { fragment: Fragment; kindquestion: kindQuestion }) => {
     const { fragment, kindquestion } = payload;
-    try{
-        const formData = new FormData();
-        formData.append('kindquestion', kindquestion); // Tipo de pregunta
-        formData.append('documents', new Blob([fragment.content], { type: 'text/plain' }), 'transcript.txt'); // Envio del documento del fragmento
-        const response = await fetch('http://127.0.0.1:8000/api/docs/v2', {
-            method: 'POST',
-            body: formData
-          });
-          if (!response.ok) {
-            throw new Error('Error al enviar la transcripción');
-          }
-          const questions = await response.json();
-          Array.isArray(questions) && questions.map(async(question) => {
-            await supabase
-              .from("QUESTIONS")
-              .insert([
-                {
-                  ...question,
-                  type: kindquestion,
-                },
-              ])
-              .select("*");
-          })
-            const { data } = await supabase
-                .from("QUESTIONS")
-                .select("*")
-                .eq("FRAGMENT_ID", fragment.ID);
+    try {
+      const formData = new FormData();
+      formData.append("kindquestion", kindquestion); // Tipo de pregunta
+      formData.append(
+        "documents",
+        new Blob([fragment.content], { type: "text/plain" }),
+        "transcript.txt",
+      ); // Envio del documento del fragmento
+      const response = await fetch("http://127.0.0.1:8000/api/docs/v2", {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error("Error al enviar la transcripción");
+      } else {
+        const decodedData = await response.json();
+        const regex = /\[(.*)\]/s;
 
-          return data as Question[] 
+        const match = decodedData.data.match(regex);
+
+        if (match && match.length > 1) {
+          const jsonContent = match[1];
+          console.log(jsonContent)
+          const dataParse: question[] = JSON.parse(jsonContent)?.questions;
+          const newQuestions: Question[] = dataParse.map((item: question) => ({
+            ID: v4(),
+            answer: item.answer,
+            alternatives: item.alternatives ?? [],
+            question: item.questionTitle,
+            created_at: new Date().toDateString(),
+            COURSE_ID: fragment.COURSE_ID,
+            FRAGMENT_ID: fragment.ID,
+            SESSION_ID: fragment.SESSION_ID,
+            type: kindquestion,
+            USER_ID: fragment.USER_ID,
+          }));
+          newQuestions.map(async (question: Question) => {
+            await supabase.from("QUESTIONS").insert([question]);
+          });
+        }
     }
-    catch(err){
-        console.error(err);
+    // // const { data } = await supabase
+    // //   .from("QUESTIONS")
+    // //   .select("*")
+    // //   .eq("FRAGMENT_ID", fragment.ID);
+    // return data as Question[];
+    } catch (err) {
+      console.error(err);
     }
-})
+  },
+);
 
 
 export const getQuestions = createAsyncThunk('fragments/getQuestions', async(fragment:Fragment) => {
@@ -111,17 +131,6 @@ const fragmentsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase( createQuestions.rejected, (state) => {
-            state.loading = false;
-        })
-        .addCase( createQuestions.pending, (state) => {
-            state.loading = true;
-        })
-        .addCase( createQuestions.fulfilled, (state, action) => {
-            const jsonData = JSON.parse(JSON.stringify(action.payload as Question[]));
-            state.questions = jsonData as Question[];
-            state.loading = false;
-        })  
         //createFragment
         .addCase(createFragment.pending, (state) => {
             state.fragmentsLoading = true; 
@@ -139,6 +148,30 @@ const fragmentsSlice = createSlice({
         .addCase(getFragments.fulfilled, (state, action) => {
             state.fragmentsLoading = false; 
             state.fragments = action.payload as Fragment[]
+        })
+        .addCase(getFragments.rejected, (state) => {
+            state.fragmentsLoading = false;
+        })
+        // getQuestions
+        .addCase(getQuestions.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(getQuestions.fulfilled, (state, action) => {
+            state.loading = false;
+            state.questions = action.payload as Question[]
+        })
+        .addCase(getQuestions.rejected, (state) => {
+            state.loading = false;
+        })
+        // createQuestions
+        .addCase(createQuestions.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(createQuestions.fulfilled, (state) => {
+            state.loading = false;
+        })
+        .addCase(createQuestions.rejected, (state) => {
+            state.loading = false;
         })
     }
 })
