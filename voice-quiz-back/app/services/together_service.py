@@ -1,7 +1,7 @@
 # app/services/together_service.py
 from flask import jsonify, request
 from app.utils.helpers import validate_documents, read_documents, select_template_system
-from app.api.ai_api_client import query_together
+from app.api.ai_api_client import query_together, query_title_together
 
 def process_docs():
     question_type = request.form.get('kindquestion')
@@ -60,7 +60,7 @@ def process_title_docs():
         }
     ]
     
-    response_content = query_together(messages)  # AI Model call
+    response_content = query_title_together(messages)  # AI Model call
 
     print("respuesta del modelo 2: ", response_content)
 

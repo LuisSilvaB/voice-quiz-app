@@ -39,10 +39,20 @@ def query_together(messages:List[dict]):
         api_key=together_api_key,
     )
     client_together = service_together.chat.completions.create(
-        model="Qwen/Qwen1.5-7B-Chat",
-        max_tokens=2000,
+        model="Qwen/Qwen1.5-32B-Chat",
+        max_tokens=4096,
         messages=messages,
     )
     return client_together.choices[0].message.content
 
-
+def query_title_together(messages:List[dict]):
+    service_together = openai.OpenAI(
+        base_url='https://api.together.xyz/v1',
+        api_key=together_api_key,
+    )
+    client_together = service_together.chat.completions.create(
+        model="Qwen/Qwen1.5-14B-Chat",
+        max_tokens=2048,
+        messages=messages,
+    )
+    return client_together.choices[0].message.content

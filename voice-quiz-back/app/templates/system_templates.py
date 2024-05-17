@@ -14,17 +14,20 @@ ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
                             {
                                 "questionTitle": "<Aqui va una pregunta>",
                                 "alternatives": ["a)...", "b)...", "c)...", "d)..."],
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
+                                "correctIndex": 0 // Índice de la respuesta correcta (0 para "a)", 1 para "b)", etc.)
                             },
                             {
                                 "questionTitle": "<Aqui va una pregunta>",
                                 "alternatives": ["a)...", "b)...", "c)...", "d)..."],
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
+                                "correctIndex": 0 // Índice de la respuesta correcta (0 para "a)", 1 para "b)", etc.)
                             },
                             {
                                 "questionTitle": "<Aqui va una pregunta>",
                                 "alternatives": ["a)...", "b)...", "c)...", "d)..."],
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
+                                "correctIndex": 0 // Índice de la respuesta correcta (0 para "a)", 1 para "b)", etc.)
                             },
                         ]
     }
@@ -48,18 +51,17 @@ ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
                             {
                                 "questionTitle": "<Aqui va una pregunta abierta>",
                                 "alternatives": null,
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
                             },
                             {
                                 "questionTitle": "<Aqui va una pregunta abierta>",
                                 "alternatives": null,
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
                             },
                             {
                                 "questionTitle": "<Aqui va una pregunta abierta>",
                                 "alternatives": null,
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
-                            },
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
                         ]
     }
 ]
@@ -82,17 +84,20 @@ ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
                             {
                                 "questionTitle": "<Aqui va la afirmación>",
                                 "alternatives": ["Verdadero", "Falso"],
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
+                                "correctIndex": 0 // Índice de la respuesta correcta (0 para "Verdadero", 1 para "Falso")
                             },
                             {
                                 "questionTitle": "<Aqui va la afirmación>",
                                 "alternatives": ["Verdadero", "Falso"],
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
+                                "correctIndex": 0 // Índice de la respuesta correcta (0 para "Verdadero", 1 para "Falso")
                             },
                             {
                                 "questionTitle": "<Aqui va la afirmación>",
                                 "alternatives": ["Verdadero", "Falso"],
-                                "answer": "<Aquí va la respuesta correcta con una breve explicación que recuerda lo que el docente dijo durante la clase para facilitar la comprensión del estudiante>"
+                                "answer": "<Aquí va la respuesta correcta con una breve explicación sobre lo que el docente dijo durante la clase sobre esta pregunta para facilitar la comprensión del estudiante>"
+                                "correctIndex": 0 // Índice de la respuesta correcta (0 para "Verdadero", 1 para "Falso")
                             },
                         ]
     }
