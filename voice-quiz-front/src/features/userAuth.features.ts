@@ -1,13 +1,14 @@
 import { supabase } from "../config/config";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { User } from "@supabase/supabase-js";
+import { publicConfig } from "../config/config";
 
 export const signInWithGoogleAsync = createAsyncThunk('userAuth/signInWithGoogleAsync', async () => {
     try{
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider:'google', 
             options: {
-                redirectTo:'http://localhost:5173/auth/login'
+                redirectTo:`${publicConfig.front_v1}/auth/google/callback`,
             } 
         }); 
         if (error) throw new Error('Ocurrio un error durante la autentificación de usuario');
