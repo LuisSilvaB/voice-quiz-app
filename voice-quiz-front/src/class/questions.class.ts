@@ -13,6 +13,20 @@ export interface Question {
     FRAGMENT_ID:string; 
 }
 
+export interface Alternative{
+    ID:string; 
+    position:number;
+    content:string;
+    QUESTION_ID:string;
+}
+
+export interface Answer {
+    ID:string;
+    position:number;
+    content:string;
+    QUESTION_ID:string;
+}
+
 export class QuestionClass implements Question {
     ID: string;
     created_at: string;
@@ -38,3 +52,4 @@ export class QuestionClass implements Question {
         this.FRAGMENT_ID = FRAGMENT_ID;
     }
 }
+

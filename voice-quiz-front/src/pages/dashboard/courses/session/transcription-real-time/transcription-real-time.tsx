@@ -6,11 +6,12 @@ import { getQuestions } from "../../../../../features/fragments.features";
 import { Question } from "../../../../../class/questions.class";
 import { useEffect, useState, useCallback } from "react";
 import { Button, Chip } from "@material-tailwind/react";
-import QuestionsList from "./questions-list";
-import QuestionsEmpty from "./questions-empty";
+import QuestionsList from "./questions/questions-list";
+import QuestionsEmpty from "./questions/questions-empty";
 import { supabase } from "../../../../../config/config";
-import QuestionsPresentationModal from "./questions-presentation-modal";
+import QuestionsPresentationModal from "./questions/questions-presentation-modal";
 import useToggle from "../../../../../hooks/useToggle";
+import QuizSessionOptions from "../../../quizzes/quiz-session-options/quiz-menu-oiptions";
 
 const TranscriptionRealTime = () => {
   const targetFragment = useSelector((state:RootState) => state.fragments.targetFragment); 
@@ -18,7 +19,7 @@ const TranscriptionRealTime = () => {
   const currentUser = useSelector((state:RootState) => state.users.user); 
   const dispatch = useDispatch<AppDispatch>()
   const toggleQuestionsPermission = useToggle()
-  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
+  // const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
   const [reverseQuestions, setResverseQuestions] = useState<Question[]>([])
     const onReverseQuestions = useCallback(() => {
     if (questions) {      
@@ -63,37 +64,48 @@ const TranscriptionRealTime = () => {
     if (fragment){
       dispatch(getQuestions(fragment))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[targetFragment])
     
   return (
-    <div className="flex h-full w-full items-center justify-center gap-2 p-4 pt-0 text-black">
-      <div className="flex h-full w-full flex-row gap-4 rounded-xl p-4 text-2xl">
+    <div className="flex w-full flex-1 items-center justify-center gap-2 p-4 pt-0 text-black">
+      <div className="flex h-full max-h-[80vh] w-full flex-1 flex-row gap-4 rounded-xl p-4 text-2xl">
         <InputRecognition />
-        <div className="flex w-full flex-col">
-          <div className="flex w-full items-center justify-between py-4">
-            <div className="flex flex-row items-center gap-2 rounded-md bg-gray-200 p-2">
-              <h3 className="text-sm font-medium">Fragmento: </h3>
-              <Chip
-                color="deep-purple"
-                variant="ghost"
-                value={
-                  targetFragment.ID
-                    ? targetFragment.ID
-                    : "Seleccione un fragmento"
-                }
-                className=""
-              ></Chip>
+
+        <div className="box-border flex w-full flex-col">
+          <div className="flex w-full flex-col items-center justify-between pb-2 pt-4">
+            <div className="flex w-full flex-col items-center justify-between lg:flex-row">
+              <div className="flex flex-row items-center gap-2 rounded-md bg-gray-200 p-2">
+                <h3 className="text-sm font-medium">Fragmento: </h3>
+                <Chip
+                  color="deep-purple"
+                  variant="ghost"
+                  value={
+                    targetFragment.ID
+                      ? targetFragment.ID
+                      : "Seleccione un fragmento"
+                  }
+                  className=""
+                ></Chip>
+              </div>
+              <div className="flex w-full flex-row justify-end items-center gap-2">
+                {questions && questions.length ? (
+                  <Button
+                    placeholder={""}
+                    className="flex w-fit h-fit justify-center gap-2"
+                    size="md"
+                    color="deep-purple"
+                    variant="outlined"
+                    onClick={toggleQuestionsPermission.onToggle}
+                  >
+                    Presentar preguntas
+                  </Button>
+                ) : null}
+                {questions && questions.length ? (
+                  <QuizSessionOptions questions={reverseQuestions} />
+                ) : null}
+              </div>
             </div>
-            {questions && questions.length ? (
-              <Button
-                placeholder={""}
-                variant="outlined"
-                className="rounded-md bg-transparent"
-                onClick={toggleQuestionsPermission.onToggle}
-              >
-                Presentar preguntas
-              </Button>
-            ) : null}
           </div>
           {!targetFragment.ID || (questions && !questions.length) ? (
             <QuestionsEmpty />

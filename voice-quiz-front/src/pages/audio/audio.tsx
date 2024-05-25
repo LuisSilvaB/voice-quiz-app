@@ -1,6 +1,6 @@
 import AudioRecorder from '../../components/audioRecorder/audioRecorder'
-import SpeechToText from '../../components/audioRecorder/audioRecorderNav'
-import AudioUploader from '../../components/audioRecorder/audioUploader'
+// import SpeechToText from '../../components/audioRecorder/audioRecorderNav'
+// import AudioUploader from '../../components/audioRecorder/audioUploader'
 
 const Audio = () => {
   return (
@@ -9,9 +9,9 @@ const Audio = () => {
         <h1 className='text-black text-center'>Audio-page</h1>
         <AudioRecorder/>
         <p className='text-black' >--------------------------------------------------</p>
-        <AudioUploader/>
+        {/* <AudioUploader/>
         <p className='text-black' >--------------------------------------------------</p>
-        <SpeechToText/>
+        <SpeechToText/> */}
     </div>
         
   )

@@ -15,7 +15,7 @@ import {
   List,
   ListItem
 } from "@material-tailwind/react";
-import { GoogleLoginButton, FacebookLoginButton, GithubLoginButton } from "react-social-login-buttons"
+import { GoogleLoginButton } from "react-social-login-buttons"
 import { signInWithGoogleAsync } from '../../../features/userAuth.features';
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../app/store";

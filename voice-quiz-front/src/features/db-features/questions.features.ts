@@ -6,7 +6,6 @@ export const generateQuestions = createAsyncThunk("questions/generateQuestions",
     async () => {return }, 
 )
 
-
 export const createQuestions = createAsyncThunk("questions/createQuestions", async(questions: Question[]) => {
     try{
         questions.forEach(async(question) => {

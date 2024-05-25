@@ -1,7 +1,7 @@
-import { Question } from '../../../../../class/questions.class'
+import { Question } from '../../../../../../class/questions.class'
 import { motion } from "framer-motion"
 import { Chip, Button } from '@material-tailwind/react'
-import useToggle from '../../../../../hooks/useToggle';
+import useToggle from '../../../../../../hooks/useToggle';
 import QuestionPresentationModal from './question-presentatión-modal';
 
 interface QuestionCardProps{

@@ -33,13 +33,14 @@ const Session = () => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex w-full flex-1 flex-col">
       <SessionMenu
         returnToCourse={returnToCourse}
         handleTabChange={handleTabChange}
+        currentComponent = {currentComponent}
       />
-      <div className="flex h-full w-full flex-col items-start justify-center">
-        {currentComponent}
+      <div className="flex w-full flex-1 flex-col items-start justify-center">
+        <TranscriptionRealTime />
       </div>
     </div>
   );

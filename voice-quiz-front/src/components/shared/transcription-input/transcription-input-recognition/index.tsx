@@ -58,7 +58,7 @@ const InputRecognition = () => {
 
 
   const getCurrenTranscript = useCallback(()=>{
-    if (currentSession) {
+    if (currentSession && currentSession.transcription?.length) {
       setCurrentTranscript(currentSession.transcription ?? "");
     }    
   },[currentSession])
@@ -69,10 +69,10 @@ const InputRecognition = () => {
   
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-  
     const onChangeTranscript = () => {
       if (recognitionFns.loadingListening) {        
         setIsRecording(true);
+        clearTimeout(timeoutId);
         const charactersTranscript = recognitionFns.transcript.length;
   
         if (processedCharacters < charactersTranscript) {
@@ -81,33 +81,38 @@ const InputRecognition = () => {
           setProcessedCharacters(charactersTranscript);
         }
     
-        clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
+          dispatch(
+            updateSession({
+              ...currentSession, 
+              transcription: currentSession.transcription + recognitionFns.transcript,
+            })
+          )        
           setIsRecording(false);
-        }, 5000);
+          clearTimeout(timeoutId);
+        }, 2000);
       }
     
     }
     onChangeTranscript();
   
     return () => clearTimeout(timeoutId);
-  }, [recognitionFns.transcript, isRecording]);
+  }, [recognitionFns.transcript]);
 
+  // useEffect(() => {
 
-  useEffect(() => {
-    
-    if (!isRecording) {
-      console.log("ejecutandome")
-      // const transcription = currentTranscript.substring(0, currentCharacteres - 1);
-      dispatch(
-        updateSession({
-          ...currentSession, 
-          transcription: currentSession.transcription + recognitionFns.transcript ,
-        })
-      )
-    }
+  //   if (!isRecording) {
+  //     // const transcription = currentTranscript.substring(0, currentCharacteres - 1);
+  //     console.log('enviando')
+  //     dispatch(
+  //       updateSession({
+  //         ...currentSession, 
+  //         transcription: currentSession.transcription + recognitionFns.transcript,
+  //       })
+  //     )
+  //   }
 
-  }, [isRecording]);
+  // }, [isRecording]);
 
   useEffect(()=>{
     getCourseQuerie()
@@ -116,16 +121,18 @@ const InputRecognition = () => {
       dispatch(clearSessionData());
       dispatch(clearTargetFragment());
       dispatch(clearFragments());
+      recognitionFns.onStopListening();
+      recognitionFns.onResetTranscription();
     }
   }, [])
 
 
   return (
-    <div className="flex h-full w-full max-w-[60%] flex-col">
+    <div className="flex h-full w-full max-w-[60%] flex-col ">
       <div className="flex h-full w-full flex-col rounded-lg border border-gray-400 p-4">
         <h3 className="text-lg font-medium text-gray-700">TRANSCRIPCIÓN</h3>
         <div className="flex min-h-[200px] flex-col">
-          <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg border border-gray-400 p-2 text-base font-normal">
+          <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg border border-gray-400 bg-white p-2 text-base font-normal">
             {currentTranscript}
           </div>
           <div className="mt-4 flex w-full items-center justify-between text-sm font-normal text-gray-600">
@@ -172,7 +179,7 @@ const InputRecognition = () => {
               </div>
             </div>
 
-            <div className="h-fit w-fit mt-2 flex flex-col gap-2">
+            <div className="mt-2 flex h-fit w-fit flex-col gap-2">
               <Chip
                 value="Título "
                 className="w-fit"
@@ -183,7 +190,7 @@ const InputRecognition = () => {
               <p className="text-sm">{targetFrament.title} </p>
             </div>
 
-            <div className="h-fit w-fit mt-2 flex flex-col gap-2">
+            <div className="mt-2 flex h-fit w-fit flex-col gap-2">
               <Chip
                 value="Contenido del fragmento "
                 className="w-fit"
@@ -252,7 +259,7 @@ const InputRecognition = () => {
                 Cantidad de fragmentos: {recognitionFns.fragments.length}
               </p>
             </div>
-            <div className="mb-2 flex h-full max-h-[400px]  w-full flex-row  flex-wrap justify-around gap-4 overflow-y-auto rounded-md  border p-2 pt-10 text-sm text-gray-600">
+            <div className="mb-2 flex flex-1 max-h-[400px] w-full flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md border border-gray-400  p-2 pt-10 text-sm text-gray-600">
               {fragments.map((fragment: Fragment, index: number) => (
                 <FragmentsCard
                   key={index}
@@ -269,6 +276,7 @@ const InputRecognition = () => {
               <Button
                 placeholder={""}
                 className="flex items-center gap-3 bg-red-500"
+                disabled={isRecording ? true : false}
                 onClick={() => {
                   recognitionFns.onStopListening();
                   setIsListening(false);

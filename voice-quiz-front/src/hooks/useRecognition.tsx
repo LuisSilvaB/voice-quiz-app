@@ -8,9 +8,10 @@ import { RootState } from '../app/store';
 import { Fragment } from '../class/fragments';
 import { useParams } from 'react-router-dom'; 
 import { v4 } from 'uuid';
+import { publicConfig } from '../config/config';
 
 const useRecognition = () => {
-  const { resetTranscript, transcript } = useSpeechRecognition()
+  const { resetTranscript, transcript, listening } = useSpeechRecognition()
   const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
   const [loadingListening, setLoadingListening] = useState<boolean>(false);
   const [processedCharacters, setProcessedCharacters ] = useState<number>(0);
@@ -55,7 +56,7 @@ const useRecognition = () => {
   
   }
   const onGenerateFragments = useCallback(async () => {
-    const fragmentSize: number = 100;
+  const fragmentSize: number = 100;
   
     if (transcript && audioStream && !requestSent) {
       try {
@@ -68,7 +69,7 @@ const useRecognition = () => {
           // Marcar la solicitud como enviada para evitar múltiples envíos
           setRequestSent(true);
   
-          const response = await fetch("http://127.0.0.1:8000/api/title/v2", {
+          const response = await fetch(`${publicConfig.v1}/api/title/v2`, {
             method: "POST",
             body: formData,   
           });
@@ -104,7 +105,7 @@ const useRecognition = () => {
     onGenerateFragments();
   }, [transcript, audioStream]);
   
-  return { loadingListening, audioStream,  transcript , onListening, onStopListening, onResetTranscription, fragments };
+  return { loadingListening, audioStream,  transcript , onListening, onStopListening, onResetTranscription, fragments, listening };
 }
 
 export default useRecognition

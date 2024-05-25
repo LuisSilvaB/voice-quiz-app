@@ -1,11 +1,11 @@
 import { motion } from "framer-motion" 
-import { variants } from "../../../types"
+import { variants } from "../../types"
 import { useSelector, useDispatch } from "react-redux"
-import { RootState } from "../../../../../../app/store";
-import { setToggleModal, clearTargetCourse } from "../../../../../../features/db-features/courses.features";
+import { RootState } from "../../../../../app/store";
+import { setToggleModal, clearTargetCourse } from "../../../../../features/db-features/courses.features";
 import { IoMdClose } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
-import EditCourseForm from "./edit-course.form";
+import EditCourseForm from "../../courses-list/course-card-modals/edit-course/edit-course.form";
 
 const EditCourseModal:React.FC = () => {
   const dispatch = useDispatch(); 

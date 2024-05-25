@@ -2,8 +2,9 @@ import { createAsyncThunk, createSlice  } from "@reduxjs/toolkit";
 import { kindQuestion, question } from '../interface/types';
 import { Fragment } from '../class/fragments';
 import { supabase } from "../config/config";
-import { Question } from '../class/questions.class';
+import { Alternative, Question } from '../class/questions.class';
 import { v4 } from "uuid";
+import { publicConfig } from "../config/config";
 
 export const createFragment = createAsyncThunk('fragments/createFragment', async(fragment:Fragment) => {
     try{
@@ -24,8 +25,6 @@ export const getFragments = createAsyncThunk('fragments/getFragments', async(ses
     }
 })
 
-
-
 export const createQuestions = createAsyncThunk(
   "fragments/submitFragments",
   async (payload: { fragment: Fragment; kindquestion: kindQuestion }) => {
@@ -38,7 +37,7 @@ export const createQuestions = createAsyncThunk(
         new Blob([fragment.content], { type: "text/plain" }),
         "transcript.txt",
       ); // Envio del documento del fragmento
-      const response = await fetch("http://127.0.0.1:8000/api/docs/v2", {
+      const response = await fetch(`${publicConfig.v1}/api/docs/v2`, {
         method: "POST",
         body: formData,
       });
@@ -47,12 +46,11 @@ export const createQuestions = createAsyncThunk(
       } else {
         const decodedData = await response.json();
         const regex = /\[(.*)\]/s;
-
+        console.log(decodedData)
         const match = decodedData.data.match(regex);
 
         if (match && match.length > 1) {
           const jsonContent = match[1];
-          console.log(jsonContent)
           const dataParse: question[] = JSON.parse(jsonContent)?.questions;
           const newQuestions: Question[] = dataParse.map((item: question) => ({
             ID: v4(),
@@ -68,20 +66,36 @@ export const createQuestions = createAsyncThunk(
           }));
           newQuestions.map(async (question: Question) => {
             await supabase.from("QUESTIONS").insert([question]);
+            if (question.type !== "open_answer") {                
+                question.alternatives.map(async(alternative:string, index:number) => {
+                    const newAlternative: Alternative = {
+                      ID: v4(),
+                      content: alternative,
+                      position: index,
+                      QUESTION_ID: question.ID,
+                    };
+                    await supabase.from("ALTERNATIVES").insert([newAlternative])
+                });
+            }
+            await supabase
+              .from("ANSWERS")
+              .insert([
+                {
+                  ID: v4(),
+                  content: question.answer,
+                  position: 0,
+                  QUESTION_ID: question.ID,
+                },
+              ]);
+
           });
         }
     }
-    // // const { data } = await supabase
-    // //   .from("QUESTIONS")
-    // //   .select("*")
-    // //   .eq("FRAGMENT_ID", fragment.ID);
-    // return data as Question[];
     } catch (err) {
       console.error(err);
     }
   },
 );
-
 
 export const getQuestions = createAsyncThunk('fragments/getQuestions', async(fragment:Fragment) => {
     try{

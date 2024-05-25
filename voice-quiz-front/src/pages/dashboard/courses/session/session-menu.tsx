@@ -10,6 +10,7 @@ import { BsGrid1X2 } from "react-icons/bs";
 interface Props {
     returnToCourse: () => void
     handleTabChange: (tab: sessionTabs) => void
+    currentComponent:React.ReactNode
 } 
 
 const SessionMenu:React.FC<Props> = ({returnToCourse, handleTabChange}) => {

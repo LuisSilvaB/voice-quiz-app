@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { Question } from '../../../../../class/questions.class'
-import { toggleProps } from '../../../../../interface/types';
+import { Question } from '../../../../../../class/questions.class'
+import { toggleProps } from '../../../../../../interface/types';
 import { motion } from "framer-motion"
-import { variants } from '../../types';
+import { variants } from '../../../types';
 import { createPortal } from 'react-dom';
 import { Button, Chip, IconButton } from '@material-tailwind/react';
 import { CgClose } from 'react-icons/cg';
-import useToggle from '../../../../../hooks/useToggle';
+import useToggle from '../../../../../../hooks/useToggle';
 interface Props extends toggleProps{  
   questionSelected: Question | null; 
   questionClear: () => void; 

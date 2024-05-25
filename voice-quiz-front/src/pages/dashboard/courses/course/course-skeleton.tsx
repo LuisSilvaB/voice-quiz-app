@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button } from '@material-tailwind/react';
 
 const CourseSkeleton = () => {
@@ -30,10 +29,10 @@ const CourseSkeleton = () => {
             <p>Profesor:{" "}</p>
             <div className="animate-pulse rounded-lg bg-gray-300 font-normal"></div>
           </p>
-          <p className="flex justify-between font-bold text-gray-500">
+          {/* <p className="flex justify-between font-bold text-gray-500">
             Cantidad de estudiantes:{" "}
             <span className="animate-pulse bg-gray-300 font-normal"></span>
-          </p>
+          </p> */}
           <p className="flex justify-between font-bold text-gray-500">
             Duración :{" "}
             <span className="animate-pulse bg-gray-300 font-normal"></span>

@@ -52,9 +52,9 @@ const CreateCourseModal:React.FC = () => {
             /> */}
 
             <div className="mt-10 flex w-full flex-col items-center justify-center gap-1">
-              <p className="font-inter text-lg font-bold">Crear clase</p>
+              <p className="font-inter text-lg font-bold">Crear curso</p>
               <p className="text-md w-full text-center font-inter font-normal text-gray-600">
-                Sientete libre de crear tu clase
+                Sientete libre de crear tu curso 
               </p>
               <p className="text-md w-full text-center font-inter font-bold text-gray-600">
                 Datos

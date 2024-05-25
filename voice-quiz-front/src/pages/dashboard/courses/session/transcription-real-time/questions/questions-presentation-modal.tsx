@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Question } from '../../../../../class/questions.class';
-import { toggleProps } from '../../../../../interface/types';
+import { Question } from '../../../../../../class/questions.class';
+import { toggleProps } from '../../../../../../interface/types';
 import { motion } from "framer-motion"
-import { variants } from '../../types';
+import { variants } from '../../../types';
 import { createPortal } from 'react-dom';
 import { Button, Chip, IconButton } from '@material-tailwind/react';
 import { CgClose } from 'react-icons/cg';
-import useToggle from '../../../../../hooks/useToggle';
 import { Pagination, Navigation } from 'swiper/modules';
 
 import { SwiperSlide, Swiper } from "swiper/react";
@@ -20,7 +19,6 @@ interface Props extends toggleProps{
 
 const QuestionsPresentationModal:React.FC<Props> = ({questions, questionClear, ...toggle}) => {
   useEffect(()=>{return () => questionClear()})
-  const toggleQuestion = useToggle()
   const [questionTargetId, setQuestionTargetId] = useState<string | null>(null)
   const revealQuestion = (questionId:string) => {
     setQuestionTargetId((state) => 

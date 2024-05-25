@@ -225,7 +225,7 @@ const CourseView = () => {
                   )}
                 </p>
 
-                <p className="flex justify-between font-bold text-gray-500">
+                {/* <p className="flex justify-between font-bold text-gray-500">
                   Cantidad de estudiantes:{" "}
                   {courseLoading ? (
                     <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
@@ -234,7 +234,7 @@ const CourseView = () => {
                       {currentCourse?.students_count} estudiantes
                     </span>
                   )}
-                </p>
+                </p> */}
 
                 <p className="flex justify-between font-bold text-gray-500">
                   Duración :{" "}
