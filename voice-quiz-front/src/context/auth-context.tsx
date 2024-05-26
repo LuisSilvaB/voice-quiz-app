@@ -5,6 +5,7 @@ import { signInWithGoogleAsync, stateChangeGoogleAuth, singOutWithGoogleAsync } 
 import { isRegisterOnDB, registerUserOnDB, clearUserData } from '../features/db-features/users.db.features';
 import { isRegisterUserRolOnDB, createUserRol, clearUserRol } from '../features/db-features/users-roles.db.freatures';
 import { User } from "../class/user.class";
+import { useNavigate } from "react-router-dom";
 
 import { UserRol } from "../class/user-rol.class";
 import React from 'react';
@@ -30,6 +31,7 @@ export const authContext = createContext<AuthContext>({
 });
 
 export const AuthContextProvider = ({children}: {children: React.ReactNode}) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>()
   const { userAuthInfo, authLoading } = useSelector((state:RootState) => state.userAuth);
   const { user, userLoading  } = useSelector((state:RootState) => state.users);     
@@ -53,8 +55,17 @@ export const AuthContextProvider = ({children}: {children: React.ReactNode}) => 
   
   useEffect(() => {
     if (userAuthInfo) dispatch(isRegisterOnDB(userAuthInfo.id));
+    if (!user || !user.ID.length) {
+      navigate("/auth/login")
+    }
   }, [userAuthInfo, dispatch]);
-  
+
+  useEffect(()=>{
+    if (!user || !user.ID.length || !user_rol || !user_rol.ROL_ID.length) {
+      navigate("/auth/login")
+    }
+  },[user, dispatch])  
+
   const handleRegisterUser = (userFormData:User) => {
     if(userAuthInfo && !authLoading && !user && !userLoading){
       dispatch(registerUserOnDB(userFormData))
