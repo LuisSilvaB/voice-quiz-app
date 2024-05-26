@@ -33,6 +33,18 @@ interface Props extends toggleProps {
 
 const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetails, openSessionView, setFilter}) => {
   // const [targerFilter, setTargetFilter] = useState<Session | null>(null)
+  const formatDate = (dateString: string) => { 
+    const date = new Date(dateString);
+  
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    const year = date.getUTCFullYear();
+  
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  }
   const dispatch = useDispatch<AppDispatch>()
   const openModal = (action: ModalActions, session: Session) => {
     dispatch(setSessionTypeModal(action));
@@ -42,35 +54,51 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
   const columnHelper = createColumnHelper<Session>()
   const columns = [
     columnHelper.accessor("ID", {
-      
       header: () => "Id",
-      cell: (info) => info.getValue(),
+      cell: (info) => (
+        <div className="flex gap-2 rounded-xl border bg-white">
+          <p className="ronded-lg max-w-[150px] overflow-hidden truncate text-ellipsis text-nowrap font-medium p-2 text-center text-gray-800">
+            {info.getValue()}
+          </p>
+        </div>
+      ),
     }),
     columnHelper.accessor("title", {
       header: () => "Título",
-      cell: (info) => info.getValue(),
+      cell: (info) => <p className="text-gray-800 font-medium">{info.getValue()}</p>,
     }),
     columnHelper.accessor("created_at", {
       header: () => "Fecha de creación",
-      cell: (info) => info.getValue(),
+      cell: (info) => <p className="text-gray-800 font-medium">{formatDate(info.getValue().toString())}</p>,
     }),
     columnHelper.accessor("ID", {
-      filterFn: "auto", 
+      filterFn: "auto",
       header: () => "Acciones",
       cell: (info) => (
-        <div className="flex gap-2" >
-          <IconButton className="bg-blue-500" onClick={ () => openSessionView(String(info.getValue()))} placeholder={""}>
+        <div className="flex gap-2">
+          <IconButton
+            className="bg-blue-500"
+            onClick={() => openSessionView(String(info.getValue()))}
+            placeholder={""}
+          >
             <RxEyeOpen />
           </IconButton>
-          <IconButton className="bg-orange-500" onClick={ () => openSessionDetails(String(info.getValue()))} placeholder={""}>
+          <IconButton
+            className="bg-orange-500"
+            onClick={() => openSessionDetails(String(info.getValue()))}
+            placeholder={""}
+          >
             <TbListDetails />
           </IconButton>
-          <IconButton className='bg-red-500' onClick={() => openModal("delete", info.row.original)} placeholder={""}>
+          <IconButton
+            className="bg-red-500"
+            onClick={() => openModal("delete", info.row.original)}
+            placeholder={""}
+          >
             <IoMdTrash />
           </IconButton>
         </div>
       ),
-      
     }),
   ];
   const table = useReactTable({
@@ -121,6 +149,8 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
           </tr>
         ))}
       </tbody>
+ 
+
     </table>
   );
 }

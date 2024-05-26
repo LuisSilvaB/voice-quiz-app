@@ -5,6 +5,7 @@ import { IoClose } from "react-icons/io5";
 import useRecognition from '../../../../hooks/useRecognition';
 import { Button, IconButton } from '@material-tailwind/react';
 import { FaMicrophoneAlt } from 'react-icons/fa';
+import { VscEmptyWindow } from 'react-icons/vsc';
 
 
 interface Props {
@@ -23,21 +24,32 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
       variants={variants}
       initial="exit"
       animate={isOpen ? "enter" : "exit"}
-      className="fixed left-0 top-0 h-full w-full"
+      className="fixed left-0 top-0 z-30 h-full w-full"
     >
       <div className="flex h-full w-full items-center justify-center">
         <div className="z-20 flex h-[700px] max-h-[700px] w-[1000px] max-w-[1000px]  flex-col gap-2 overflow-y-auto rounded-xl bg-white p-3">
-          <div className="flex w-full justify-end ">
-            <IconButton
-              placeholder={""}
-              onClick={onClose}
-            >
-              <IoClose />
-            </IconButton>
+          <div className="flex h-fit w-full flex-row items-center justify-center gap-2">
+            <div className="flex w-full items-center justify-between px-1">
+              <p className="text-xl">Transcripción</p>
+              <IconButton
+                placeholder={""}
+                onClick={onClose}
+                variant="gradient"
+                color="red"
+              >
+                <IoClose />
+              </IconButton>
+            </div>
           </div>
-          <p className="text-xl">Transcripción</p>
-          <div className="h-full max-h-[600px] w-full overflow-y-auto rounded-lg border p-4 text-lg font-normal">
-            {currentTranscript}
+          <div className="h-full max-h-[600px] w-full overflow-y-auto rounded-lg border-2 p-4 text-lg font-normal">
+            {!currentTranscript.length ? (
+              <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 text-gray-600">
+                <VscEmptyWindow className="h-auto w-10" />
+                <p className="font-medium">No hay transcripción</p>
+              </div>
+            ) : (
+              currentTranscript
+            )}
           </div>
           {isListening ? (
             <Button
@@ -54,7 +66,7 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
           ) : (
             <Button
               placeholder={""}
-              className="bg-green-500"
+              className="w-fit bg-green-500"
               onClick={() => {
                 recognitionFns.onListening();
                 setListening(true);

@@ -8,7 +8,7 @@ export const signInWithGoogleAsync = createAsyncThunk('userAuth/signInWithGoogle
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider:'google', 
             options: {
-                redirectTo: `${publicConfig.front_v1}/auth/login`
+                redirectTo:`${publicConfig.front_v1}/auth/google/callback`,
             } 
         }); 
         if (error) throw new Error('Ocurrio un error durante la autentificación de usuario');
@@ -26,19 +26,24 @@ export const singOutWithGoogleAsync = createAsyncThunk('userAuth/singOutWithGoog
     }
 })
 export const stateChangeGoogleAuth = createAsyncThunk<User | null, void>(
-    'userAuth/stateChangeGoogleAuth',
-    async () => {
-      return new Promise<User | null>((resolve) => {
-        supabase.auth.onAuthStateChange(async (event, session) => {
-          if (event === 'SIGNED_OUT') {
-            resolve(null);
-          } else {
-            resolve(session?.user ?? null);
+  'userAuth/stateChangeGoogleAuth',
+  async () => {
+    return new Promise<User | null>((resolve) => {
+      supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_OUT') {
+          localStorage.removeItem('userId');
+          resolve(null);
+        } else {
+          const userId = session?.user?.id ?? null;
+          if (userId) {
+            localStorage.setItem('userId', userId);
           }
-        });
+          resolve(session?.user ?? null);
+        }
       });
-    }
-  );
+    });
+  }
+);
   
   const userAuthSlice = createSlice({
     name: 'userAuth',

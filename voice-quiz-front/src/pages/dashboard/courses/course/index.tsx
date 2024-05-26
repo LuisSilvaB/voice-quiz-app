@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { Button } from "@material-tailwind/react"
+import { Button, Chip } from "@material-tailwind/react"
 
 import { CiSearch } from "react-icons/ci";
 import { FaArrowAltCircleRight } from "react-icons/fa";
@@ -193,12 +193,11 @@ const CourseView = () => {
                 </p>
 
                 <p className="flex justify-between font-bold text-gray-500">
-                  id del curso:
-                  <span className="ml-4 font-normal">
+                  <span className="font-normal">
                     {courseLoading ? (
                       <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
                     ) : (
-                      currentCourse.ID
+                      <Chip color="teal" value={<p>{currentCourse.ID}</p>} />
                     )}
                   </span>
                 </p>
@@ -321,9 +320,14 @@ const CourseView = () => {
               </>
             )}
           </div>
-          <div className="gap-2Z flex items-center">
-            <Button loading={sessionsLoading} placeholder={""}>
-              SESSIONS
+          <div className="flex flex-1 items-center justify-end gap-2">
+            <Button
+              loading={sessionsLoading}
+              placeholder={""}
+              variant="text"
+              size="sm"
+            >
+              Sesiones
             </Button>
             {toggleSession.isOpen ? (
               <Button
@@ -338,9 +342,12 @@ const CourseView = () => {
               <Button
                 onClick={() => openCreateSessionModal("create")}
                 placeholder={""}
-                className="flex h-10 items-center gap-2 bg-green-500"
+                variant="filled"
+                size="sm"
+                color="green"
+                className="flex items-center justify-center gap-2"
               >
-                <p>Nueva sessión</p>
+                <p>Nueva sesión</p>
                 <FiPlus />
               </Button>
             )}
