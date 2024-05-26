@@ -18,6 +18,9 @@ import { Fragment } from '../../../../class/fragments';
 import { FaQuestionCircle } from "react-icons/fa";
 import { CgSpinner } from "react-icons/cg";
 import cx from '../../../../libs/cx';
+import { VscEmptyWindow } from 'react-icons/vsc';
+import { CiCreditCardOff } from "react-icons/ci";
+
 
 const InputRecognition = () => {
   const recognitionFns = useRecognition();  
@@ -128,12 +131,19 @@ const InputRecognition = () => {
 
 
   return (
-    <div className="flex box-border h-full w-full max-w-[60%] flex-col ">
+    <div className="box-border flex h-full w-full max-w-[60%] flex-col ">
       <div className="flex h-full w-full flex-col rounded-lg border border-gray-400 p-4">
         <h3 className="text-lg font-medium text-gray-700">TRANSCRIPCIÓN</h3>
         <div className="flex min-h-[200px] flex-col">
           <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg border border-gray-400 bg-white p-2 text-base font-normal">
-            {currentTranscript}
+            {!currentTranscript.length ? (
+              <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 text-gray-600">
+                <VscEmptyWindow className="h-auto w-10" />
+                <p className="font-medium">No hay transcripción</p>
+              </div>
+            ) : (
+              currentTranscript
+            )}
           </div>
           <div className="mt-4 flex w-full items-center justify-between text-sm font-normal text-gray-600">
             <p>Cantidad de caratéres: {currentTranscript.length}</p>
@@ -252,21 +262,28 @@ const InputRecognition = () => {
             {targetFrament.content.length}
           </div>
         ) : (
-          <div className="flex box-border h-full w-auto flex-col">
+          <div className="box-border flex h-full w-auto flex-col">
             <div className="mt-4 flex flex-row items-center justify-between">
               <h3 className="text-lg font-medium text-gray-700">FRAGMENTOS</h3>
               <p className="text-sm font-normal text-gray-600">
                 Cantidad de fragmentos: {recognitionFns.fragments.length}
               </p>
             </div>
-            <div className="flez-1 flex flex-1 h-fit max-h-[380px] w-full flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md border border-gray-400  p-2 pt-10 text-sm text-gray-600">
-              {fragments.map((fragment: Fragment, index: number) => (
-                <FragmentsCard
-                  key={index}
-                  fragment={fragment}
-                  position={index}
-                />
-              ))}
+            <div className="flez-1 flex h-fit max-h-[380px] w-full flex-1 flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md border border-gray-400  p-2 pt-10 text-sm text-gray-600">
+              {!fragments.length ? (
+                <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 text-gray-600">
+                  <CiCreditCardOff className="h-auto w-20" />
+                  <p className="font-medium">No hay fragmentos</p>
+                </div>
+              ) : (
+                fragments.map((fragment: Fragment, index: number) => (
+                  <FragmentsCard
+                    key={index}
+                    fragment={fragment}
+                    position={index}
+                  />
+                ))
+              )}
             </div>
           </div>
         )}

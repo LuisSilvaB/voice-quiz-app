@@ -20,7 +20,7 @@ type Filters = "true_or_false" | "multiple_answer" | undefined;
 
 const QuizForm:React.FC<Props> = ({quiz, questions, setCurrentView}) => {
   const [filter, setFilters] = useState<Filters>(undefined);
-  const [currentQuestions, setCurrentQuestions] = useState<Question[]>(questions); 
+  const [currentQuestions, setCurrentQuestions] = useState<Question[]>(questions.filter((question) => question.type !== "open_answer")); 
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
   const currentUser = useSelector((state:RootState) => state.users.user)
   const currentQuizQuestions = useSelector((state:RootState) => state.quizzes.quizQuiesions)
