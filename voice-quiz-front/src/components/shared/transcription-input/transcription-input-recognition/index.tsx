@@ -128,7 +128,7 @@ const InputRecognition = () => {
 
 
   return (
-    <div className="flex h-full w-full max-w-[60%] flex-col ">
+    <div className="flex box-border h-full w-full max-w-[60%] flex-col ">
       <div className="flex h-full w-full flex-col rounded-lg border border-gray-400 p-4">
         <h3 className="text-lg font-medium text-gray-700">TRANSCRIPCIÓN</h3>
         <div className="flex min-h-[200px] flex-col">
@@ -252,14 +252,14 @@ const InputRecognition = () => {
             {targetFrament.content.length}
           </div>
         ) : (
-          <div className="flex h-full w-auto flex-col">
+          <div className="flex box-border h-full w-auto flex-col">
             <div className="mt-4 flex flex-row items-center justify-between">
               <h3 className="text-lg font-medium text-gray-700">FRAGMENTOS</h3>
               <p className="text-sm font-normal text-gray-600">
                 Cantidad de fragmentos: {recognitionFns.fragments.length}
               </p>
             </div>
-            <div className="mb-2 flex flex-1 max-h-[400px] w-full flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md border border-gray-400  p-2 pt-10 text-sm text-gray-600">
+            <div className="flez-1 flex flex-1 h-fit max-h-[380px] w-full flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md border border-gray-400  p-2 pt-10 text-sm text-gray-600">
               {fragments.map((fragment: Fragment, index: number) => (
                 <FragmentsCard
                   key={index}
