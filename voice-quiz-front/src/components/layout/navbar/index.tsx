@@ -22,7 +22,7 @@ import NavbarOptions from "./navbar-options";
 // ]
 
 const Navbar = () => {
-  const userAuth = useSelector((state:RootState) => state.userAuth);
+  const user = useSelector((state:RootState) => state.users);
   const auth = useAuth(); 
   const {isOpen, onClose, onToggle} = useToggle();
   const toggleOptions = useToggle();
@@ -60,7 +60,7 @@ const Navbar = () => {
       </div>
       <div className="flex w-auto justify-end gap-6">
         <NavbarOptions isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
-        {userAuth.userAuthInfo ? (
+        {user.user ? (
             <div className="h-full">
             <div
               className={cx(
@@ -71,11 +71,11 @@ const Navbar = () => {
             >
               <img
                 className="h-8 w-8 rounded-full "
-                src={userAuth?.userAuthInfo?.user_metadata?.picture}
+                src={user?.user.img_url}
                 alt=""
               />
               <p className="hidden font-inter text-sm text-gray-600 lg:flex">
-                {userAuth?.userAuthInfo?.user_metadata.name}
+                {user.user.name}
               </p>
               <div className="flex h-full items-center justify-center rounded-r-xl border-l px-4 transition-all ease-in-out hover:bg-gray-200">
                 {/* <MdOutlineArrowDropDownCircle className="text-gray-600" /> */}

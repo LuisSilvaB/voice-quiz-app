@@ -10,7 +10,7 @@ interface NavbarOptiosInterface extends  React.DetailedHTMLProps<React.HTMLAttri
   }
   
   const NavbarOptions:React.FC<NavbarOptiosInterface> = ({isOpen, onClose}) => {
-    const userAuth = useSelector((state:RootState) => state.userAuth);
+    const user = useSelector((state:RootState) => state.users);
     return (
       <ul
         className={cx(
@@ -54,7 +54,7 @@ interface NavbarOptiosInterface extends  React.DetailedHTMLProps<React.HTMLAttri
           />
         </Link>
         {
-            userAuth.userAuthInfo ? (
+            user.user ? (
                 <Link
                 to={"/dashboard/courses/courses-list"}
                 onClick={onClose}

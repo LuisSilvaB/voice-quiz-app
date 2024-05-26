@@ -10,17 +10,17 @@ interface DashboardProps {
 } 
 
 const DashboardLayout:React.FC<DashboardProps> = () => {
-  const userAuth = useSelector((state:RootState) => state.userAuth);
+  const user = useSelector((state:RootState) => state.users);
   const navigate = useNavigate();
   const location = useLocation(); 
 
   useEffect(()=>{
-    if (!userAuth.userAuthInfo) {
+    if (!user.user) {
       navigate('/auth/login');
     } else if (location.pathname === "/dashboard" || location.pathname === "/dashboard/") {
       navigate('/dashboard/courses');
     }
-  }, [userAuth.userAuthInfo, location.pathname, navigate]);
+  }, [user.user, location.pathname, navigate]);
   return (
     <div className='w-full h-full flex-1 flex flex-row'>
         <SidebarComponent />   
