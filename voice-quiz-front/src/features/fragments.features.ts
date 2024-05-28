@@ -37,7 +37,7 @@ export const createQuestions = createAsyncThunk(
         new Blob([fragment.content], { type: "text/plain" }),
         "transcript.txt",
       ); // Envio del documento del fragmento
-      const response = await fetch(`${publicConfig.back_v1}/api/docs/v2`, {
+      const response = await fetch(`${publicConfig.back_v1_local}/api/docs/v2`, {
         method: "POST",
         body: formData,
       });
@@ -98,11 +98,13 @@ export const createQuestions = createAsyncThunk(
 );
 
 export const getQuestions = createAsyncThunk('fragments/getQuestions', async(fragment:Fragment) => {
-    try{
-        const { data } = await supabase.from('QUESTIONS').select("*").eq("FRAGMENT_ID", fragment.ID)
-        return data as Question[]
-    }catch(e){
-        console.error("Error al obtener las preguntas")
+    if(fragment){
+        try{
+            const { data } = await supabase.from('QUESTIONS').select("*").eq("FRAGMENT_ID", fragment.ID)
+            return data as Question[]
+        }catch(e){
+            console.error("Error al obtener las preguntas")
+        }
     }
 })
 
@@ -141,6 +143,9 @@ const fragmentsSlice = createSlice({
             state.fragments = [] as Fragment[];
             state.questions = [] as Question[]
             state.targetFragment = {} as Fragment; 
+        },
+        clearQuestions : (state) => {
+            state.questions = [] as Question[]
         }
     },
     extraReducers: (builder) => {
@@ -191,5 +196,5 @@ const fragmentsSlice = createSlice({
 })
 
 
-export const { setTargetFragment, clearTargetFragment, setFragments, clearFragments } = fragmentsSlice.actions
+export const { setTargetFragment, clearTargetFragment, setFragments, clearFragments, clearQuestions } = fragmentsSlice.actions
 export default fragmentsSlice.reducer;

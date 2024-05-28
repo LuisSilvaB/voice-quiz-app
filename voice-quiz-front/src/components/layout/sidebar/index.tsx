@@ -4,6 +4,7 @@ import { CiSettings } from "react-icons/ci";
 import { BsGrid1X2 } from "react-icons/bs";
 import { VscHistory } from "react-icons/vsc";
 import cx from '../../../libs/cx';
+import { BsJournalCheck } from "react-icons/bs";
 // import { useState } from 'react';
 // import { useLocation } from 'react-router-dom';
 // import { useEffect } from 'react';
@@ -45,6 +46,19 @@ const SidebarComponent = () => {
               >
                 <BsGrid1X2 />
                 <p>Cursos</p>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/dashboard/my-quizzes"
+                className={cx(
+                  "flex flex-row items-center gap-2 py-4 pl-8 transition-all hover:bg-blue-gray-50",
+                  location.pathname === "/dashboard/my-quizzes" &&
+                    "bg-blue-gray-50 font-bold",
+                )}
+              >
+                <BsJournalCheck />
+                <p>Mis cuestionarios</p>
               </Link>
             </li>
             <li>

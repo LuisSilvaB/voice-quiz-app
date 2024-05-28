@@ -21,9 +21,10 @@ export const createQuestions = createAsyncThunk("questions/createQuestions", asy
 export const getAllQuestionbySession = createAsyncThunk("questions/getAllQuestionbySession", async( session:Session ) => {
     if (session) {
         const { data } = await supabase.from("QUESTIONS").select("*").eq("SESSION_ID", session.ID);
-        return data as Question[]
+        return data 
     }
 })
+
 
 const questionsSlice = createSlice({
     name: 'questions_slice',

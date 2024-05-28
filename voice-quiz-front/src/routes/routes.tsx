@@ -11,30 +11,44 @@ import Settings from "../pages/dashboard/settings";
 import CursesList from "../pages/dashboard/courses/courses-list";
 import Course from "../pages/dashboard/courses/course";
 import Session from "../pages/dashboard/courses/session";
+import MyQuizzes from "../pages/dashboard/quizzes/my-quizzes";
+import EditQuiz from "../pages/dashboard/quizzes/my-quizzes/edit-quiz";
+import CreateQuiz from "../pages/dashboard/quizzes/my-quizzes/create-quiz";
+import Quiz from "../pages/dashboard/quizzes/quiz";
 
 const RoutesContainer = () => {
     const routes = useRoutes([
-        { path: "/", element: <Home /> },
-        { path: "/auth/login", element: <Login /> },
-        { 
-          path: "/dashboard", 
-          element: <DashboardLayout />, 
-          children: [
-            { 
-              path: "courses", 
-              element: <CoursesLayout />, 
-              children:[
-                { path: "courses-list", element: <CursesList /> },
-                { path: "course/:courseId", element: <Course /> },
-                { path: "course/:courseId/session/:sessionId", element: <Session /> },
-              ]
-            },
-            { path: "save-data", element: <SaveData /> },
-            { path: "history", element: <History /> },
-            { path: "settings", element: <Settings /> },
-          ]
-        },
-        { path: "*", element: <Error /> },
+      { path: "/", element: <Home /> },
+      { path: "/auth/login", element: <Login /> },
+      { path: "/quiz/:quizId", element: <Quiz /> },
+      {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children: [
+          {
+            path: "courses",
+            element: <CoursesLayout />,
+            children: [
+              { path: "courses-list", element: <CursesList /> },
+              { path: "course/:courseId", element: <Course /> },
+              {
+                path: "course/:courseId/session/:sessionId",
+                element: <Session />,
+              },
+            ],
+          },
+          { path: "save-data", element: <SaveData /> },
+          {
+            path: "my-quizzes",
+            element: <MyQuizzes />,
+          },
+          { path: "my-quizzes/edit-quiz/:quizId", element: <EditQuiz /> },
+          { path: "my-quizzes/create-quiz/", element: <CreateQuiz /> },
+          { path: "history", element: <History /> },
+          { path: "settings", element: <Settings /> },
+        ],
+      },
+      { path: "*", element: <Error /> },
     ]);
 
     return routes;

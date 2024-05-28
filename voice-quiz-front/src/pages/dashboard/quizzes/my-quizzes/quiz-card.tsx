@@ -1,22 +1,26 @@
 import { IconButton, Tooltip, Chip } from '@material-tailwind/react';
-import { Quiz } from '../../../../../class/quiz.class';
+import { Quiz } from '../../../../class/quiz.class';
 import { FaChartArea, FaEdit, FaTrash } from 'react-icons/fa';
-import QuizQrModal from '../../my-quizzes/modals/quiz-qr-modal';
-import useToggle from '../../../../../hooks/useToggle';
-import { PiQrCodeLight } from 'react-icons/pi';
+import { useNavigate } from 'react-router-dom';
+import { PiQrCodeLight } from "react-icons/pi";
+import useToggle from '../../../../hooks/useToggle';
+import QuizQrModal from './modals/quiz-qr-modal';
 
 interface Props {
   quiz: Quiz;
-  onSetQuiz: (quiz:Quiz) => void;
   onSetToDeleteQuiz: (quiz:Quiz) => void;
 }
 
-const QuizListCard:React.FC<Props> = ({ quiz, onSetQuiz, onSetToDeleteQuiz }) => {
+const QuizCard:React.FC<Props> = ({ quiz, onSetToDeleteQuiz }) => {
+  const navigate = useNavigate();
   const toggleQrModal = useToggle();
+  const onNavegateToEdit = () => {
+    navigate(`/dashboard/my-quizzes/edit-quiz/${quiz.ID}`)
+  }
   return (
     <div
       key={quiz.ID}
-      className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border pt-0 text-black transition-all hover:shadow-lg"
+      className="flex w-full max-w-[300px] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border pt-0 text-black transition-all hover:shadow-lg"
     >
       <div className="flex w-full flex-row items-center justify-between gap-2 bg-orange-50 p-2">
         <p className=" max-w-32 overflow-hidden text-ellipsis text-nowrap text-lg font-bold text-orange-900">
@@ -24,15 +28,11 @@ const QuizListCard:React.FC<Props> = ({ quiz, onSetQuiz, onSetToDeleteQuiz }) =>
         </p>
         <div className="flex w-fit flex-row items-center justify-end gap-2">
           <Tooltip content={"Abrir QR Code"} placement="left">
-            <IconButton
-              placeholder={""}
-              className="bg-white"
-              onClick={toggleQrModal.onOpen}
-            >
+            <IconButton placeholder={""} className="bg-white" onClick={toggleQrModal.onOpen}>
               <PiQrCodeLight className="h-auto w-4 text-blue-gray-600" />
             </IconButton>
           </Tooltip>
-          <Tooltip content={"Editar cuestionario"} placement="left">
+          <Tooltip content={"Ver estadísticas"} placement="left">
             <IconButton placeholder={""} className="bg-white">
               <FaChartArea className="h-auto w-4 text-green-500" />
             </IconButton>
@@ -41,7 +41,7 @@ const QuizListCard:React.FC<Props> = ({ quiz, onSetQuiz, onSetToDeleteQuiz }) =>
             <IconButton
               placeholder={""}
               className="bg-white"
-              onClick={() => onSetQuiz(quiz)}
+              onClick={() => onNavegateToEdit()}
             >
               <FaEdit className="h-auto w-4 text-light-blue-500" />
             </IconButton>
@@ -84,9 +84,15 @@ const QuizListCard:React.FC<Props> = ({ quiz, onSetQuiz, onSetToDeleteQuiz }) =>
           <p className="text-sm font-bold text-gray-600">{quiz.final_time}</p>
         </div>
       </div>
-      {<QuizQrModal id="" {...toggleQrModal} quiz={quiz} />}
+      {
+        <QuizQrModal 
+          id=''
+          {...toggleQrModal}
+          quiz={quiz}
+        />
+      }
     </div>
   );
 }
 
-export default QuizListCard
+export default QuizCard

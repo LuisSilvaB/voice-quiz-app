@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../../app/store";
-import { getQuizListbySessionID } from "../../../../../features/db-features/quizzes.features";
+import { clearQuizList, getQuizListbySessionID } from "../../../../../features/db-features/quizzes.features";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Quiz } from "../../../../../class/quiz.class";
@@ -12,6 +12,8 @@ import { FaChartArea } from "react-icons/fa";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import QuizDeleteModal from "./quiz-delete-modal";
 import useToggle from '../../../../../hooks/useToggle';
+import { PiQrCodeLight } from "react-icons/pi";
+import QuizQrModal from "../../my-quizzes/modals/quiz-qr-modal";
 
 interface Props {
   onSetQuiz: (quiz:Quiz) => void;
@@ -24,6 +26,12 @@ const QuizList:React.FC<Props> = ({onSetQuiz}) => {
   const currentUser = useSelector((state:RootState) => state.users.user)
   const [targetQuiz, setTargetQuiz] = useState<Quiz>()
   const toggleQuiz = useToggle(); 
+  const toggleQrModal = useToggle();
+
+  const onSetToQuizToQr = (quiz:Quiz) => {
+    toggleQrModal.onOpen()
+    setTargetQuiz(quiz)
+  } 
   
   useEffect(() => {
     const subscribeCreateChannel = supabase
@@ -38,25 +46,37 @@ const QuizList:React.FC<Props> = ({onSetQuiz}) => {
         },
       )
       .subscribe();
+
+      const subscribeUpdateChannel = supabase
+      .channel("update-quiz")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "QUIZZES" },
+        (payload) => {
+          if (currentUser && payload.new.USER_ID === currentUser?.ID) {
+            dispatch(getQuizListbySessionID(sessionID));
+          }
+        },
+      )
+      .subscribe();
   
-      // const subscribeDeleteChannel = supabase
-      //   .channel("delete-quiz")
-      //   .on(
-      //     "postgres_changes",
-      //     { event: "DELETE", schema: "public", table: "QUIZZES" },
-      //     (payload) => {
-      //       console.log(targetQuiz)
-      //       console.log(payload)
-      //       if (currentUser && payload.old.ID === targetQuiz?.ID) {
-      //         dispatch(getQuizListbySessionID(sessionID));
-      //       }
-      //     },
-      //   )
-      //   .subscribe();
+      const subscribeDeleteChannel = supabase
+        .channel("delete-quiz")
+        .on(
+          "postgres_changes",
+          { event: "DELETE", schema: "public", table: "QUIZZES" },
+          (payload) => {
+            if (currentUser && payload.old.ID === targetQuiz?.ID) {
+              dispatch(getQuizListbySessionID(sessionID));
+            }
+          },
+        )
+        .subscribe();
 
     return () => {
       subscribeCreateChannel.unsubscribe();
-      // subscribeDeleteChannel.unsubscribe();
+      subscribeUpdateChannel.unsubscribe();
+      subscribeDeleteChannel.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionID]);
@@ -68,13 +88,15 @@ const QuizList:React.FC<Props> = ({onSetQuiz}) => {
 
   useEffect(() => {
       dispatch(getQuizListbySessionID(sessionID));
+      return () => {
+        dispatch(clearQuizList());
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-
 
   if (!quizList || !quizList.length) return <QuizListEmpty />; 
   return (
-    <div className="flex w-full flex-1 flex-col items-start gap-2 overflow-y-auto h-max max-h-[90vh]">
+    <div className="flex h-max max-h-[90vh] w-full flex-1 flex-col items-start gap-2 overflow-y-auto">
       {quizList.map((quiz: Quiz) => (
         <div
           key={quiz.ID}
@@ -85,18 +107,35 @@ const QuizList:React.FC<Props> = ({onSetQuiz}) => {
               {quiz.title}
             </p>
             <div className="flex w-fit flex-row items-center justify-end gap-2">
-            <Tooltip content={"Editar cuestionario"} placement="left">
+              <Tooltip content={"Abrir QR Code"} placement="left">
+                <IconButton
+                  placeholder={""}
+                  className="bg-white"
+                  onClick={() => onSetToQuizToQr(quiz)}
+                >
+                  <PiQrCodeLight className="h-auto w-4 text-blue-gray-600" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={"Editar cuestionario"} placement="left">
                 <IconButton placeholder={""} className="bg-white">
                   <FaChartArea className="h-auto w-4 text-green-500" />
                 </IconButton>
               </Tooltip>
               <Tooltip content={"Editar cuestionario"} placement="left">
-                <IconButton placeholder={""} className="bg-white" onClick={() => onSetQuiz(quiz)}>
+                <IconButton
+                  placeholder={""}
+                  className="bg-white"
+                  onClick={() => onSetQuiz(quiz)}
+                >
                   <FaEdit className="h-auto w-4 text-light-blue-500" />
                 </IconButton>
               </Tooltip>
               <Tooltip content={"Eliminar cuestionario"} placement="left">
-                <IconButton placeholder={""} className="bg-white" onClick={() => onSetToDeleteQuiz(quiz)}>
+                <IconButton
+                  placeholder={""}
+                  className="bg-white"
+                  onClick={() => onSetToDeleteQuiz(quiz)}
+                >
                   <FaTrash className="h-auto w-4 text-red-500" />
                 </IconButton>
               </Tooltip>
@@ -135,11 +174,12 @@ const QuizList:React.FC<Props> = ({onSetQuiz}) => {
           </div>
         </div>
       ))}
-      <QuizDeleteModal 
-        quiz = {targetQuiz ?? {} as Quiz}
-        id = {targetQuiz?.ID ?? ''}
+      <QuizDeleteModal
+        quiz={targetQuiz ?? ({} as Quiz)}
+        id={targetQuiz?.ID ?? ""}
         {...toggleQuiz}
       />
+      {<QuizQrModal id="" {...toggleQrModal} quiz={targetQuiz ?? ({} as Quiz)} />}
     </div>
   );
 }
