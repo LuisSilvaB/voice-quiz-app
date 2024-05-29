@@ -53,7 +53,7 @@ const QuestionPresentationModal:React.FC<Props> = ({questionSelected, questionCl
 
           {questionSelected?.type === "multiple_answer" ? (
             <Chip
-              value={questionSelected?.ID ? "Preguntas múltiples" : "Pregunta"}
+              value={questionSelected?.ID ? "Alternativas" : "Pregunta"}
               variant="ghost"
               color="pink"
               className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"

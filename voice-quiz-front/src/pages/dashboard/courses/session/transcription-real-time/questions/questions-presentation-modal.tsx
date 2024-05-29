@@ -81,7 +81,7 @@ const QuestionsPresentationModal:React.FC<Props> = ({questions, questionClear, .
                       <Chip
                         value={
                           questionSelected?.ID
-                            ? "Preguntas múltiples"
+                            ? "Alternativas"
                             : "Pregunta"
                         }
                         variant="ghost"

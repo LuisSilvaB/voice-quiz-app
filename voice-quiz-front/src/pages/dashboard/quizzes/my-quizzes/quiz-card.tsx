@@ -17,6 +17,9 @@ const QuizCard:React.FC<Props> = ({ quiz, onSetToDeleteQuiz }) => {
   const onNavegateToEdit = () => {
     navigate(`/dashboard/my-quizzes/edit-quiz/${quiz.ID}`)
   }
+  const onNavigateToStats = () => {
+    navigate(`/dashboard/my-quizzes/stats-quiz/${quiz.ID}`)
+  }
   return (
     <div
       key={quiz.ID}
@@ -28,12 +31,20 @@ const QuizCard:React.FC<Props> = ({ quiz, onSetToDeleteQuiz }) => {
         </p>
         <div className="flex w-fit flex-row items-center justify-end gap-2">
           <Tooltip content={"Abrir QR Code"} placement="left">
-            <IconButton placeholder={""} className="bg-white" onClick={toggleQrModal.onOpen}>
+            <IconButton
+              placeholder={""}
+              className="bg-white"
+              onClick={toggleQrModal.onOpen}
+            >
               <PiQrCodeLight className="h-auto w-4 text-blue-gray-600" />
             </IconButton>
           </Tooltip>
           <Tooltip content={"Ver estadísticas"} placement="left">
-            <IconButton placeholder={""} className="bg-white">
+            <IconButton
+              placeholder={""}
+              className="bg-white"
+              onClick={onNavigateToStats}
+            >
               <FaChartArea className="h-auto w-4 text-green-500" />
             </IconButton>
           </Tooltip>
@@ -84,13 +95,7 @@ const QuizCard:React.FC<Props> = ({ quiz, onSetToDeleteQuiz }) => {
           <p className="text-sm font-bold text-gray-600">{quiz.final_time}</p>
         </div>
       </div>
-      {
-        <QuizQrModal 
-          id=''
-          {...toggleQrModal}
-          quiz={quiz}
-        />
-      }
+      {<QuizQrModal id="" {...toggleQrModal} quiz={quiz} />}
     </div>
   );
 }

@@ -38,7 +38,7 @@ const QuestionCard:React.FC<Props> = ({ question, onSelectQuestion, currentQuest
 
       {question.type === "multiple_answer" ? (
         <Chip
-          value={question.ID ? "Preguntas múltiples" : "Pregunta"}
+          value={question.ID ? "Alternativas" : "Pregunta"}
           variant="ghost"
           color="pink"
           size="sm"

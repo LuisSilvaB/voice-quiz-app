@@ -34,7 +34,7 @@ const MyQuizzes = () => {
   useEffect(()=>{
     if (userId) {
       dispatch(getAllCourses(userId));
-      dispatch(getQuizList())
+      dispatch(getQuizList(userId))
     }
     return () => {
       setCurrentCourseId("");
@@ -62,7 +62,7 @@ const MyQuizzes = () => {
     setCurrentCourseId("");
     setCurrentSessionId("");
     dispatch(clearQuizList());
-    dispatch(getQuizList())
+    dispatch(getQuizList(userId ?? ""))
     dispatch(clearSessionsData());
     dispatch(clearCourses());
   }

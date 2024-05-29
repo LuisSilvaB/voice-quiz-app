@@ -52,6 +52,7 @@ export const createQuestions = createAsyncThunk(
         if (match && match.length > 1) {
           const jsonContent = match[1];
           const dataParse: question[] = JSON.parse(jsonContent)?.questions;
+          console.log(dataParse)
           const newQuestions: Question[] = dataParse.map((item: question) => ({
             ID: v4(),
             answer: item.answer,
@@ -63,9 +64,21 @@ export const createQuestions = createAsyncThunk(
             SESSION_ID: fragment.SESSION_ID,
             type: kindquestion,
             USER_ID: fragment.USER_ID,
+            correctIndex: item.correctIndex,
           }));
           newQuestions.map(async (question: Question) => {
-            await supabase.from("QUESTIONS").insert([question]);
+            await supabase.from("QUESTIONS").insert([{
+                ID: question.ID,
+                answer: question.answer,
+                alternatives: question.alternatives,
+                question: question.question,
+                created_at: question.created_at,
+                COURSE_ID: question.COURSE_ID,
+                FRAGMENT_ID: question.FRAGMENT_ID,
+                SESSION_ID: question.SESSION_ID,
+                type: question.type,
+                USER_ID: question.USER_ID,                
+            }]);
             if (question.type !== "open_answer") {                
                 question.alternatives.map(async(alternative:string, index:number) => {
                     const newAlternative: Alternative = {
@@ -83,12 +96,13 @@ export const createQuestions = createAsyncThunk(
                 {
                   ID: v4(),
                   content: question.answer,
-                  position: 0,
+                  position: question.correctIndex ?? 0,
                   QUESTION_ID: question.ID,
                 },
               ]);
 
           });
+          console.log(newQuestions)
         }
     }
     } catch (err) {

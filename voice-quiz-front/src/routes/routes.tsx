@@ -15,6 +15,7 @@ import MyQuizzes from "../pages/dashboard/quizzes/my-quizzes";
 import EditQuiz from "../pages/dashboard/quizzes/my-quizzes/edit-quiz";
 import CreateQuiz from "../pages/dashboard/quizzes/my-quizzes/create-quiz";
 import Quiz from "../pages/dashboard/quizzes/quiz";
+import StastQuiz from "../pages/dashboard/quizzes/my-quizzes/stats-quiz/stats-quiz";
 
 const RoutesContainer = () => {
     const routes = useRoutes([
@@ -44,6 +45,7 @@ const RoutesContainer = () => {
           },
           { path: "my-quizzes/edit-quiz/:quizId", element: <EditQuiz /> },
           { path: "my-quizzes/create-quiz/", element: <CreateQuiz /> },
+          { path: "my-quizzes/stats-quiz/:quizId", element: <StastQuiz /> },
           { path: "history", element: <History /> },
           { path: "settings", element: <Settings /> },
         ],

@@ -10,7 +10,8 @@ export interface Question {
     SESSION_ID:string; 
     COURSE_ID:string; 
     USER_ID:string; 
-    FRAGMENT_ID:string; 
+    FRAGMENT_ID:string;
+    correctIndex?:number; 
 }
 
 export interface Alternative{
@@ -26,6 +27,23 @@ export interface Answer {
     content:string;
     QUESTION_ID:string;
 }
+
+export type QuestionResponse = {
+  QUESTION_ID: string;
+  ALTERNATIVE_ID: string;
+  position: string;
+};
+
+export type Result = {
+  ID: string;
+  ALTERNATIVE_ID: string;
+  QUESTION_ID: string;
+  USER_ID: string;
+  QUIZ_ID: string;
+  ANSWER_ID: string;
+  SCORE: number;
+};
+  
 
 export class QuestionClass implements Question {
     ID: string;

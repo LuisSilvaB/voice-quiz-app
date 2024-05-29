@@ -121,9 +121,9 @@ export const deleteQuiz = createAsyncThunk(
 
 export const getQuizList = createAsyncThunk(
   "quiz/getQuizList",
-  async () => {
+  async (userId:string) => {
     try {
-      const { data } = await supabase.from("QUIZZES").select("*")
+      const { data } = await supabase.from("QUIZZES").select("*").eq("USER_ID", userId)
       return data as Quiz[]
     } catch (e) {
       console.error("Error al obtener los cuestionarios: ", e);
@@ -210,23 +210,23 @@ export const getAllQuestionsByQuizID = createAsyncThunk(
   }
 )
 
-export const getAllQuestionsByQuizIDToApply = createAsyncThunk(
-  "quiz/getAllQuestionsByQuizID", 
+export const getParticipantsByQuizID = createAsyncThunk(
+  "quiz/getParticipantsByQuizID", 
   async (quizID: string) => {
     if (quizID && quizID.length) {
       try{
         const { data } = await supabase
-          .from("QUESTIONS")
-          .select("(question, type), QUIZ_QUESTION!inner(QUIZ_ID)")
-          .eq("QUIZ_QUESTION.QUIZ_ID", quizID)
+          .from("USERS")
+          .select("name, ID, img_url, RESULTS!inner()") 
+          .eq("RESULTS.QUIZ_ID", quizID)
         return data
       }catch (e){
         console.error(e)
       }
     } 
   }
-)
 
+)
 
 
 const quizSlice = createSlice({
