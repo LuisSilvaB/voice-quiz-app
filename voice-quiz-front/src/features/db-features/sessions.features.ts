@@ -86,7 +86,7 @@ export const getSession = createAsyncThunk(
 export const getAllSessions = createAsyncThunk(
   "user/getAllSessions",
   async ({userId, courseId} : { userId:string, courseId:string }) => {
-    if (userId) {
+    if (userId && courseId) {
       try {
         const { data } = await supabase.from("SESSIONS").select("*").eq('USER_ID', userId).eq('COURSE_ID', courseId);
         return data as Session[] ;

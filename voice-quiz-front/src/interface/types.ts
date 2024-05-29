@@ -43,6 +43,7 @@ export interface question {
   questionTitle:string;
   alternatives: string[] | null;
   answer:string;
+  correctIndex: number;
 }
 
 export type kindQuestion = "multiple_answer" | "open_answer" | "true_or_false"

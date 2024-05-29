@@ -225,7 +225,7 @@ const InputRecognition = () => {
                   )
                 }
               >
-                Preguntas múltiples
+                Alternativas
               </Button>
               <Button
                 placeholder={""}

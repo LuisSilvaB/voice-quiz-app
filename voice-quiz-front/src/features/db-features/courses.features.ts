@@ -130,6 +130,9 @@ const coursesSlice = createSlice({
         },
         setToggleModal: (state) => {
             state.isOpenModal = !state.isOpenModal;
+        },
+        clearCourses: (state) => {
+          state.courses = [];
         }
     },
     extraReducers: (builder) => {
@@ -189,5 +192,6 @@ export const {
   setToggleModal,
   setTargetCourse,
   clearTargetCourse,
+  clearCourses
 } = coursesSlice.actions;
 export default coursesSlice.reducer;

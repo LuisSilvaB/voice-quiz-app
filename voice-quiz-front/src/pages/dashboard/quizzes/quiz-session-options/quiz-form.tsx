@@ -241,7 +241,7 @@ const QuizForm:React.FC<Props> = ({quiz, questions, setCurrentView}) => {
                 Verdadero o Falso
               </Option>
               <Option onClick={() => setFilters("multiple_answer")}>
-                Preguntas múltiples
+                Alternativas
               </Option>
             </Select>
           </div>
@@ -279,7 +279,7 @@ const QuizForm:React.FC<Props> = ({quiz, questions, setCurrentView}) => {
 
                     {question.type === "multiple_answer" ? (
                       <Chip
-                        value={question.ID ? "Preguntas múltiples" : "Pregunta"}
+                        value={question.ID ? "Alternativas" : "Pregunta"}
                         variant="ghost"
                         color="pink"
                         size="sm"

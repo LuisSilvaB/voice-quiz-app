@@ -119,6 +119,18 @@ export const deleteQuiz = createAsyncThunk(
   }
 )
 
+export const getQuizList = createAsyncThunk(
+  "quiz/getQuizList",
+  async (userId:string) => {
+    try {
+      const { data } = await supabase.from("QUIZZES").select("*").eq("USER_ID", userId)
+      return data as Quiz[]
+    } catch (e) {
+      console.error("Error al obtener los cuestionarios: ", e);
+    }
+  },
+);
+
 export const getQuizListbySessionID = createAsyncThunk(
   "quiz/getQuizbySessionID",
   async (sessionID:string) => {
@@ -148,6 +160,72 @@ export const getQuizQuiestionsByQuizID = createAsyncThunk(
       }
     } 
   }
+)
+
+export const getQuizByID = createAsyncThunk(
+  "quiz/getQuizByID", 
+  async (quizID: string) => {
+    if (quizID && quizID.length) {
+      try{
+        const { data } = await supabase.from("QUIZZES").select("*").eq("ID", quizID)
+        return data?.[0] as Quiz
+      }catch (e){
+        console.error(e)
+      }
+    } 
+  }
+)
+
+export const getQuiestionsByQuizId = createAsyncThunk(
+  "quiz/getQuestionsByQuizId", 
+  async (quizID: string) => {
+    if (quizID && quizID.length) {
+      try{
+        const { data } = await supabase
+          .from("QUESTIONS")
+          .select("*")
+          .eq("QUIZ_QUESTION.QUIZ_ID", quizID)
+        return data
+      }catch (e){
+        console.error(e)
+      }
+    } 
+  }
+)
+
+export const getAllQuestionsByQuizID = createAsyncThunk(
+  "quiz/getAllQuestionsByQuizID", 
+  async (quizID: string) => {
+    if (quizID && quizID.length) {
+      try{
+        const { data } = await supabase
+          .from("QUESTIONS")
+          .select("*, QUIZ_QUESTION!inner(QUIZ_ID)")
+          .eq("QUIZ_QUESTION.QUIZ_ID", quizID)
+        return data
+      }catch (e){
+        console.error(e)
+      }
+    } 
+  }
+)
+
+export const getParticipantsByQuizID = createAsyncThunk(
+  "quiz/getParticipantsByQuizID", 
+  async (quizID: string) => {
+    if (quizID && quizID.length) {
+      try{
+        const { data } = await supabase
+          .from("USERS")
+          .select("name, ID, img_url, RESULTS!inner()") 
+          .eq("RESULTS.QUIZ_ID", quizID)
+        return data
+      }catch (e){
+        console.error(e)
+      }
+    } 
+  }
+
 )
 
 
@@ -183,10 +261,23 @@ const quizSlice = createSlice({
     },
     clearQuizQuestions: (state) => {
       state.quizQuiesions = [] as QuizQuestion[]
+    },
+    clearQuizList: (state) => {
+      state.quizList = [] as Quiz[]
     }
   },
   extraReducers: (builder) => {
     builder
+      .addCase(createQuiz.pending, (state) => {
+        state.quizLoading = true;
+      })
+      .addCase(getQuizList.pending, (state) => {
+        state.quizLoading = true;
+      })
+      .addCase(getQuizList.fulfilled, (state, action) => {
+        state.quizLoading = false;
+        state.quizList = action.payload as Quiz[];
+      })
       .addCase(getQuizListbySessionID.pending, (state) => { 
         state.quizLoading = true;
       })
@@ -216,5 +307,5 @@ const quizSlice = createSlice({
   },
 })
 
-export const { setLocalQuiz, clearLocalQuiz, setGlobalQuiz, clearGlobalQuiz, clearQuizQuestions } = quizSlice.actions;
+export const { setLocalQuiz, clearLocalQuiz, setGlobalQuiz, clearGlobalQuiz, clearQuizQuestions, clearQuizList } = quizSlice.actions;
 export default quizSlice.reducer;
