@@ -50,7 +50,7 @@ const QuizQrModal:React.FC<Props> = ({quiz, ...toggle}) => {
               placeholder={""}
               variant="gradient"
               color="cyan"
-              onClick={() => navigate(`${publicConfig.front_v1_local}/quiz/${quiz.ID}`)}
+              onClick={() => navigate(`${publicConfig.front_v1}/quiz/${quiz.ID}`)}
             >
               Ir al cuestionario
             </Button>
