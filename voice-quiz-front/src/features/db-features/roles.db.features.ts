@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabase } from "../../config/config";
-import { UserRol } from "../../class/user-rol.class";
+import { Rol } from "../../class/rol.class";
 
 export const getRol = createAsyncThunk('user/getUserRol',
     async(rolID:string) => {
@@ -18,15 +18,15 @@ export const getRol = createAsyncThunk('user/getUserRol',
 const users_roles_Slice = createSlice({
     name:"users_roles_slice",
     initialState:{
-        rol:{} as UserRol, 
+        rol:{} as Rol, 
         rolLoading:false as boolean, 
     },
     reducers:{
-        setLoadingUserDB: (state, action) => {
+        setRolLoading: (state, action) => {
             state.rolLoading = action.payload
         }, 
-        clearUserData: (state) => {
-            state.rol = {} as UserRol;
+        clearRol: (state) => {
+            state.rol = {} as Rol;
             state.rolLoading = false;
         } 
     },
@@ -41,5 +41,5 @@ const users_roles_Slice = createSlice({
         })
     }
 })
-export const { clearUserData, setLoadingUserDB } = users_roles_Slice.actions; 
+export const { clearRol, setRolLoading } = users_roles_Slice.actions; 
 export default users_roles_Slice.reducer; 

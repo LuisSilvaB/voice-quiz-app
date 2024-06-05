@@ -73,7 +73,7 @@ const MyQuizzesForm:React.FC<Props> = ({
       placeholder={""}
       color="transparent"
       shadow={false}
-      className="my-2 flex h-full w-fit flex-col items-center justify-start gap-1 px-4 "
+      className="my-2 flex h-fit w-fit flex-col items-center justify-start gap-1 px-4 over"
     >
       <form
         className="mb-2 mt-3 w-80 max-w-screen-lg sm:w-96 h-full flex flex-col justify-between"

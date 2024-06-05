@@ -77,11 +77,12 @@ export const reviewQuestions = createAsyncThunk(
             questionResponse.map((response) => response.QUESTION_ID),
           ); 
         if (answersByQuestionId) {          
+          const results:Result[] = [];
           questionResponse.forEach(async (questionResponse: QuestionResponse) => {
             const correctAnswer:Answer = answersByQuestionId.find(
               (answer:Answer) => answer.QUESTION_ID === questionResponse.QUESTION_ID,
             );
-            if (correctAnswer && correctAnswer.position === parseInt(questionResponse.position)) {
+            if (correctAnswer && correctAnswer.position === questionResponse.position) {
                 const correctResult:Result = { 
                   ID: v4(),
                   ANSWER_ID: correctAnswer.ID,
@@ -91,8 +92,7 @@ export const reviewQuestions = createAsyncThunk(
                   USER_ID: userID,
                   SCORE: scoreByCorrectQuestion,
                 }
-                await supabase.from("RESULTS").insert([correctResult]).select('*');
-                console.log(correctAnswer, questionResponse,"correcto")
+                results.push(correctResult);
               } else {
                 const incorrectResult:Result = { 
                   ID: v4(),
@@ -103,15 +103,34 @@ export const reviewQuestions = createAsyncThunk(
                   USER_ID: userID,
                   SCORE: 0,
                 }
-                await supabase.from("RESULTS").insert([incorrectResult]).select('*');
-                console.log(correctAnswer, questionResponse, "incorrecto")
-              }
-  
-          });
+                results.push(incorrectResult);
+              }              
+            });
+            console.log(results)
+            await supabase.from("RESULTS").insert(results).select("*");
           toast.success("Respuestas enviadas correctamente")
+          return true; 
         }
       }catch (e){
         toast.error("Error al enviar las respuestas")
+      }
+    }
+  }
+)
+
+export const userSendHisResponse = createAsyncThunk(
+  "questions/userSendHisResponse", 
+  async ({userId, quizId}: {userId:string, quizId:string}) => {
+    if (userId && userId.length) {
+      try{
+        const { data: UserData } = await supabase
+          .from("USERS")
+          .select("ID, RESULTS!inner()")
+          .eq("RESULTS.USER_ID", userId)
+          .eq("RESULTS.QUIZ_ID", quizId);
+        return UserData
+      }catch (e){
+        console.error(e)
       }
     }
   }

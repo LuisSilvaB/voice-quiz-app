@@ -7,13 +7,12 @@ import { publicConfig } from "../../../../../config/config"
 import QrCode from "react-qr-code"
 import { Button, Typography } from "@material-tailwind/react"
 import { PiQrCodeLight } from "react-icons/pi";
-import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 interface Props extends ModalProps{
   quiz:Quiz
 }
 
 const QuizQrModal:React.FC<Props> = ({quiz, ...toggle}) => {
-  const navigate = useNavigate()
   return (
     <motion.div
       variants={variants}
@@ -46,14 +45,16 @@ const QuizQrModal:React.FC<Props> = ({quiz, ...toggle}) => {
             <Typography placeholder={""} variant="h5" color="gray">
               {quiz.title}
             </Typography>
-            <Button
-              placeholder={""}
-              variant="gradient"
-              color="cyan"
-              onClick={() => navigate(`${publicConfig.front_v1}/quiz/${quiz.ID}`)}
-            >
-              Ir al cuestionario
-            </Button>
+            <Link to={`${publicConfig.front_v1}/quiz/${quiz.ID}`}>
+              <Button
+                placeholder={""}
+                variant="gradient"
+                color="cyan"
+                className="w-full"
+              >
+                Ir al cuestionario
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

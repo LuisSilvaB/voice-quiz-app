@@ -5,11 +5,13 @@ import { signInWithGoogleAsync, stateChangeGoogleAuth, singOutWithGoogleAsync } 
 import { isRegisterOnDB, registerUserOnDB, clearUserData } from '../features/db-features/users.db.features';
 import { isRegisterUserRolOnDB, createUserRol, clearUserRol } from '../features/db-features/users-roles.db.freatures';
 import { User } from "../class/user.class";
+import { useNavigate } from "react-router-dom";
 
 import { UserRol } from "../class/user-rol.class";
 import React from 'react';
 
 import { toast } from "sonner"
+import { clearRol, getRol } from "../features/db-features/roles.db.features";
 
 type userRol = "TEACHER" | "STUDENT"  
 
@@ -30,10 +32,12 @@ export const authContext = createContext<AuthContext>({
 });
 
 export const AuthContextProvider = ({children}: {children: React.ReactNode}) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>()
   const { userAuthInfo, authLoading } = useSelector((state:RootState) => state.userAuth);
   const { user, userLoading  } = useSelector((state:RootState) => state.users);     
   const { user_rol } = useSelector((state:RootState) => state.users_roles);
+
 
   useEffect(()=>{
     dispatch(stateChangeGoogleAuth()); 
@@ -48,6 +52,9 @@ export const AuthContextProvider = ({children}: {children: React.ReactNode}) => 
     dispatch(singOutWithGoogleAsync()); 
     dispatch(clearUserData()); 
     dispatch(clearUserRol()); 
+    dispatch(clearRol())
+    localStorage.removeItem('userId');
+    navigate('/auth/login');
   }
 
   
@@ -65,9 +72,12 @@ export const AuthContextProvider = ({children}: {children: React.ReactNode}) => 
   }
 
 
-  const checkUserRole = useCallback(() =>{
+  const checkUserRole = useCallback(async () =>{
     if(userAuthInfo && user && !authLoading && !userLoading ) {
-      dispatch(isRegisterUserRolOnDB(user.ID))
+      const user_rol = await dispatch(isRegisterUserRolOnDB(user.ID))
+      if (user_rol.payload) {
+        dispatch(getRol(user_rol.payload.ROL_ID))
+      }
     }
   }, [userAuthInfo, user, authLoading, userLoading, dispatch])
 

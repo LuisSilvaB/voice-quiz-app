@@ -31,7 +31,6 @@ export const stateChangeGoogleAuth = createAsyncThunk<User | null, void>(
     return new Promise<User | null>((resolve) => {
       supabase.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_OUT') {
-          localStorage.removeItem('userId');
           resolve(null);
         } else {
           const userId = session?.user?.id ?? null;

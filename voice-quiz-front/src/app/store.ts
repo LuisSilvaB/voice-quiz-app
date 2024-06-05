@@ -7,6 +7,7 @@ import newCoursesReducers from "../features/db-features/courses.features"
 import sessionsReducers from "../features/db-features/sessions.features"
 import fragmentsReducers from "../features/fragments.features";
 import quizzesReducers from "../features/db-features/quizzes.features";
+import resultsReducers from "../features/db-features/results.features";
 
 export const store = configureStore({
     reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
         fragments: fragmentsReducers,
         courses: newCoursesReducers, 
         sessions: sessionsReducers,
-        quizzes: quizzesReducers
+        quizzes: quizzesReducers,
+        results: resultsReducers,
     }, 
 })
 

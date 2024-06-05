@@ -33,6 +33,7 @@ import { CgSpinner } from "react-icons/cg";
 import { Navigate } from "react-router-dom";
 import FormUser from "./form-user";
 import { Toaster } from "sonner"
+import StudentModal from "../student.modal";
 
 const images:string[] = [Login7, Login2, Login3, Login5, Login6];
 
@@ -40,11 +41,15 @@ const Login = () => {
   const dispatch = useDispatch<AppDispatch>(); 
   const toggleOptions = useToggle(); 
   const toggleTeacherModal = useToggle(); 
+  const toggleStudentModal = useToggle();
   const userAuth = useSelector((state:RootState) => state.userAuth)
   const userSelector = useSelector((state:RootState) => state.users)
   const user_roles = useSelector((state:RootState) => state.users_roles)
+  const role = useSelector((state:RootState) => state.roles)
   const cardRef = useRef<HTMLDivElement>(null)
   const auth = useAuth(); 
+
+  console.log(role)
 
   useEffect(()=>{
     if (cardRef && toggleOptions.isOpen) {
@@ -58,11 +63,12 @@ const Login = () => {
     return <Navigate to={"/"}/>
   }
 
-  if (userAuth.authLoading) return (
+  if (userAuth.authLoading || role.rolLoading || user_roles.user_rol_loading) return (
     <div className="fixed w-full h-full top-0 right-0 flex justify-center items-center">
       <CgSpinner className="animate-spin w-20 h-auto text-tangaroa-500"/>
     </div>
   );
+
 
   if (userAuth.userAuthInfo && (!userSelector.user || !user_roles.user_rol) )
     return (
@@ -118,73 +124,94 @@ const Login = () => {
               </motion.div>
             </div>
           </div>
-          <div className="flex w-[60%] flex-1 items-center justify-center  gap-10 rounded-xl">
-            <div
-              className={
-                "relative mb-10 flex h-full flex-1 flex-col items-center justify-center gap-3 rounded-lg bg-white py-10"
-              }
-            >
-              <div className="absolute -top-10 flex w-fit items-center justify-center rounded-full bg-white p-2">
-                <img
-                  className="z-20 h-16 w-16 rounded-full"
-                  src={userAuth.userAuthInfo.user_metadata.picture}
-                />
-              </div>
+          <div className="mt-12 flex w-[100vw] flex-1 items-start justify-center gap-10 rounded-xl  lg:mt-0 lg:w-[30vw] lg:items-center">
+            {!userSelector.user ? (
               <div
-                className={cx(
-                  "absolute left-0 top-0 z-10 hidden h-full w-full items-center justify-center rounded-lg bg-gray-500 opacity-25 transition-opacity",
-                  userSelector.userLoading && "flex",
-                )}
+                className={
+                  "relative mb-10 flex h-full flex-1 flex-col items-center justify-center gap-3 rounded-lg bg-white py-10"
+                }
               >
-                <CgSpinner className="h-auto w-10 animate-spin text-tangaroa-950" />
-              </div>
-              <p className="mt-4 text-xl font-semibold text-tangaroa-500">
-                {userSelector.user ? "Bienvenido" : "Datos del usuario"}
-              </p>
-              <FormUser />
-            </div>
-
-            <div className="relative mb-10 flex h-full max-h-[800px] flex-1 flex-col items-center justify-center rounded-lg  bg-white py-6">
-
-              <div className={cx("absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-lg bg-gray-500 opacity-50", userSelector.user && "hidden")}>
-                <div className="absolute bg-black p-2">
-                  <p className="text-white">Registra tus datos</p>
+                <div className="absolute -top-10 flex w-fit items-center justify-center rounded-full bg-white p-2">
+                  <img
+                    className="z-20 h-16 w-16 rounded-full"
+                    src={userAuth.userAuthInfo.user_metadata.picture}
+                  />
                 </div>
-              </div>
-
-              <h3 className="text-xl font-bold text-tangaroa-500">
-                ¿Que deseas ser?
-              </h3>
-
-              <div className="mt-4 flex w-full flex-col items-center gap-10 px-4 transition-all ease-in-out">
                 <div
-                  className="flex h-32 w-full cursor-pointer flex-row items-center justify-start gap-4 rounded-lg border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-auto lg:w-full lg:py-5"
-                  onClick={toggleTeacherModal.onToggle}
+                  className={cx(
+                    "absolute left-0 top-0 z-10 hidden h-full w-full items-center justify-center rounded-lg bg-gray-500 opacity-25 transition-opacity",
+                    userSelector.userLoading && "flex",
+                  )}
                 >
-                  <PiChalkboardTeacherLight className="h-auto w-12 text-tangaroa-500 lg:w-10" />
-                  <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
-                    Profesor
-                  </p>
+                  <CgSpinner className="h-auto w-10 animate-spin text-tangaroa-950" />
+                </div>
+                <p className="mt-4 text-xl font-semibold text-tangaroa-500">
+                  {userSelector.user ? "Bienvenido" : "Datos del usuario"}
+                </p>
+                <FormUser />
+              </div>
+            ) : null}
+
+            {userSelector.user ? ( 
+              <div className="relative mb-10 flex h-full max-h-[80vh] w-fit flex-1 flex-col items-center justify-center rounded-lg  bg-white py-6">
+                <div
+                  className={cx(
+                    "absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-lg bg-gray-500 opacity-50",
+                    userSelector.user && "hidden",
+                  )}
+                >
+                  <div className="absolute bg-black p-2">
+                    <p className="text-white">Registra tus datos</p>
+                  </div>
                 </div>
 
-                <div className="flex h-32 w-full cursor-pointer flex-row items-center justify-start gap-4 rounded-lg border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-auto lg:w-full lg:py-5">
-                  <PiStudent className="h-auto w-12 text-tangaroa-500 lg:w-10" />
-                  <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
-                    Estudiante
-                  </p>
+                <h3 className="text-xl font-bold text-tangaroa-500">
+                  ¿Que deseas ser?
+                </h3>
+
+                <div className="mt-4 flex w-full flex-col items-center gap-10 px-4 transition-all ease-in-out">
+                  <div
+                    className="flex h-32 w-full cursor-pointer flex-row items-center justify-start gap-4 rounded-lg border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-auto lg:w-full lg:py-5"
+                    onClick={toggleTeacherModal.onToggle}
+                  >
+                    <PiChalkboardTeacherLight className="h-auto w-12 text-tangaroa-500 lg:w-10" />
+                    <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
+                      Profesor
+                    </p>
+                  </div>
+
+                  <div className="flex h-32 w-full cursor-pointer flex-row items-center justify-start gap-4 rounded-lg border bg-white p-8 shadow-lg hover:shadow-2xl lg:h-auto lg:w-full lg:py-5"
+                    onClick={toggleStudentModal.onToggle}
+                  >
+                    <PiStudent
+                      className="h-auto w-12 text-tangaroa-500 lg:w-10"
+                    />
+                    <p className="text-xs font-semibold text-tangaroa-800 lg:text-sm">
+                      Estudiante
+                    </p>
+                  </div>
                 </div>
-                
               </div>
-            </div>
+            ) : null}
           </div>
           <Toaster richColors />
         </div>
-        <TeacherModal
-          isOpen={toggleTeacherModal.isOpen}
-          onClose={toggleTeacherModal.onClose}
-          onOpen={toggleTeacherModal.onOpen}
-          toggle={toggleTeacherModal.onToggle}
-        />
+        {toggleTeacherModal.isOpen ? (
+          <TeacherModal
+            isOpen={toggleTeacherModal.isOpen}
+            onClose={toggleTeacherModal.onClose}
+            onOpen={toggleTeacherModal.onOpen}
+            toggle={toggleTeacherModal.onToggle}
+          />
+        ) : null}
+        {toggleStudentModal.isOpen ? (
+          <StudentModal
+            isOpen={toggleStudentModal.isOpen}
+            onClose={toggleStudentModal.onClose}
+            onOpen={toggleStudentModal.onOpen}
+            toggle={toggleStudentModal.onToggle}
+          />
+        ) : null}
       </div>
     );
 

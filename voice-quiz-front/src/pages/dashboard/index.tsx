@@ -13,6 +13,7 @@ interface DashboardProps {
 const DashboardLayout:React.FC<DashboardProps> = () => {
   const user = useSelector((state:RootState) => state.users);
   const userAuth = useSelector((state:RootState) => state.userAuth);
+  const rol = useSelector((state:RootState) => state.roles);
   const navigate = useNavigate();
   const location = useLocation(); 
   const dispatch = useDispatch<AppDispatch>();
@@ -24,6 +25,9 @@ const DashboardLayout:React.FC<DashboardProps> = () => {
         const data = await dispatch(isRegisterOnDB(userId ?? ""));
         if (!data.payload && !userId) {
           navigate('/auth/login');        
+        }
+        else if (!(data.payload.state === "active") || !(rol.rol.name === "TEACHER")){
+          return navigate("/")
         }
         else if (location.pathname === "/dashboard" || location.pathname === "/dashboard/") {
           navigate('/dashboard/courses');

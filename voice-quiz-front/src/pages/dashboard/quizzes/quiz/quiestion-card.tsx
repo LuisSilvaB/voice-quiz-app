@@ -9,7 +9,7 @@ import { Alternative, QuestionResponse } from '../../../../class/questions.class
 interface Props {
   questionToAppy: QuiestionToApply
   position: number
-  onChangeResponse: (questionID: string, response: string, position: string) => void
+  onChangeResponse: (questionID: string, response: string, position: number) => void
   responses: QuestionResponse[]
 }
 
@@ -75,7 +75,7 @@ const QuizQuiestionCard:React.FC<Props> = ({position, questionToAppy, onChangeRe
                 onChangeResponse(
                   questionToAppy.ID,
                   String(alternative.ID),
-                  String(alternative.position),
+                  alternative.position,
                 )
               }
               checked={responses.some(

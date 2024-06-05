@@ -16,7 +16,7 @@ const QuestionCard:React.FC<QuestionCardProps> = ({question}) => {
       className="h-auto cursor-pointer rounded-lg border-2 bg-white p-2 transition-all"
       // onClick={() => setSelectedQuestion(question)}
     >
-      <p className="mb-2 text-lg text-gray-800">
+      <p className="mb-2 text-sm text-gray-800">
         <span className="mr-2 font-semibold">Pregunta:</span>
         {question.question}
       </p>
@@ -25,6 +25,7 @@ const QuestionCard:React.FC<QuestionCardProps> = ({question}) => {
         <Chip
           value={question.ID ? "Verdadero o Falso" : "Pregunta"}
           variant="ghost"
+          size="sm"
           className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
         ></Chip>
       ) : null}
@@ -33,6 +34,7 @@ const QuestionCard:React.FC<QuestionCardProps> = ({question}) => {
         <Chip
           value={question.ID ? "Alternativas" : "Pregunta"}
           variant="ghost"
+          size="sm"
           color="pink"
           className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
         ></Chip>
@@ -42,12 +44,13 @@ const QuestionCard:React.FC<QuestionCardProps> = ({question}) => {
         <Chip
           value={question.ID ? "Pregunta abierta" : "Pregunta"}
           variant="ghost"
+          size="sm"
           color="green"
           className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
         ></Chip>
       ) : null}
 
-      <ul className="mt-3 h-fit w-full">
+      <ul className="mt-3 h-fit w-full text-xs text-gray-600">
         {question.alternatives?.map((alternative: string, index: number) => (
           <li className="text-sm" key={index}>
             {index + 1}. {alternative}
@@ -56,7 +59,7 @@ const QuestionCard:React.FC<QuestionCardProps> = ({question}) => {
       </ul>
 
       <div className="flex justify-end" onClick={toggleQuestionPresentation.onToggle}>
-        <Button placeholder={""}>Presentar Pregunta</Button>
+        <Button placeholder={""} size='sm'>Presentar Pregunta</Button>
       </div>
       {toggleQuestionPresentation.isOpen ? (
         <QuestionPresentationModal

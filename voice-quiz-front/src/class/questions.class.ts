@@ -31,7 +31,7 @@ export interface Answer {
 export type QuestionResponse = {
   QUESTION_ID: string;
   ALTERNATIVE_ID: string;
-  position: string;
+  position: number;
 };
 
 export type Result = {

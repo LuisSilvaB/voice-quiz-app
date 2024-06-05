@@ -24,7 +24,7 @@ interface Props {
   onClose: () => void;
 }
 
-const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
+const StudentModal:React.FC<Props> = ({isOpen, onClose}) => {
   const { registerUserRol }  = useAuth()
   return (
     <motion.div
@@ -43,7 +43,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
       <div className="fixed bottom-0 left-0 right-0 top-0 m-auto flex h-full flex-col rounded-lg bg-white px-6 py-3 lg:h-fit  lg:max-w-[30rem]">
         <div className="flex w-full justify-center py-4">
           <p className="text-xl font-semibold text-tangaroa-500 lg:text-3xl">
-            Profesor
+            Estudiante
           </p>
         </div>
         <Timeline className="flex flex-col">
@@ -54,7 +54,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
                 <MicrophoneIcon className="h-4 w-4" />
               </TimelineIcon>
               <Typography placeholder={""} variant="h5" color="blue-gray">
-                Grabación en tiempo real
+                Acceso a exámenes
               </Typography>
             </TimelineHeader>
             <TimelineBody className="pb-8">
@@ -63,10 +63,9 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
                 color="amber"
                 className="lg:text-md text-xs font-normal text-gray-600"
               >
-                Capta cada momento de tus clases con nuestra función de
-                grabación en tiempo real. Los profesores pueden registrar sus
-                sesiones, lo que les permite revisar y analizar la interacción
-                con los estudiantes en cualquier momento.
+                Obtén acceso a todos tus exámenes y pruebas desde un solo lugar.
+                Nuestra plataforma te permite revisar y completar tus exámenes
+                en línea de manera sencilla y organizada.
               </Typography>
             </TimelineBody>
           </TimelineItem>
@@ -77,7 +76,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
                 <QueueListIcon className="h-4 w-4" />
               </TimelineIcon>
               <Typography placeholder={""} variant="h5" color="blue-gray">
-                Generación de preguntas.
+                Registro de progreso.
               </Typography>
             </TimelineHeader>
             <TimelineBody className="pb-8">
@@ -86,10 +85,9 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
                 color="amber"
                 className="lg:text-md text-xs font-normal text-gray-600"
               >
-                Enriquece tu enseñanza con preguntas inteligentes. Nuestra
-                herramienta de generación de preguntas automatizadas utiliza la
-                inteligencia artificial para crear cuestionarios adaptados al
-                contenido de tu clase
+                Sigue tu progreso académico en tiempo real. Nuestra herramienta
+                de seguimiento te muestra cómo estás avanzando en tus estudios y
+                te ayuda a identificar áreas de mejora.
               </Typography>
             </TimelineBody>
           </TimelineItem>
@@ -99,7 +97,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
                 <UsersIcon className="h-4 w-4" />
               </TimelineIcon>
               <Typography placeholder={""} variant="h5" color="blue-gray">
-                Retroalimentación activa.
+                Estadísticas detalladas
               </Typography>
             </TimelineHeader>
             <TimelineBody>
@@ -108,9 +106,9 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
                 color="amber"
                 className="lg:text-md text-xs font-normal text-gray-600"
               >
-                Mejora tu enseñanza con retroalimentación instantánea. Nuestra
-                función de retroalimentación activa analiza las preguntas
-                adecuadas a los estudiantes en tiempo real.
+                Accede a estadísticas detalladas de tus exámenes y rendimiento
+                académico. Obtén una visión clara de tus fortalezas y
+                debilidades para mejorar tu aprendizaje.
               </Typography>
             </TimelineBody>
           </TimelineItem>
@@ -127,7 +125,7 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
             type="button"
             className="rounded bg-tangaroa-500 px-3 py-2 text-white transition-all ease-in-out hover:bg-tangaroa-800"
             onClick={() => {
-              registerUserRol("TEACHER");
+              registerUserRol("STUDENT");
             }}
           >
             Confirmar
@@ -138,4 +136,4 @@ const TeacherModal:React.FC<Props> = ({isOpen, onClose}) => {
   );
 }
 
-export default TeacherModal
+export default StudentModal 
