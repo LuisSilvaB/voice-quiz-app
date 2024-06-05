@@ -96,8 +96,8 @@ const MyQuizzesQuiestionsFilters:React.FC<Props> = ({ currentQuestions, onSelect
   },[])
 
   return (
-    <div className="flex h-full w-full flex-1 flex-row gap-2">
-      <div className="box-boder flex h-full flex-1 flex-col overflow-y-auto rounded-lg border px-4 py-7">
+    <div className="flex h-full w-full flex-1 flex-row gap-2 flex-wrap">
+      <div className="box-boder flex h-fit flex-1 flex-col overflow-y-auto rounded-lg border px-4 py-7 min-w-[400px]">
         <div className="flex flex-row gap-2 justify-between">
           <Typography
             placeholder={""}

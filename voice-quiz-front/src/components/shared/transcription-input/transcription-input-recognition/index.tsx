@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { IconButton, Button, Chip } from '@material-tailwind/react'
-import { FaExpandAlt } from "react-icons/fa";
 import useRecognition from '../../../../hooks/useRecognition'
 import { FaMicrophoneAlt } from 'react-icons/fa';
 import RecognitionModal from './recognition-modal';
@@ -132,10 +131,10 @@ const InputRecognition = () => {
 
   return (
     <div className="box-border flex h-full w-full max-w-[60%] flex-col ">
-      <div className="flex h-full w-full flex-col rounded-lg border border-gray-400 p-4">
-        <h3 className="text-lg font-medium text-gray-700">TRANSCRIPCIÓN</h3>
-        <div className="flex min-h-[200px] flex-col">
-          <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg border border-gray-400 bg-white p-2 text-base font-normal">
+      <div className="flex h-full w-full flex-col rounded-md bg-white p-4 shadow-md">
+        <h3 className="text-base font-medium font-inter text-black border-b">TRANSCRIPCIÓN</h3>
+        <div className="flex min-h-[20vh] flex-col">
+          <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg text-gray-600 bg-white p-2 text-xs font-normal border-b">
             {!currentTranscript.length ? (
               <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 text-gray-600">
                 <VscEmptyWindow className="h-auto w-10" />
@@ -146,14 +145,14 @@ const InputRecognition = () => {
             )}
           </div>
           <div className="mt-4 flex w-full items-center justify-between text-sm font-normal text-gray-600">
-            <p>Cantidad de caratéres: {currentTranscript.length}</p>
-            <IconButton placeholder={""} onClick={transcriptionModal.onOpen}>
-              <FaExpandAlt />
-            </IconButton>
+            <p className='tesxt-gray-600 text-xs'>Cantidad de caratéres: {currentTranscript.length}</p>
+            <Button placeholder={""} onClick={transcriptionModal.onOpen} className='flex flex-row items-center gap-2 text-xs border' size='sm' variant='text'>
+              <p>Ver transcripción</p>
+            </Button>
           </div>
         </div>
         {targetFrament.ID ? (
-          <div className="border-gray- mt-2 flex h-full w-full flex-col rounded-lg border bg-white p-4">
+          <div className="border-gray- mt-2 flex h-full w-full flex-col rounded-lg border bg-white p-4 text0-xs">
             <div className="flex w-full items-center justify-between">
               <div className="flex items-center gap-2">
                 <Chip
@@ -197,7 +196,7 @@ const InputRecognition = () => {
                 size="sm"
               />
 
-              <p className="text-sm">{targetFrament.title} </p>
+              <p className="text-xs">{targetFrament.title} </p>
             </div>
 
             <div className="mt-2 flex h-fit w-fit flex-col gap-2">
@@ -207,7 +206,7 @@ const InputRecognition = () => {
                 variant="ghost"
                 size="sm"
               />
-              <p className="mb-2 mt-1 max-h-10 overflow-hidden truncate text-clip text-wrap text-sm font-normal">
+              <p className="mb-2 mt-1 max-h-10 overflow-hidden truncate text-clip text-wrap text-xs font-normal">
                 {targetFrament.content}
               </p>
             </div>
@@ -215,7 +214,9 @@ const InputRecognition = () => {
               <Button
                 placeholder={""}
                 color="pink"
-                variant="outlined"
+                size='sm'
+                variant="text"
+                  className='border'
                 onClick={() =>
                   dispatch(
                     createQuestions({
@@ -229,7 +230,9 @@ const InputRecognition = () => {
               </Button>
               <Button
                 placeholder={""}
-                variant="outlined"
+                variant="text"
+                className='border'
+                size='sm'
                 color="green"
                 onClick={() =>
                   dispatch(
@@ -244,8 +247,10 @@ const InputRecognition = () => {
               </Button>
               <Button
                 placeholder={""}
-                variant="outlined"
-                color="gray"
+                variant="text"
+                className='border'
+                color="blue-gray"
+                size='sm'
                 onClick={() =>
                   dispatch(
                     createQuestions({
@@ -259,17 +264,16 @@ const InputRecognition = () => {
               </Button>
             </div>
 
-            {targetFrament.content.length}
           </div>
         ) : (
           <div className="box-border flex h-full w-auto flex-col">
-            <div className="mt-4 flex flex-row items-center justify-between">
-              <h3 className="text-lg font-medium text-gray-700">FRAGMENTOS</h3>
-              <p className="text-sm font-normal text-gray-600">
+            <div className="mt-4 flex flex-row items-center justify-between border-b">
+              <h3 className="text-base font-medium text-black">FRAGMENTOS</h3>
+              <p className="text-xs font-normal text-gray-600">
                 Cantidad de fragmentos: {recognitionFns.fragments.length}
               </p>
             </div>
-            <div className="flez-1 flex h-fit max-h-[380px] w-full flex-1 flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md border border-gray-400  p-2 pt-10 text-sm text-gray-600">
+            <div className="flez-1 flex h-fit max-h-[30vh] w-full flex-1 flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md  border-gray-400  p-2 pt-10 text-sm text-gray-600">
               {!fragments.length ? (
                 <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 text-gray-600">
                   <CiCreditCardOff className="h-auto w-20" />
@@ -292,6 +296,7 @@ const InputRecognition = () => {
             {isListening ? (
               <Button
                 placeholder={""}
+                size='sm'
                 className="flex items-center gap-3 bg-red-500"
                 disabled={isRecording ? true : false}
                 onClick={() => {
@@ -304,6 +309,7 @@ const InputRecognition = () => {
               </Button>
             ) : (
               <Button
+                size='sm'
                 placeholder={""}
                 className="bg-green-500"
                 onClick={() => {

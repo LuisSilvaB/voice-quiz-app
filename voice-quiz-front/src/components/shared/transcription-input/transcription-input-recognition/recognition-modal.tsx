@@ -27,7 +27,7 @@ const RecognitionModal:React.FC<Props> = ({onClose, isOpen, isListening, setList
       className="fixed left-0 top-0 z-30 h-full w-full"
     >
       <div className="flex h-full w-full items-center justify-center">
-        <div className="z-20 flex h-[700px] max-h-[700px] w-[1000px] max-w-[1000px]  flex-col gap-2 overflow-y-auto rounded-xl bg-white p-3">
+        <div className="z-20 flex h-full max-h-[70vh] w-[1000px] max-w-[1000px]  flex-col gap-2 overflow-y-auto rounded-xl bg-white p-3">
           <div className="flex h-fit w-full flex-row items-center justify-center gap-2">
             <div className="flex w-full items-center justify-between px-1">
               <p className="text-xl">Transcripción</p>

@@ -11,6 +11,8 @@ interface NavbarOptiosInterface extends  React.DetailedHTMLProps<React.HTMLAttri
   
   const NavbarOptions:React.FC<NavbarOptiosInterface> = ({isOpen, onClose}) => {
     const user = useSelector((state:RootState) => state.users);
+    const rol = useSelector((state:RootState) => state.roles);
+
     return (
       <ul
         className={cx(
@@ -54,7 +56,7 @@ interface NavbarOptiosInterface extends  React.DetailedHTMLProps<React.HTMLAttri
           />
         </Link>
         {
-            user.user ? (
+            user.user && user.user.state === "active" && rol.rol.name === "TEACHER" ? (
                 <Link
                 to={"/dashboard/courses/courses-list"}
                 onClick={onClose}
@@ -68,7 +70,7 @@ interface NavbarOptiosInterface extends  React.DetailedHTMLProps<React.HTMLAttri
                 <span
                     className={cx(
                     "h-[2px] w-full transition-all  group-hover:bg-[#598392]",
-                    isOpen && "hidden",
+                    location.pathname.includes("dashboard") && "bg-[#598392]",
                     )}
                 />
                 </Link>

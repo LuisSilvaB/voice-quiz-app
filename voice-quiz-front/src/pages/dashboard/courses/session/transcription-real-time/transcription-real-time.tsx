@@ -5,7 +5,7 @@ import { Fragment } from "../../../../../class/fragments";
 import { getQuestions } from "../../../../../features/fragments.features";
 import { Question } from "../../../../../class/questions.class";
 import { useEffect, useState, useCallback } from "react";
-import { Button, Chip } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import QuestionsList from "./questions/questions-list";
 import QuestionsEmpty from "./questions/questions-empty";
 import { supabase } from "../../../../../config/config";
@@ -72,10 +72,10 @@ const TranscriptionRealTime = () => {
       <div className="flex h-full max-h-[80vh] w-full flex-1 flex-row gap-4 rounded-xl p-4 text-2xl">
         <InputRecognition />
 
-        <div className="box-border flex w-full flex-col">
-          <div className="flex w-full flex-col items-center justify-between pb-2 pt-4">
+        <div className="box-border flex w-full flex-col bg-white rounded-lg shadow-md">
+          <div className="flex w-full flex-col items-center justify-between pb-2 pt-0">
             <div className="flex w-full flex-col items-center justify-between lg:flex-row">
-              <div className="flex flex-row items-center gap-2 rounded-md bg-gray-200 p-2">
+              {/* <div className="flex flex-row items-center gap-2 rounded-md bg-gray-200 p-2">
                 <h3 className="text-sm font-medium">Fragmento: </h3>
                 <Chip
                   color="deep-purple"
@@ -87,13 +87,13 @@ const TranscriptionRealTime = () => {
                   }
                   className=""
                 ></Chip>
-              </div>
+              </div> */}
               <div className="flex w-full flex-row justify-end items-center gap-2">
                 {questions && questions.length ? (
                   <Button
                     placeholder={""}
                     className="flex w-fit h-fit justify-center gap-2"
-                    size="md"
+                    size="sm"
                     color="deep-purple"
                     variant="outlined"
                     onClick={toggleQuestionsPermission.onToggle}

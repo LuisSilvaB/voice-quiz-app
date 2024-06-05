@@ -49,7 +49,7 @@ const EditQuiz = () => {
 
   
   return (
-    <div className="max-h m-4 flex w-full flex-1 flex-col rounded-lg border p-2">
+    <div className="max-h m-4 flex w-full flex-1 flex-col rounded-lg border p-2 max-h-[90vh] overflow-y-auto">
       <div className="flex flex-col items-start justify-center gap-2 text-center">
         <div className="flex flex-row items-center gap-2">
           <IconButton

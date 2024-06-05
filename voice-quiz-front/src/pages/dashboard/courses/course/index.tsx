@@ -170,19 +170,13 @@ const CourseView = () => {
   // );
   
   return (
-    <div className="flex w-full flex-1 select-none flex-col items-start justify-start gap-6 lg:flex-row">
+    <div className="flex w-full flex-1 select-none flex-col items-center lg:items-start justify-start gap-6 lg:flex-row">
       <div className="flex h-fit w-fit flex-col items-center justify-center gap-2 lg:ml-11 lg:h-full lg:w-auto lg:items-start lg:justify-start">
         {!currentCourse ? (
           <CourseSkeleton />
         ) : (
-          <div className="relative top-5 mx-auto mt-4 w-full max-w-[350px] rounded-lg border-t bg-white p-6 shadow-lg lg:w-[500px] lg:max-w-[500px]">
+          <div className="relative top-5 mx-auto mt-4 w-full rounded-lg border-t bg-white p-6 shadow-lg lg:w-[500px] lg:max-w-[350px]">  
             <div className="flex flex-col gap-5">
-              <div className=" h-48 w-48 rounded-lg  bg-white">
-                <img
-                  src="https://placehold.co/300x300"
-                  className="h-full w-full rounded-lg"
-                />
-              </div>
               <div className="flex flex-col gap-3">
                 <p className="text-3xl font-bold">
                   {courseLoading ? (
@@ -279,6 +273,7 @@ const CourseView = () => {
               <div className="flex gap-4">
                 <Button
                   placeholder={""}
+                  size="sm"
                   className="bg-blue-500"
                   onClick={() => {
                     openModal("edit");
@@ -288,6 +283,7 @@ const CourseView = () => {
                 </Button>
                 <Button
                   placeholder={""}
+                  size="sm"
                   className="bg-red-500"
                   onClick={() => {
                     openModal("delete");

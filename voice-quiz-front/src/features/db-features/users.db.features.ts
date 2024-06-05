@@ -27,7 +27,7 @@ export const registerUserOnDB = createAsyncThunk('user/registerUserOnDB',
 const userSlice = createSlice({
     name:'user', 
     initialState:{
-        user: null as User | null ,   
+        user: {} as User ,   
         userLoading: false,
     },
     reducers:{
@@ -35,7 +35,7 @@ const userSlice = createSlice({
             state.userLoading = action.payload
         }, 
         clearUserData: (state) => {
-            state.user = null;
+            state.user = {} as User;
             state.userLoading = false;
         } 
     },
@@ -44,7 +44,7 @@ const userSlice = createSlice({
             isRegisterOnDB.pending, 
             (state) => {
                 state.userLoading = true;
-                state.user = null;
+                state.user = {} as User;
             }
         ),
         builder.addCase(
@@ -58,7 +58,7 @@ const userSlice = createSlice({
             registerUserOnDB.pending, 
             (state) => {
                 state.userLoading = true;
-                state.user = null;
+                state.user = {} as User;
             }
         ),
         builder.addCase(

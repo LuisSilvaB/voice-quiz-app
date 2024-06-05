@@ -17,7 +17,7 @@ const FragmentsCard:React.FC<Props> = ({fragment}) => {
         dispatch(setTargetFragment(fragment))
     }
   return (
-    <div className="flex h-fit w-full max-w-[350px] cursor-pointer flex-col gap-3 rounded-xl border hover:border-gray-400 bg-white p-3 shadow-sm transition-all">
+    <div className="flex h-fit text-xs w-full max-w-[350px] cursor-pointer flex-col gap-3 rounded-xl border hover:border-gray-400 bg-white p-3 shadow-sm transition-all">
       <div className="flex w-fit items-center gap-2 font-bold">
         <Chip
           value={fragment.ID}
@@ -28,7 +28,7 @@ const FragmentsCard:React.FC<Props> = ({fragment}) => {
         />
       </div>
       
-      <div className="text-bold text-sm">
+      <div className="text-bold text-xs">
         <Chip className="w-fit" value = {"Título"} size="sm" variant="ghost"/>
         <p className="font-medium mt-2">{fragment.title}</p>
       </div>

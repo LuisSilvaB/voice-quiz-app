@@ -6,7 +6,7 @@ interface QuestionsListProps {
 }
 const QuestionsList:React.FC<QuestionsListProps> = ({questions}) => {
   return (
-    <div className="flex border w-full flex-col gap-3 overflow-y-auto rounded-lg p-3 max-h-[850px]">
+    <div className="flex w-full flex-col gap-3 overflow-y-auto rounded-lg p-3 max-h-[850px]">
       {
         questions.map((question:Question)  => (
           <QuestionCard question={question}/>

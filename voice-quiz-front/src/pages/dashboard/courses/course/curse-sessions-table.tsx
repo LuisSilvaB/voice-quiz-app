@@ -29,8 +29,6 @@ interface Props extends toggleProps {
   setFilter:React.Dispatch<React.SetStateAction<string>>; 
 }
 
-
-
 const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetails, openSessionView, setFilter}) => {
   // const [targerFilter, setTargetFilter] = useState<Session | null>(null)
   const formatDate = (dateString: string) => { 
@@ -52,11 +50,11 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
     dispatch(setSessionToggleModal());
   }
   const columnHelper = createColumnHelper<Session>()
-  const columns = [
+  const columns = [ 
     columnHelper.accessor("ID", {
-      header: () => "Id",
+      header: () => (<p className="hidden lg:flex lg:justify-center lg:items-center">Id</p>),
       cell: (info) => (
-        <div className="flex gap-2 rounded-xl border bg-white">
+        <div className="gap-2 rounded-xl border hidden bg-white lg:flex">
           <p className="ronded-lg max-w-[150px] overflow-hidden truncate text-ellipsis text-nowrap font-medium p-2 text-center text-gray-800">
             {info.getValue()}
           </p>

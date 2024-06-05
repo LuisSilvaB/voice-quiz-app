@@ -60,7 +60,7 @@ const Navbar = () => {
       </div>
       <div className="flex w-auto justify-end gap-6">
         <NavbarOptions isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
-        {user.user ? (
+        {user.user.ID ? (
             <div className="h-full">
             <div
               className={cx(

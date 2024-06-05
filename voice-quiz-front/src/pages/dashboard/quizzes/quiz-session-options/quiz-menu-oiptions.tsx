@@ -21,12 +21,12 @@ const QuizSessionOptions:React.FC<Props> = ({ questions }) => {
     setCurrentView("quizFormEdit");
   }
   return (
-    <div className="flex py-3">
+    <div className="flex py-3 pr-2">
       <Button
         onClick={toggleMyQuizzes.onOpen}
         placeholder={""}
         className="flex w-fit justify-center gap-2"
-        size="md"
+        size="sm"
         color="orange"
         variant="filled"
       >
