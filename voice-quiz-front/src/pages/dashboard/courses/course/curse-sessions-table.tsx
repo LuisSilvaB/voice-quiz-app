@@ -9,10 +9,10 @@ import {
 } from "@tanstack/react-table";
 import { ModalActions, toggleProps } from '../../../../interface/types';
 import { Session } from '../../../../class/sessions';
-import { IconButton } from '@material-tailwind/react';
+import { Button, Chip } from '@material-tailwind/react';
 import { IoMdTrash } from "react-icons/io";
 import { RxEyeOpen } from "react-icons/rx";
-import { TbListDetails } from "react-icons/tb";
+// import { TbListDetails } from "react-icons/tb";
 import {
   setTargetSession,
   setSessionTypeModal,
@@ -27,9 +27,10 @@ interface Props extends toggleProps {
   openSessionDetails(id:string): void;
   openSessionView(id:string): void;
   setFilter:React.Dispatch<React.SetStateAction<string>>; 
+  sessionLoading: boolean;
 }
 
-const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetails, openSessionView, setFilter}) => {
+const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionView, setFilter}) => {
   // const [targerFilter, setTargetFilter] = useState<Session | null>(null)
   const formatDate = (dateString: string) => { 
     const date = new Date(dateString);
@@ -50,51 +51,54 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
     dispatch(setSessionToggleModal());
   }
   const columnHelper = createColumnHelper<Session>()
-  const columns = [ 
-    columnHelper.accessor("ID", {
-      header: () => (<p className="hidden lg:flex lg:justify-center lg:items-center">Id</p>),
-      cell: (info) => (
-        <div className="gap-2 rounded-xl border hidden bg-white lg:flex">
-          <p className="ronded-lg max-w-[150px] overflow-hidden truncate text-ellipsis text-nowrap font-medium p-2 text-center text-gray-800">
-            {info.getValue()}
-          </p>
-        </div>
-      ),
-    }),
+  const columns = [
     columnHelper.accessor("title", {
       header: () => "Título",
-      cell: (info) => <p className="text-gray-800 font-medium">{info.getValue()}</p>,
+      cell: (info) => (
+        <p className="font-medium text-gray-800">{info.getValue()}</p>
+      ),
+    }),
+    columnHelper.accessor("transcription", {
+      header: () => "transcripción",
+      cell: (info) => (
+        <p className="font-medium text-gray-800">
+          {info.getValue()?.length ? (
+            <Chip color="green" variant="ghost" value={"Transcripción"} />
+          ) : (
+            <Chip color="red" variant="ghost" value={"Sin transcripción"} />
+          )}
+        </p>
+      ),
     }),
     columnHelper.accessor("created_at", {
       header: () => "Fecha de creación",
-      cell: (info) => <p className="text-gray-800 font-medium">{formatDate(info.getValue().toString())}</p>,
+      cell: (info) => (
+        <p className="font-medium text-gray-800">
+          {formatDate(info.getValue().toString())}
+        </p>
+      ),
     }),
     columnHelper.accessor("ID", {
       filterFn: "auto",
       header: () => "Acciones",
       cell: (info) => (
         <div className="flex gap-2">
-          <IconButton
-            className="bg-blue-500"
+          <Button
+            className="flex flex-row items-center gap-2 bg-blue-500"
             onClick={() => openSessionView(String(info.getValue()))}
             placeholder={""}
           >
-            <RxEyeOpen />
-          </IconButton>
-          <IconButton
-            className="bg-orange-500"
-            onClick={() => openSessionDetails(String(info.getValue()))}
-            placeholder={""}
-          >
-            <TbListDetails />
-          </IconButton>
-          <IconButton
-            className="bg-red-500"
+            <p className="hidden text-center lg:flex">Abrir sessión</p>
+            <RxEyeOpen className="flex lg:hidden"/>
+          </Button>
+          <Button
+            className="flex w-fit flex-row items-center gap-2 bg-red-500"
             onClick={() => openModal("delete", info.row.original)}
             placeholder={""}
           >
-            <IoMdTrash />
-          </IconButton>
+            <p className="hidden text-center lg:flex">Eliminar</p>
+            <IoMdTrash className="flex lg:hidden"/>
+          </Button>
         </div>
       ),
     }),
@@ -117,12 +121,15 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
   
 
   return (
-    <table className="w-full border-collapse rounded-xl overflow-hidden"> 
+    <table className="w-full border-collapse overflow-hidden rounded-xl">
       <thead>
         {table.getHeaderGroups().map((headerGroups, index) => (
           <tr key={index}>
             {headerGroups.headers.map((headItem, index) => (
-              <th key={index} className='bg-blue-gray-500 py-4 text-white border'>
+              <th
+                key={index}
+                className="border bg-blue-gray-500 py-4 text-white"
+              >
                 {flexRender(
                   headItem.column.columnDef.header,
                   headItem.getContext(),
@@ -132,23 +139,22 @@ const CourseSessionsTable:React.FC<Props> = ({sessions, filter, openSessionDetai
           </tr>
         ))}
       </thead>
-      <tbody className='h-fit'>
+      <tbody className="h-fit bg-white shadow-lg">
         {table.getRowModel().rows.map((rowModel, index) => (
-          <tr key={index} className='border h-20'>
-            {
-              rowModel.getVisibleCells().map((cell, index) => (
-                <td key={index} className='border text-center mx-auto h-10 max-h-10' >
-                  <div className='flex justify-center items-center h-fit'>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </div>
-                </td>
-              ))
-            }
+          <tr key={index} className="h-20 border">
+            {rowModel.getVisibleCells().map((cell, index) => (
+              <td
+                key={index}
+                className="mx-auto h-10 max-h-10 border text-cente"
+              >
+                <div className="flex h-fit items-center justify-center">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </div>
+              </td>
+            ))}
           </tr>
         ))}
       </tbody>
- 
-
     </table>
   );
 }

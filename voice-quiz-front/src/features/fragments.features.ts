@@ -25,6 +25,16 @@ export const getFragments = createAsyncThunk('fragments/getFragments', async(ses
     }
 })
 
+export const deleteFragment = createAsyncThunk('fragments/deleteFragment', async(fragment:Fragment) => {
+    try{
+        await supabase.from('FRAGMENTS').delete().eq("ID", fragment.ID)
+        const { data } = await supabase.from('FRAGMENTS').select("*").eq("SESSION_ID", fragment.SESSION_ID)
+        return data as Fragment[]
+    }catch(e){
+        console.error("Error al eliminar el fragmento")
+    }
+})
+
 export const createQuestions = createAsyncThunk(
   "fragments/submitFragments",
   async (payload: { fragment: Fragment; kindquestion: kindQuestion }) => {
@@ -205,6 +215,13 @@ const fragmentsSlice = createSlice({
         })
         .addCase(createQuestions.rejected, (state) => {
             state.loading = false;
+        })
+        .addCase(deleteFragment.pending, (state) => {
+            state.fragmentsLoading = true; 
+        })
+        .addCase(deleteFragment.fulfilled, (state, action) => {
+            state.fragmentsLoading = false; 
+            state.fragments = action.payload as Fragment[]
         })
     }
 })

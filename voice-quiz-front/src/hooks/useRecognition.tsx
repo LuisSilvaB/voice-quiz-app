@@ -23,6 +23,7 @@ const useRecognition = () => {
   const fragments = useSelector((state:RootState) => state.fragments.fragments)
   const fragmentLoading = useSelector((state:RootState) => state.fragments.fragmentLoading)
   const currentUser = useSelector((state:RootState) => state.users.user)
+  const currenSession = useSelector((state:RootState) => state.sessions)
 
   const onListening = () => {
     try {
@@ -56,7 +57,7 @@ const useRecognition = () => {
   
   }
   const onGenerateFragments = useCallback(async () => {
-  const fragmentSize: number = 100;
+  const fragmentSize: number = currenSession.context ?? 1000;
   
     if (transcript && audioStream && !requestSent) {
       try {

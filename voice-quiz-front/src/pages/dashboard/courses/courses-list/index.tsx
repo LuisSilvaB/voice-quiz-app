@@ -95,9 +95,11 @@ const CursesList:React.FC<Props> = () => {
 
   return (
     <div className="flex h-full w-full flex-col items-start justify-start p-2 lg:p-10">
-      <div className="flex w-full items-start gap-2 lg:items-center justify-start pb-4 pr-4 flex-col lg:flex-row lg:justify-between" > 
+      <div className="flex w-full flex-col items-start justify-start gap-2 pb-4 pr-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="font-montserrat text-4xl font-bold text-blue-gray-600">Lista de cursos</p>
+          <p className="font-montserrat text-4xl font-bold text-blue-gray-600">
+            Lista de cursos
+          </p>
         </div>
         <div className="flex gap-2">
           <Button
@@ -116,20 +118,22 @@ const CursesList:React.FC<Props> = () => {
           </Button>
         </div>
       </div>
-      <section className="flex w-full flex-1 flex-wrap gap-3 overflow-y-auto pb-10 border-2 border-blue-gray-50 rounded-lg p-4">
-        {
-          newCoursesStore.courses && !newCoursesStore.courses.length ? (
-            <div className='w-full h-full flex flex-1 justify-center items-center text-blue-gray-600 flex-col gap-2'>
-              <VscEmptyWindow className='h-auto w-20' />
-              <p className='font-medium font-montserrat'>No hay cursos registrados</p>
-            </div>
-          ) : null
-        }
-        {newCoursesStore.courses
-          ? newCoursesStore.courses?.map((course: Course, index) => (
-              <CourseCard key={index} {...course} />
-            ))
-          : null}
+      <section className="flex w-full flex-1 flex-wrap items-start  justify-start gap-3 overflow-y-auto rounded-lg border-2 border-blue-gray-50 p-4">
+        {newCoursesStore.courses && !newCoursesStore.courses.length ? (
+          <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 text-blue-gray-600">
+            <VscEmptyWindow className="h-auto w-20" />
+            <p className="font-montserrat font-medium">
+              No hay cursos registrados
+            </p>
+          </div>
+        ) : null}
+        <div className="flex h-fit w-full flex-row flex-wrap items-start justify-start gap-3 ">
+          {newCoursesStore.courses
+            ? newCoursesStore.courses?.map((course: Course, index) => (
+                <CourseCard key={index} {...course} />
+              ))
+            : null}
+        </div>
       </section>
       <CreateCourseModal />
       <EditCourseModal />

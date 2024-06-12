@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { Button, Chip } from "@material-tailwind/react"
+import { Button, Typography } from "@material-tailwind/react"
 
 import { CiSearch } from "react-icons/ci";
 import { FaArrowAltCircleRight } from "react-icons/fa";
@@ -12,13 +12,19 @@ import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { FiPlus } from "react-icons/fi";
+import { CgSpinner } from "react-icons/cg";
 
 
 import EditCourseModal from "../courses-list/course-card-modals/edit-course/edit-course.modal";
 import DeleteCourseModal from "../courses-list/course-card-modals/delete-course.modal";
 import { ModalActions } from "../../../../interface/types";
 
-import { setTypeModal, setTargetCourse, setToggleModal, clearCourseData } from "../../../../features/db-features/courses.features";
+import {
+  // setTypeModal,
+  // setTargetCourse,
+  // setToggleModal,
+  clearCourseData,
+} from "../../../../features/db-features/courses.features";
 import { setSessionTypeModal, setSessionToggleModal, getAllSessions, clearSessionsData } from "../../../../features/db-features/sessions.features";
 
 import { getCourse } from "../../../../features/db-features/courses.features";
@@ -26,12 +32,12 @@ import { AppDispatch, RootState } from "../../../../app/store";
 import { supabase } from '../../../../config/config';
 import { toast } from "sonner";
 import { Session } from "../../../../class/sessions";
-import CourseSkeleton from "./course-skeleton";
+// import CourseSkeleton from "./course-skeleton";
 
 
 const CourseView = () => {
   const currentCourse:Course = useSelector((state: RootState) => state.courses.course)
-  const courseLoading:boolean = useSelector((state: RootState) => state.courses.courseLoading)
+  // const courseLoading:boolean = useSelector((state: RootState) => state.courses.courseLoading)
   const currentUser = useSelector((state: RootState) => state.users.user)
   const sessions = useSelector((state: RootState) => state.sessions.sessions)
   const sessionsLoading = useSelector((state: RootState) => state.sessions.sessionsLoading)
@@ -151,154 +157,26 @@ const CourseView = () => {
     setFilter("")
   }
 
-  const openModal = (action: ModalActions) => {
-    dispatch(setTypeModal(action))
-    dispatch(setTargetCourse(currentCourse))
-    dispatch(setToggleModal())
-  }
+  // const openModal = (action: ModalActions) => {
+  //   dispatch(setTypeModal(action))
+  //   dispatch(setTargetCourse(currentCourse))
+  //   dispatch(setToggleModal())
+  // }
   const openCreateSessionModal = (action: ModalActions) => {
     dispatch(setSessionTypeModal(action))
     dispatch(setSessionToggleModal())
   }
 
 
-
-  // if(courseLoading || !currentCourse ) return (
-  //   <div className="flex h-full w-full items-center justify-center">
-  //     <CgSpinner className="h-auto w-20 animate-spin text-tangaroa-500" />
-  //   </div>
-  // );
   
   return (
-    <div className="flex w-full flex-1 select-none flex-col items-center lg:items-start justify-start gap-6 lg:flex-row">
-      <div className="flex h-fit w-fit flex-col items-center justify-center gap-2 lg:ml-11 lg:h-full lg:w-auto lg:items-start lg:justify-start">
-        {!currentCourse ? (
-          <CourseSkeleton />
-        ) : (
-          <div className="relative top-5 mx-auto mt-4 w-full rounded-lg border-t bg-white p-6 shadow-lg lg:w-[500px] lg:max-w-[350px]">  
-            <div className="flex flex-col gap-5">
-              <div className="flex flex-col gap-3">
-                <p className="text-3xl font-bold">
-                  {courseLoading ? (
-                    <div className="h-8 w-40 animate-pulse rounded-md bg-gray-300" />
-                  ) : (
-                    currentCourse.title
-                  )}
-                </p>
-
-                <p className="flex justify-between font-bold text-gray-500">
-                  <span className="font-normal">
-                    {courseLoading ? (
-                      <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
-                    ) : (
-                      <Chip color="teal" value={<p>{currentCourse.ID}</p>} />
-                    )}
-                  </span>
-                </p>
-
-                <p className="flex justify-between font-bold text-gray-500">
-                  N° de sesiones:{" "}
-                  {courseLoading ? (
-                    <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
-                  ) : (
-                    <span className="font-normal">
-                      {currentCourse?.sessions_count} sesiones
-                    </span>
-                  )}
-                </p>
-
-                <p className="flex justify-between font-bold text-gray-500">
-                  Profesor:{" "}
-                  {courseLoading ? (
-                    <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
-                  ) : (
-                    <span className="font-normal">
-                      {currentCourse?.teacher_name}
-                    </span>
-                  )}
-                </p>
-
-                {/* <p className="flex justify-between font-bold text-gray-500">
-                  Cantidad de estudiantes:{" "}
-                  {courseLoading ? (
-                    <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
-                  ) : (
-                    <span className="font-normal">
-                      {currentCourse?.students_count} estudiantes
-                    </span>
-                  )}
-                </p> */}
-
-                <p className="flex justify-between font-bold text-gray-500">
-                  Duración :{" "}
-                  {courseLoading ? (
-                    <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
-                  ) : (
-                    <span className="font-normal">
-                      {currentCourse?.duration} semanas
-                    </span>
-                  )}
-                </p>
-
-                <p className="flex justify-between font-bold text-gray-500">
-                  Fecha de inicio:{" "}
-                  {courseLoading ? (
-                    <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
-                  ) : (
-                    <span className="font-normal">
-                      {currentCourse?.initial_date
-                        ? new Date(currentCourse.initial_date)
-                            .toISOString()
-                            .split("T")[0]
-                        : ""}
-                    </span>
-                  )}
-                </p>
-
-                <p className="flex justify-between font-bold text-gray-500">
-                  Fecha de fin:{" "}
-                  {courseLoading ? (
-                    <div className="h-4 w-40 animate-pulse rounded-lg bg-gray-300" />
-                  ) : (
-                    <span className="font-normal">
-                      {currentCourse?.final_date
-                        ? new Date(currentCourse.final_date)
-                            .toISOString()
-                            .split("T")[0]
-                        : ""}
-                    </span>
-                  )}
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <Button
-                  placeholder={""}
-                  size="sm"
-                  className="bg-blue-500"
-                  onClick={() => {
-                    openModal("edit");
-                  }}
-                >
-                  Editar
-                </Button>
-                <Button
-                  placeholder={""}
-                  size="sm"
-                  className="bg-red-500"
-                  onClick={() => {
-                    openModal("delete");
-                  }}
-                >
-                  Eliminar
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* <div className="flex-1 border lg:w-full lg:max-w-[500px]"></div> */}
+    <div className="flex w-full flex-1 select-none flex-col items-center justify-start gap-1 lg:flex-col lg:items-start">
+      <div className="h-fit w-full px-4 pt-5">
+        <Typography placeholder={""} variant="h2" color="gray">
+          {currentCourse.title}
+        </Typography>
       </div>
-      <div className="flex max-h-[80vh] flex-1 flex-col overflow-y-auto px-4 pt-5">
+      <div className="flex max-h-[80vh] w-full flex-1 flex-col overflow-y-auto px-4 pt-1">
         <div className="flex items-center  justify-between py-4 ">
           <div className="relative flex w-[60%] ">
             {toggleSession.isOpen ? (
@@ -317,14 +195,6 @@ const CourseView = () => {
             )}
           </div>
           <div className="flex flex-1 items-center justify-end gap-2">
-            <Button
-              loading={sessionsLoading}
-              placeholder={""}
-              variant="text"
-              size="sm"
-            >
-              Sesiones
-            </Button>
             {toggleSession.isOpen ? (
               <Button
                 placeholder={""}
@@ -339,7 +209,7 @@ const CourseView = () => {
                 onClick={() => openCreateSessionModal("create")}
                 placeholder={""}
                 variant="filled"
-                size="sm"
+                size="md"
                 color="green"
                 className="flex items-center justify-center gap-2"
               >
@@ -351,13 +221,18 @@ const CourseView = () => {
         </div>
         <CourseSessionsTable
           sessions={(sessions as Session[]) ?? ([] as Session[])}
+          sessionLoading={sessionsLoading}
           filter={filter}
           setFilter={setFilter}
           openSessionDetails={() => {}}
           openSessionView={openSessionView}
           {...toggleSession}
         />
-        {/* <SessionDetails targetSession={targetSession ?? {} as Session} isOpen = {tagSession.isOpen}/>  */}
+        {sessionsLoading ? (
+          <div className="flex w-full flex-col h-20 items-center justify-center gap-2">
+            <CgSpinner className="h-16 w-16 animate-spin text-gray-500" />
+          </div>
+        ) : null}
       </div>
       <EditCourseModal />
       <DeleteCourseModal />

@@ -35,12 +35,12 @@ const QuizSessionOptions:React.FC<Props> = ({ questions }) => {
       <Drawer
         transition={{ type: "tween", duration: 0.2 }}
         placeholder={""}
-        size={420}
+        size={900}
         title="Mis cuestionarios"
         placement="right"
         open={toggleMyQuizzes.isOpen}
         onClose={toggleMyQuizzes.onClose}
-        className="flex flex-col gap-2 rounded-l-lg bg-white p-4"
+        className="flex flex-col gap-2 rounded-l-lg bg-white p-4 max-h-[10vh] overflow-y-auto"
       >
         <div className="flex w-full flex-row items-center justify-between">
           <Typography

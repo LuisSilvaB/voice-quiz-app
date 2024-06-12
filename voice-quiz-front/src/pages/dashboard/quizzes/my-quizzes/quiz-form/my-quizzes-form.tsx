@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "../../../../../app/store";
 import { createQuiz, getQuizByID, updateQuiz } from "../../../../../features/db-features/quizzes.features";
 import { Question } from "../../../../../class/questions.class";
 import { v4 } from "uuid";
-
+import { useNavigate } from "react-router-dom";
 interface Props {
   currentQuestions:Question[]
 }
@@ -18,6 +18,7 @@ const MyQuizzesForm:React.FC<Props> = ({
   const currentUser = useSelector((state:RootState) => state.users.user)
   const dispatch = useDispatch<AppDispatch>()
   const params = useParams()
+  const navigate = useNavigate()
   const [quizForm, setQuizForm] = useState<Quiz>({
     ID: "",   
     title: "",
@@ -36,6 +37,7 @@ const MyQuizzesForm:React.FC<Props> = ({
       quizFormContent: quizForm,
       questionsID: currentQuestions.map((question:Question) => question.ID)
     }))
+    navigate("/dashboard/my-quizzes")
   }
 
   const onCreateQuiz  = (e:React.FormEvent<HTMLFormElement>) => {
@@ -55,6 +57,7 @@ const MyQuizzesForm:React.FC<Props> = ({
       quiz: newQuiz,
       questionsID: currentQuestions.map((question:Question) => question.ID),
      }))
+     navigate("/dashboard/my-quizzes")
   }
 
   useEffect(()=>{
@@ -81,7 +84,7 @@ const MyQuizzesForm:React.FC<Props> = ({
       >
         <div className="mb-1 mt-3 flex flex-col gap-4">
         <Typography placeholder={""} variant="h5" color="blue-gray">
-          Formumario
+          Formulario
         </Typography>
           <Input
             required={true}
