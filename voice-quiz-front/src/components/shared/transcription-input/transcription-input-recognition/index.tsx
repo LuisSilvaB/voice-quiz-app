@@ -12,12 +12,8 @@ import { CgClose } from 'react-icons/cg';
 import { createQuestions } from '../../../../features/fragments.features';
 import { useParams } from 'react-router-dom';
 import { getCourse } from '../../../../features/db-features/courses.features';
-import { clearSessionData, getSession, updateSession } from '../../../../features/db-features/sessions.features';
+import { clearSessionData, getSession, updateSession, setContext } from '../../../../features/db-features/sessions.features';
 import { Fragment } from '../../../../class/fragments';
-import { FaQuestionCircle } from "react-icons/fa";
-import { CgSpinner } from "react-icons/cg";
-import cx from '../../../../libs/cx';
-import { VscEmptyWindow } from 'react-icons/vsc';
 import { CiCreditCardOff } from "react-icons/ci";
 
 
@@ -28,7 +24,7 @@ const InputRecognition = () => {
   const params = useParams(); 
 
   const [isListening, setIsListening] = useState<boolean>(false);
-  const [isRecording, setIsRecording] = useState<boolean>(true);
+  const [isRecording, setIsRecording] = useState<boolean>(false);
   const [currentTranscript, setCurrentTranscript] = useState<string>("")
   const [processedCharacters, setProcessedCharacters] = useState<number>(0);
   
@@ -57,7 +53,30 @@ const InputRecognition = () => {
     dispatch(getFragments(params.sessionId as string ?? ""))
   },[params.sessionId])
 
-
+  const onSetContext = (context: number) => {
+    switch (context) {
+      case 100:
+        dispatch(setContext(500))
+        break;
+      case 500:
+        dispatch(setContext(2500))
+        break;
+      case 1000:
+        dispatch(setContext(5000))
+        break;
+      case 2000:
+        dispatch(setContext(10000))
+        break;
+      case 3000:
+        dispatch(setContext(15000))
+        break;
+      case 4000:
+        dispatch(setContext(20000))
+        break;
+      default:
+      break;
+    }
+  }
 
   const getCurrenTranscript = useCallback(()=>{
     if (currentSession && currentSession.transcription?.length) {
@@ -132,9 +151,9 @@ const InputRecognition = () => {
   return (
     <div className="box-border flex h-full w-full max-w-[60%] flex-col ">
       <div className="flex h-full w-full flex-col rounded-md bg-white p-4 shadow-md">
-        <h3 className="text-base font-medium font-inter text-black border-b">TRANSCRIPCIÓN</h3>
-        <div className="flex min-h-[20vh] flex-col">
-          <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg text-gray-600 bg-white p-2 text-xs font-normal border-b">
+        {/* <h3 className="text-base font-medium font-inter text-black border-b">TRANSCRIPCIÓN</h3> */}
+        <div className="flex h-fit flex-col">
+          {/* <div className="w-fill h-full max-h-[150px] overflow-y-auto rounded-lg text-gray-600 bg-white p-2 text-xs font-normal border-b">
             {!currentTranscript.length ? (
               <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 text-gray-600">
                 <VscEmptyWindow className="h-auto w-10" />
@@ -143,20 +162,80 @@ const InputRecognition = () => {
             ) : (
               currentTranscript
             )}
-          </div>
-          <div className="mt-4 flex w-full items-center justify-between text-sm font-normal text-gray-600">
-            <p className='tesxt-gray-600 text-xs'>Cantidad de caratéres: {currentTranscript.length}</p>
-            <Button placeholder={""} onClick={transcriptionModal.onOpen} className='flex flex-row items-center gap-2 text-xs border' size='sm' variant='text'>
-              <p>Ver transcripción</p>
-            </Button>
+          </div> */}
+          <div className=" flex w-full flex-wrap items-center justify-between text-sm font-normal text-gray-600">
+            <div className=" flex w-fit flex-wrap items-center justify-between text-sm font-normal text-gray-600">
+              <p>Contexto</p>
+              <select
+                className="outline-none"
+                onChange={(e) => onSetContext(Number(e.target.value))}
+              >
+                <option value={100}>100 palabras</option>
+                <option value={500}>500 palabras</option>
+                <option value={1000}>1000 palabras</option>
+                <option value={2000}>2000 palabras</option>
+                <option value={3000}>3000 palabras</option>
+                <option value={4000}>4000 palabras</option>
+              </select>
+            </div>
+            <div className="flex w-fit items-center gap-2 ">
+              <Button
+                placeholder={""}
+                onClick={transcriptionModal.onOpen}
+                className="flex flex-row items-center gap-2 border text-xs"
+                size="sm"
+                variant="text"
+              >
+                {isRecording ? (
+                  <p className="animate-pulse">Transcribiendo ...</p>
+                ) : (
+                  <p>Ver transcripción</p>
+                )}
+              </Button>
+              {isListening ? (
+                <div className="relative">
+                  <Button
+                    placeholder={""}
+                    size="sm"
+                    className="flex items-center gap-3 bg-red-500"
+                    disabled={isRecording ? true : false}
+                    onClick={() => {
+                      recognitionFns.onStopListening();
+                      setIsListening(false);
+                    }}
+                  >
+                    <p>Detener grabación</p>
+                    <FaMicrophoneAlt />
+                  </Button>
+                  <div className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center">
+                    <div className="realtive flex h-4 w-4 items-center justify-center rounded-full opacity-75">
+                      <div className="absolute h-4 w-4 animate-ping rounded-full bg-red-900 opacity-75 duration-200" />
+                      <div className="h-full w-full rounded-full bg-red-900 opacity-75" />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  size="sm"
+                  placeholder={""}
+                  className="bg-green-500"
+                  onClick={() => {
+                    recognitionFns.onListening();
+                    setIsListening(true);
+                  }}
+                >
+                  Iniciar grabación
+                </Button>
+              )}
+            </div>
           </div>
         </div>
         {targetFrament.ID ? (
-          <div className="border-gray- mt-2 flex h-full w-full flex-col rounded-lg border bg-white p-4 text0-xs">
+          <div className="border-gray- text0-xs mt-2 flex h-full w-full flex-col rounded-lg border bg-white p-4">
             <div className="flex w-full items-center justify-between">
               <div className="flex items-center gap-2">
                 <Chip
-                  value="Fragment: "
+                  value="Fragmento: "
                   className="w-fit"
                   variant="outlined"
                   size="sm"
@@ -170,14 +249,6 @@ const InputRecognition = () => {
                 />
               </div>
               <div className="flex gap-2">
-                <IconButton placeholder={""} className="bg-green-500">
-                  {loading ? (
-                    <CgSpinner className={cx(loading ? "animate-spin" : "")} />
-                  ) : (
-                    <FaQuestionCircle />
-                  )}
-                </IconButton>
-
                 <IconButton
                   placeholder={""}
                   className="bg-red-500"
@@ -206,7 +277,7 @@ const InputRecognition = () => {
                 variant="ghost"
                 size="sm"
               />
-              <p className="mb-2 mt-1 max-h-10 overflow-hidden truncate text-clip text-wrap text-xs font-normal">
+              <p className="mb-2 mt-1 max-h-[70%] overflow-hidden truncate text-clip text-wrap text-xs font-normal">
                 {targetFrament.content}
               </p>
             </div>
@@ -214,9 +285,9 @@ const InputRecognition = () => {
               <Button
                 placeholder={""}
                 color="pink"
-                size='sm'
+                size="sm"
                 variant="text"
-                  className='border'
+                className="border"
                 onClick={() =>
                   dispatch(
                     createQuestions({
@@ -231,8 +302,8 @@ const InputRecognition = () => {
               <Button
                 placeholder={""}
                 variant="text"
-                className='border'
-                size='sm'
+                className="border"
+                size="sm"
                 color="green"
                 onClick={() =>
                   dispatch(
@@ -248,9 +319,9 @@ const InputRecognition = () => {
               <Button
                 placeholder={""}
                 variant="text"
-                className='border'
+                className="border"
                 color="blue-gray"
-                size='sm'
+                size="sm"
                 onClick={() =>
                   dispatch(
                     createQuestions({
@@ -263,7 +334,11 @@ const InputRecognition = () => {
                 Verdadero o falso
               </Button>
             </div>
-
+            <div className="w-full p-3">
+              {loading ? (
+                <p className="gap-2 text-sm animate-pulse text-gray-600">Generando preguntas ...</p>
+              ) : null}
+            </div>
           </div>
         ) : (
           <div className="box-border flex h-full w-auto flex-col">
@@ -273,7 +348,7 @@ const InputRecognition = () => {
                 Cantidad de fragmentos: {recognitionFns.fragments.length}
               </p>
             </div>
-            <div className="flez-1 flex h-fit max-h-[30vh] w-full flex-1 flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md  border-gray-400  p-2 pt-10 text-sm text-gray-600">
+            <div className="flex max-h-[calc(100%-70px)] flex-1 flex-row flex-wrap justify-around gap-4 overflow-y-auto rounded-md border  border-gray-200  p-2  text-sm text-gray-600">
               {!fragments.length ? (
                 <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 text-gray-600">
                   <CiCreditCardOff className="h-auto w-20" />
@@ -291,43 +366,13 @@ const InputRecognition = () => {
             </div>
           </div>
         )}
-        <div className="mt-2 flex w-full items-center justify-between gap-4">
-          <div className="flex w-auto justify-start gap-4">
-            {isListening ? (
-              <Button
-                placeholder={""}
-                size='sm'
-                className="flex items-center gap-3 bg-red-500"
-                disabled={isRecording ? true : false}
-                onClick={() => {
-                  recognitionFns.onStopListening();
-                  setIsListening(false);
-                }}
-              >
-                <p>Detener grabación</p>
-                <FaMicrophoneAlt />
-              </Button>
-            ) : (
-              <Button
-                size='sm'
-                placeholder={""}
-                className="bg-green-500"
-                onClick={() => {
-                  recognitionFns.onListening();
-                  setIsListening(true);
-                }}
-              >
-                Iniciar grabación
-              </Button>
-            )}
-          </div>
-        </div>
       </div>
       <RecognitionModal
         isOpen={transcriptionModal.isOpen}
         onClose={transcriptionModal.onClose}
         isListening={isListening}
         setListening={setIsListening}
+        isRecording={isRecording}
         currentTranscript={currentTranscript}
       />
     </div>

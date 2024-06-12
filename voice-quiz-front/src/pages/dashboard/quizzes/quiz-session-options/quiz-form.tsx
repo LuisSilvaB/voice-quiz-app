@@ -146,199 +146,203 @@ const QuizForm:React.FC<Props> = ({quiz, questions, setCurrentView}) => {
       className="mt-2 flex w-full flex-col items-center justify-start gap-1"
     >
       <form
-        className="mb-2 mt-3 w-80 max-w-screen-lg sm:w-96"
+        className="mb-2 mt-3 w-80 max-w-screen-lg sm:w-full flex flex-row gap-2"
         onSubmit={quiz ? onUpdateQuiz : onCreateQuiz}
       >
-        <Typography placeholder={""} variant="h5" color="blue-gray">
-          {quiz ? "Editar cuestionario" : "Crear cuestionario"}
-        </Typography>
-        <div className="mb-1 mt-3 flex flex-col gap-4">
-          <Input
-            required={true}
-            label="Nombre del cuestionario"
-            value={quizForm.title}
-            onChange={(e) => {
-              setQuizForm((prev) => ({
-                ...prev,
-                title: e.target.value,
-              }));
-            }}
-            crossOrigin={""}
-            size="md"
-            color="blue-gray"
-          />
-          <Input
-            required={true}
-            label="Descripción del cuestionario"
-            value={quizForm.description}
-            onChange={(e) => {
-              setQuizForm((prev) => ({
-                ...prev,
-                description: e.target.value,
-              }));
-            }}
-            crossOrigin={""}
-            size="lg"
-            placeholder="name@mail.com"
-          />
-          <Input
-            required={true}
-            label="Inicio del cuestionario"
-            value={quizForm.initial_time}
-            onChange={(e) => {
-              setQuizForm((prev) => ({
-                ...prev,
-                initial_time: e.target.value,
-              }));
-            }}
-            crossOrigin={""}
-            type="time"
-            placeholder="HH:MM:SS"
-            pattern="\\d{2}:\\d{2}:\\d{2}"
-            size="lg"
-          />
-          <Input
-            required={true}
-            label="Fin del cuestionario"
-            value={quizForm.final_time}
-            onChange={(e) => {
-              setQuizForm((prev) => ({
-                ...prev,
-                final_time: e.target.value,
-              }));
-            }}
-            crossOrigin={""}
-            type="time"
-            placeholder="HH:MM:SS"
-            pattern="\\d{2}:\\d{2}:\\d{2}"
-            size="lg"
-          />
-          <div className="mb-2 flex w-full flex-col items-start justify-between gap-3">
-            <div className="flex w-full flex-row gap-2">
+        <div className='flex-1'>          
+          <Typography placeholder={""} variant="h5" color="blue-gray">
+            {quiz ? "Editar cuestionario" : "Crear cuestionario"}
+          </Typography>
+          <div className="mb-1 mt-3 flex flex-col gap-4">
+            <Input
+              required={true}
+              label="Nombre del cuestionario"
+              value={quizForm.title}
+              onChange={(e) => {
+                setQuizForm((prev) => ({
+                  ...prev,
+                  title: e.target.value,
+                }));
+              }}
+              crossOrigin={""}
+              size="md"
+              color="blue-gray"
+            />
+            <Input
+              required={true}
+              label="Descripción del cuestionario"
+              value={quizForm.description}
+              onChange={(e) => {
+                setQuizForm((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }));
+              }}
+              crossOrigin={""}
+              size="lg"
+              placeholder="name@mail.com"
+            />
+            <Input
+              required={true}
+              label="Inicio del cuestionario"
+              value={quizForm.initial_time}
+              onChange={(e) => {
+                setQuizForm((prev) => ({
+                  ...prev,
+                  initial_time: e.target.value,
+                }));
+              }}
+              crossOrigin={""}
+              type="time"
+              placeholder="HH:MM:SS"
+              pattern="\\d{2}:\\d{2}:\\d{2}"
+              size="lg"
+            />
+            <Input
+              required={true}
+              label="Fin del cuestionario"
+              value={quizForm.final_time}
+              onChange={(e) => {
+                setQuizForm((prev) => ({
+                  ...prev,
+                  final_time: e.target.value,
+                }));
+              }}
+              crossOrigin={""}
+              type="time"
+              placeholder="HH:MM:SS"
+              pattern="\\d{2}:\\d{2}:\\d{2}"
+              size="lg"
+            />
+            <div className="mb-2 flex w-full flex-col items-start justify-between gap-3">
               <div className="flex w-full flex-row gap-2">
-                <Switch
-                  crossOrigin={""}
-                  color="deep-purple"
-                  checked={quizForm.is_active}
-                  onChange={(e) => {
-                    setQuizForm((prev) => ({
-                      ...prev,
-                      is_active: e.target.checked,
-                    }));
-                  }}
-                />
-                <Typography placeholder={""} variant="small" color="blue-gray">
-                  Activar cuestionario
-                </Typography>
+                <div className="flex w-full flex-row gap-2">
+                  <Switch
+                    crossOrigin={""}
+                    color="deep-purple"
+                    checked={quizForm.is_active}
+                    onChange={(e) => {
+                      setQuizForm((prev) => ({
+                        ...prev,
+                        is_active: e.target.checked,
+                      }));
+                    }}
+                  />
+                  <Typography placeholder={""} variant="small" color="blue-gray">
+                    Activar cuestionario
+                  </Typography>
+                </div>
               </div>
+              <Select
+                placeholder={""}
+                label="Selecciona el tipo de pregunta"
+                color="orange"
+              >
+                <Option onClick={() => setFilters("true_or_false")}>
+                  Verdadero o Falso
+                </Option>
+                <Option onClick={() => setFilters("multiple_answer")}>
+                  Alternativas
+                </Option>
+              </Select>
             </div>
-            <Select
-              placeholder={""}
-              label="Selecciona el tipo de pregunta"
-              color="orange"
-            >
-              <Option onClick={() => setFilters("true_or_false")}>
-                Verdadero o Falso
-              </Option>
-              <Option onClick={() => setFilters("multiple_answer")}>
-                Alternativas
-              </Option>
-            </Select>
           </div>
         </div>
-        <div className="flex max-h-[450px] w-full flex-1 flex-col gap-3 overflow-y-scroll pt-2">
-          {currentQuestions && currentQuestions.length
-            ? currentQuestions.map((question: Question, index: number) => (
-                <div
-                  key={index}
-                  className="flex w-full flex-row items-start gap-2 rounded-lg border border-gray-400 p-2"
-                >
-                  <Checkbox
-                    crossOrigin={""}
-                    color="orange"
-                    onChange={() => onSelectQuestion(question.ID)}
-                    checked={selectedQuestions.includes(question.ID)}
-                  />
-                  <div className="flex flex-col gap-2">
-                    <Typography
-                      placeholder={""}
-                      variant="small"
-                      color="blue-gray"
-                      className="font-medium"
-                    >
-                      {question.question}
-                    </Typography>
-                    {question.type === "true_or_false" ? (
-                      <Chip
-                        value={question.ID ? "Verdadero o Falso" : "Pregunta"}
-                        variant="ghost"
-                        size="sm"
-                        className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
-                      ></Chip>
-                    ) : null}
+        <div className='flex-1 h-fit'>
+          <div className="flex max-h-[calc(100vh-160px)] w-full flex-1 flex-col gap-3 overflow-y-scroll pt-2">
+            {currentQuestions && currentQuestions.length
+              ? currentQuestions.map((question: Question, index: number) => (
+                  <div
+                    key={index}
+                    className="flex w-full flex-row items-start gap-2 rounded-lg border border-gray-400 p-2"
+                  >
+                    <Checkbox
+                      crossOrigin={""}
+                      color="orange"
+                      onChange={() => onSelectQuestion(question.ID)}
+                      checked={selectedQuestions.includes(question.ID)}
+                    />
+                    <div className="flex flex-col gap-2">
+                      <Typography
+                        placeholder={""}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-medium"
+                      >
+                        {question.question}
+                      </Typography>
+                      {question.type === "true_or_false" ? (
+                        <Chip
+                          value={question.ID ? "Verdadero o Falso" : "Pregunta"}
+                          variant="ghost"
+                          size="sm"
+                          className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
+                        ></Chip>
+                      ) : null}
 
-                    {question.type === "multiple_answer" ? (
-                      <Chip
-                        value={question.ID ? "Alternativas" : "Pregunta"}
-                        variant="ghost"
-                        color="pink"
-                        size="sm"
-                        className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
-                      ></Chip>
-                    ) : null}
+                      {question.type === "multiple_answer" ? (
+                        <Chip
+                          value={question.ID ? "Alternativas" : "Pregunta"}
+                          variant="ghost"
+                          color="pink"
+                          size="sm"
+                          className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
+                        ></Chip>
+                      ) : null}
 
-                    {question.type === "open_answer" ? (
-                      <Chip
-                        value={question.ID ? "Pregunta abierta" : "Pregunta"}
-                        variant="ghost"
-                        color="green"
-                        size="sm"
-                        className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
-                      ></Chip>
-                    ) : null}
+                      {question.type === "open_answer" ? (
+                        <Chip
+                          value={question.ID ? "Pregunta abierta" : "Pregunta"}
+                          variant="ghost"
+                          color="green"
+                          size="sm"
+                          className="w-fit truncate text-ellipsis rounded-md border px-2 text-xs"
+                        ></Chip>
+                      ) : null}
 
-                    {question.alternatives?.map(
-                      (alternative: string, index: number) => (
-                        <div className="flex flex-col gap-2" key={index}>
+                      {question.alternatives?.map(
+                        (alternative: string, index: number) => (
+                          <div className="flex flex-col gap-2" key={index}>
+                            <Typography
+                              placeholder={""}
+                              variant="small"
+                              color="blue-gray"
+                            >
+                              {alternative}
+                            </Typography>
+                          </div>
+                        ),
+                      )}
+                      {
+                        <div className="flex flex-col gap-2">
                           <Typography
                             placeholder={""}
                             variant="small"
                             color="blue-gray"
+                            className="font-medium"
                           >
-                            {alternative}
+                            Respuesta
                           </Typography>
+                          <p className="text-xs">{question.answer}</p>
                         </div>
-                      ),
-                    )}
-                    {
-                      <div className="flex flex-col gap-2">
-                        <Typography
-                          placeholder={""}
-                          variant="small"
-                          color="blue-gray"
-                          className="font-medium"
-                        >
-                          Respuesta
-                        </Typography>
-                        <p className="text-xs">{question.answer}</p>
-                      </div>
-                    }
+                      }
+                    </div>
                   </div>
-                </div>
-              ))
-            : null}
-        </div>
-        <div className="mt-2 flex w-full justify-end">
-          <Button
-            type="submit"
-            placeholder={""}
-            variant="gradient"
-            size="md"
-            className="flex items-center  gap-2"
-            color="orange"
-          >
-            {quiz ? <p>Actualizar cuestionario</p> : <p>Crear cuestionario</p>}
-          </Button>
+                ))
+              : null}
+          </div>
+          <div className="mt-2 flex w-full justify-end">
+            <Button
+              type="submit"
+              placeholder={""}
+              variant="gradient"
+              size="md"
+              className="flex items-center  gap-2"
+              color="orange"
+            >
+              {quiz ? <p>Actualizar cuestionario</p> : <p>Crear cuestionario</p>}
+            </Button>
+          </div>
         </div>
       </form>
     </Card>

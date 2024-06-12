@@ -111,6 +111,7 @@ const sessionsSlice = createSlice({
         // Modal actions
         sessionIsOpenModal: false as boolean,
         sessionTypeModal: null as ModalActions, 
+        context: 100 as number, 
     },
     reducers: {
         setLoadingSessionDB: (state, action) => {
@@ -140,7 +141,10 @@ const sessionsSlice = createSlice({
         },
         setSessionToggleModal: (state) => {
             state.sessionIsOpenModal = !state.sessionIsOpenModal;
-        }
+        }, 
+        setContext: (state, action) => {
+            state.context = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -200,5 +204,6 @@ export const {
   setSessionTypeModal,
   setSessionToggleModal,
   setTargetSession,
+  setContext
 } = sessionsSlice.actions;
 export default sessionsSlice.reducer;

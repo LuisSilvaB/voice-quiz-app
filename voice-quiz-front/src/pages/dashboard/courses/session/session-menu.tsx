@@ -16,9 +16,9 @@ const SessionMenu: React.FC<Props> = ({ returnToCourse }) => {
   const sessionLoading = useSelector(
     (state: RootState) => state.sessions.sessionLoading,
   );
-  const currrentCourse = useSelector(
-    (state: RootState) => state.courses.course,
-  );
+  // const currrentCourse = useSelector(
+  //   (state: RootState) => state.courses.course,
+  // );
   const currentSession = useSelector(
     (state: RootState) => state.sessions.session,
   );
@@ -32,15 +32,16 @@ const SessionMenu: React.FC<Props> = ({ returnToCourse }) => {
           className="my-2 flex flex-row items-center gap-2"
         >
           <PiKeyReturnFill className="h-auto w-5" />
+          <p>Volver a curso</p>
         </Button>
 
         <Breadcrumbs placeholder={""} className="w-full text-xs">
           <BsGrid1X2 />
-          <p>Cursos</p>
+          {/* <p>Cursos</p> */}
           <p onClick={returnToCourse}>Curso</p>
-          <Chip size="sm" color="teal" value={currrentCourse.ID} />
-          <p>Sesión</p>
-          <Chip size="sm" color="deep-purple" value={currentSession.ID} />
+          {/* <Chip size="sm" color="teal" value={currrentCourse.ID} /> */}
+          {/* <p>Sesión</p> */}
+          <Chip size="sm" color="deep-purple" value={currentSession.title} />
         </Breadcrumbs>
       </div>
       <div className="flex h-fit w-fit flex-row items-center justify-end gap-6 font-montserrat">
