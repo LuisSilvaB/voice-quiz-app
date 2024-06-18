@@ -70,7 +70,7 @@ const useRecognition = () => {
           // Marcar la solicitud como enviada para evitar múltiples envíos
           setRequestSent(true);
   
-          const response = await fetch(`${publicConfig.back_v1_local}/api/title/v2`, {
+          const response = await fetch(`${publicConfig.back_v1}/api/title/v2`, {
             method: "POST",
             body: formData,   
           });
