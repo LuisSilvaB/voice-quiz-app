@@ -16,6 +16,7 @@ import EditQuiz from "../pages/dashboard/quizzes/my-quizzes/edit-quiz";
 import CreateQuiz from "../pages/dashboard/quizzes/my-quizzes/create-quiz";
 import Quiz from "../pages/dashboard/quizzes/quiz";
 import StastQuiz from "../pages/dashboard/quizzes/my-quizzes/stats-quiz/stats-quiz";
+import DashboardStudents from "../pages/dashboardStudents";
 
 const RoutesContainer = () => {
     const routes = useRoutes([
@@ -49,6 +50,9 @@ const RoutesContainer = () => {
           { path: "history", element: <History /> },
           { path: "settings", element: <Settings /> },
         ],
+      },
+      {
+        path:"/dashboard-student", element: <DashboardStudents />,
       },
       { path: "*", element: <Error /> },
     ]);

@@ -35,7 +35,7 @@ const QuizQrModal:React.FC<Props> = ({quiz, ...toggle}) => {
           </div>
           <div className="mb-3 mt-6 flex w-full flex-col items-center justify-center gap-4">
             <QrCode
-              value={`${publicConfig.front_v1}/quiz/${quiz.ID}`}
+              value={`${publicConfig.front_v1_local}/quiz/${quiz.ID}`} 
               size={200}
               fgColor={"#3b3b3b"}
               style={{
@@ -45,7 +45,7 @@ const QuizQrModal:React.FC<Props> = ({quiz, ...toggle}) => {
             <Typography placeholder={""} variant="h5" color="gray">
               {quiz.title}
             </Typography>
-            <Link to={`${publicConfig.front_v1}/quiz/${quiz.ID}`}>
+            <Link to={`${publicConfig.front_v1_local}/quiz/${quiz.ID}`}>
               <Button
                 placeholder={""}
                 variant="gradient"
