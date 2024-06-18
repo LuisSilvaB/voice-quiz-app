@@ -8,7 +8,7 @@ export const signInWithGoogleAsync = createAsyncThunk('userAuth/signInWithGoogle
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider:'google', 
             options: {
-                redirectTo:`${publicConfig.front_v1}/auth/login`,
+                redirectTo:`${publicConfig.front_v1_local}/auth/login`,
             } 
         }); 
         if (error) throw new Error('Ocurrio un error durante la autentificación de usuario');

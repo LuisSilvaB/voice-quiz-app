@@ -29,7 +29,8 @@ const MyQuizzesQuiestionsFilters:React.FC<Props> = ({ currentQuestions, onSelect
   const listCourses = courses ?? [];
   let listSessions = sessions ?? [];
   let listFragments = fragments ?? [];
-  let listQuestions = questions ?? [];
+  let listQuestions =
+    questions.filter((question) => question.type !== "open_answer") ?? [];
 
   const onSetCurrentCourse = (courseId:string) => {
     listSessions = [];
@@ -124,6 +125,7 @@ const MyQuizzesQuiestionsFilters:React.FC<Props> = ({ currentQuestions, onSelect
           )}
         </div>
       </div>
+
       <div className="h-full flex-1 box-border overflow-x-visible rounded-lg border px-4 py-7">
         <Typography
           placeholder={""}

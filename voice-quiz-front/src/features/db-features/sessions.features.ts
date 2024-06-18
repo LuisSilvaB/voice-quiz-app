@@ -111,7 +111,7 @@ const sessionsSlice = createSlice({
         // Modal actions
         sessionIsOpenModal: false as boolean,
         sessionTypeModal: null as ModalActions, 
-        context: 100 as number, 
+        context: 500 as number, 
     },
     reducers: {
         setLoadingSessionDB: (state, action) => {

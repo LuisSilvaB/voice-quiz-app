@@ -33,7 +33,6 @@ const CursesList:React.FC<Props> = () => {
 
 
   useEffect(()=>{
-    console.log('first fetch')
     dispatch(getAllCourses(userStore.user?.ID ?? ''))
   },[])
 

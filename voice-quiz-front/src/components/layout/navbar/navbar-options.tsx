@@ -94,6 +94,19 @@ interface NavbarOptiosInterface extends  React.DetailedHTMLProps<React.HTMLAttri
             )}
           />
         </Link>
+        <Link to = {"/dashboard-student"} className={cx(
+            "group flex flex-col rounded-lg p-3 text-base font-medium text-[#598392] transition-all hover:cursor-pointer hover:text-[#bac1c4]",
+            isOpen &&
+              "w-full px-6 text-xl focus:text-[#598392] active:bg-blue-gray-600 active:text-white",
+          )}>
+          Scan QR
+          <span
+            className={cx(
+              "h-[2px] w-full transition-all  group-hover:bg-[#598392]",
+              isOpen && "hidden",
+            )}
+          />
+        </Link>
       </ul>
     );
   }

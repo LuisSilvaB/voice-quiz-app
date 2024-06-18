@@ -33,8 +33,7 @@ const InputRecognition = () => {
   const loading = useSelector((state:RootState) => state.fragments.loading)
   const currentUser = useSelector((state:RootState) => state.users.user)
   const currentSession = useSelector((state:RootState) => state.sessions.session)
-
-
+  
   const handleClearTargetFragment = () => {
     dispatch(clearTargetFragment())
   }

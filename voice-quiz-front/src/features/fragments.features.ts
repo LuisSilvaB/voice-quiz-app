@@ -47,7 +47,7 @@ export const createQuestions = createAsyncThunk(
         new Blob([fragment.content], { type: "text/plain" }),
         "transcript.txt",
       ); // Envio del documento del fragmento
-      const response = await fetch(`${publicConfig.back_v1}/api/docs/v2`, {
+      const response = await fetch(`${publicConfig.back_v1_local}/api/docs/v2`, {
         method: "POST",
         body: formData,
       });
@@ -112,7 +112,6 @@ export const createQuestions = createAsyncThunk(
               ]);
 
           });
-          console.log(newQuestions)
         }
     }
     } catch (err) {
@@ -122,7 +121,7 @@ export const createQuestions = createAsyncThunk(
 );
 
 export const getQuestions = createAsyncThunk('fragments/getQuestions', async(fragment:Fragment) => {
-    if(fragment){
+    if(fragment.ID){
         try{
             const { data } = await supabase.from('QUESTIONS').select("*").eq("FRAGMENT_ID", fragment.ID)
             return data as Question[]
