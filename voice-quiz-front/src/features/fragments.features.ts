@@ -47,7 +47,7 @@ export const createQuestions = createAsyncThunk(
         new Blob([fragment.content], { type: "text/plain" }),
         "transcript.txt",
       ); // Envio del documento del fragmento
-      const response = await fetch(`${publicConfig.back_v1}/api/docs/v2`, {
+      const response = await fetch(`${publicConfig.back_v1}/api/docs/v3`, {
         method: "POST",
         body: formData,
       });
