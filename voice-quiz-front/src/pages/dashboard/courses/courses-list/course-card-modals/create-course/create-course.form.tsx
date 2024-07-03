@@ -152,6 +152,7 @@ const CreateCourseForm:React.FC<Props> = ({
     getFinalDate()
     if (course.duration) setFormErrors((prev) => ({ ...prev, duration: null }));
     if (course.initial_date) setFormErrors((prev) => ({ ...prev, initial_date: null }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [course.duration, course.initial_date])
 
   const onSubmit = () => {
@@ -160,16 +161,16 @@ const CreateCourseForm:React.FC<Props> = ({
     }
 
     switch (true) {
-      case !newCourse.title || !newCourse.title.length:
+      case !newCourse.title || !newCourse.title.length || newCourse.title.length < 5:
         setFormErrors((prev) => ({
           ...prev,
-          title: "El título del curso es requerido",
+          title: "El título del curso es requerido o deber tener almenos 5 caracteres",
         }));
         return;
-      case !newCourse.description || !newCourse.description.length:
+      case !newCourse.description|| !newCourse.description.length || newCourse.description.length < 5:
         setFormErrors((prev) => ({
           ...prev,
-          description: "La descripción del curso es requerida",
+          description: "La descripción del curso es requerida o deber tener almenos 5 caracteres",
         }));
         return;
       case !newCourse.duration || !newCourse.duration.length:
@@ -178,10 +179,10 @@ const CreateCourseForm:React.FC<Props> = ({
           duration: "La duración del curso es requerida",
         }));
         return;
-      case !newCourse.initial_date || !newCourse.initial_date.length:
+      case !newCourse.initial_date || !newCourse.initial_date.length || newCourse.initial_date < new Date().toISOString().slice(0, 10):
         setFormErrors((prev) => ({
           ...prev,
-          initial_date: "La fecha de inicio del curso es requerida",
+          initial_date: "La fecha de inicio del curso es requerida o no debe ser menor al día de hoy",
         }));
         return;
       case !newCourse.final_date || !newCourse.final_date.length:
