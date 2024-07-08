@@ -126,7 +126,7 @@ const MyQuizzesQuiestionsFilters:React.FC<Props> = ({ currentQuestions, onSelect
         </div>
       </div>
 
-      <div className="h-full flex-1 box-border overflow-x-visible rounded-lg border px-4 py-7">
+      <div className="flex-1 box-border overflow-x-visible rounded-lg border px-4 py-7">
         <Typography
           placeholder={""}
           variant="h5"
@@ -188,7 +188,7 @@ const MyQuizzesQuiestionsFilters:React.FC<Props> = ({ currentQuestions, onSelect
               <Option>No hay fragmentos</Option>
             )}
           </Select>
-          <div className="flex w-full flex-wrap flex-row gap-2 h-full flex-1 max-h-[56vh] rounded-lg overflow-y-auto border">
+          <div className="flex w-full flex-wrap flex-row gap-2 flex-1 rounded-lg overflow-y-auto border">
             {listQuestions.length ? (
               listQuestions.map((question) => (
                 <QuestionCard
