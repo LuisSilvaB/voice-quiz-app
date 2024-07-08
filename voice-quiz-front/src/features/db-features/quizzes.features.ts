@@ -114,7 +114,7 @@ export const deleteQuiz = createAsyncThunk(
   "quiz/deleteQuiz", async(quiz:Quiz)=>{
     await supabase.from("QUIZ_QUESTION").delete().eq("QUIZ_ID", quiz.ID);
      await supabase.from("QUIZZES").delete().eq("ID", quiz.ID);
-     const { data } = await supabase.from("QUIZZES").select("*")
+     const { data } = await supabase.from("QUIZZES").select("*").eq("USER_ID", quiz.USER_ID)
      return data as Quiz[]
   }
 )

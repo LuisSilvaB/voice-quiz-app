@@ -60,23 +60,11 @@ const QuizList:React.FC<Props> = ({onSetQuiz}) => {
       )
       .subscribe();
   
-      const subscribeDeleteChannel = supabase
-        .channel("delete-quiz")
-        .on(
-          "postgres_changes",
-          { event: "DELETE", schema: "public", table: "QUIZZES" },
-          (payload) => {
-            if (currentUser && payload.old.ID === targetQuiz?.ID) {
-              dispatch(getQuizListbySessionID(sessionID));
-            }
-          },
-        )
-        .subscribe();
+
 
     return () => {
       subscribeCreateChannel.unsubscribe();
       subscribeUpdateChannel.unsubscribe();
-      subscribeDeleteChannel.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionID]);
