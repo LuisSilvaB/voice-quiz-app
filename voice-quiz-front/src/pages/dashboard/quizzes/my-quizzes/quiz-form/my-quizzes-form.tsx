@@ -46,9 +46,6 @@ const MyQuizzesForm:React.FC<Props> = ({
     if (quizForm.title.length < 4 || quizForm.description.length < 4  ) { 
         return toast.error("El cuestionario no puede ser creado, por favor rellena todos los campos")
     }
-    if (quizForm.initial_time < quizForm.final_time) {
-      return toast.error("El cuestionario no puede ser creado, la hora de inicio no puede ser mayor a la hora de fin")
-    }
     const newQuiz: Omit<Quiz, "questions"> = {
       ID: v4(),
       title: quizForm.title,
@@ -56,8 +53,8 @@ const MyQuizzesForm:React.FC<Props> = ({
       USER_ID: currentUser?.ID ?? "",
       SESSION_ID: params.sessionId as string ?? null,
       COURSE_ID: params.courseId as string ?? null,
-      initial_time: quizForm.initial_time,
-      final_time: quizForm.final_time,
+      initial_time: "00:00:00",
+      final_time: "00:00:00",
       is_active: quizForm.is_active,
     }
     await dispatch(createQuiz({ 
@@ -141,7 +138,7 @@ const MyQuizzesForm:React.FC<Props> = ({
               </p>
             ) : null}
           </div>
-          <Input
+          {/* <Input
             required={true}
             label="Inicio del cuestionario"
             value={quizForm.initial_time}
@@ -174,7 +171,7 @@ const MyQuizzesForm:React.FC<Props> = ({
             pattern="\\d{2}:\\d{2}:\\d{2}"
             error={quizForm.final_time < quizForm.initial_time}
             size="lg"
-          />
+          /> */}
           <div className="mb-2 flex w-full flex-col items-start justify-between gap-3">
             <div className="flex w-full flex-row gap-2">
               <div className="flex w-full flex-row gap-2">
