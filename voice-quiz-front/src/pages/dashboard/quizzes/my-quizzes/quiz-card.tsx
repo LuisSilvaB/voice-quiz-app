@@ -86,14 +86,14 @@ const QuizCard:React.FC<Props> = ({ quiz, onSetToDeleteQuiz }) => {
             <Chip color="red" variant="outlined" value={"Desactivado"} />
           )}
         </div>
-        <div className="flex w-full flex-row items-center justify-between gap-2">
+        {/* <div className="flex w-full flex-row items-center justify-between gap-2">
           <p className="text-sm">Hora de inicio</p>
           <p className="text-sm font-bold text-gray-600">{quiz.initial_time}</p>
         </div>
         <div className="flex w-full flex-row items-center justify-between gap-2">
           <p className="text-sm">Hora de finalización</p>
           <p className="text-sm font-bold text-gray-600">{quiz.final_time}</p>
-        </div>
+        </div> */}
       </div>
       {<QuizQrModal id="" {...toggleQrModal} quiz={quiz} />}
     </div>
