@@ -26,7 +26,8 @@ const DashboardLayout:React.FC<DashboardProps> = () => {
         if (!data.payload && !userId) {
           navigate('/auth/login');        
         }
-        else if (!(data.payload.state === "active") || !(rol.rol.name === "TEACHER")){
+        // else if (!(data.payload.state === "active") || !(rol.rol.name === "TEACHER")){
+        else if (!(rol.rol.name === "TEACHER")){
           return navigate("/")
         }
         else if (location.pathname === "/dashboard" || location.pathname === "/dashboard/") {
