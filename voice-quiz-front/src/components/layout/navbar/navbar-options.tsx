@@ -56,7 +56,8 @@ interface NavbarOptiosInterface extends  React.DetailedHTMLProps<React.HTMLAttri
           />
         </Link>
         {
-            user.user && user.user.state === "active" && rol.rol.name === "TEACHER" ? (
+            // user.user && user.user.state === "active" && rol.rol.name === "TEACHER" ? (
+            user.user && rol.rol.name === "TEACHER" ? (
                 <Link
                 to={"/dashboard/courses/courses-list"}
                 onClick={onClose}
