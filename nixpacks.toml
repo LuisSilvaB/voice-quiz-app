@@ -1,8 +1,12 @@
 [phases.setup]
-nixPkgs = ["python311", "uv"]
+nixPkgs = ["python311", "curl"]
 
 [phases.install]
-cmds = ["cd voice-quiz-back && uv pip install --system -r requirements.txt"]
+cmds = [
+  "curl -LsSf https://astral.sh/uv/install.sh | sh",
+  "export PATH=\"$HOME/.cargo/bin:$PATH\"",
+  "cd voice-quiz-back && uv pip install --system -r requirements.txt"
+]
 
 [start]
 cmd = "cd voice-quiz-back && python run.py"
