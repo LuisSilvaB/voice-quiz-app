@@ -63,12 +63,12 @@ def query_ai(messages: List[dict]):
     )
 
 
-# Title generation - uses smaller, faster model without reasoning
+# Title generation - uses Trinity Mini (same as main queries)
 def query_title(messages: List[dict]):
-    """Generate titles using Mistral Small (free, optimized for short responses)"""
+    """Generate titles using Trinity Mini (free, fast, and reliable)"""
     return query_openrouter(
         messages=messages,
-        model="mistralai/mistral-small-3.1-24b-instruct:free",
+        model="arcee-ai/trinity-mini:free",
         max_tokens=100,
         enable_reasoning=False,  # No reasoning needed for titles
     )
