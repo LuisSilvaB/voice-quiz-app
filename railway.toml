@@ -1,0 +1,6 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "voice-quiz-back/Dockerfile"
+
+[deploy]
+startCommand = "python run.py"

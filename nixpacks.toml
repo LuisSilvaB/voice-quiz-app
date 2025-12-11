@@ -1,0 +1,6 @@
+[build]
+# Use the Dockerfile in voice-quiz-back
+buildCommand = "cd voice-quiz-back && docker build -t voice-quiz-back ."
+
+[start]
+cmd = "cd voice-quiz-back && python run.py"
