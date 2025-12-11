@@ -29,8 +29,14 @@ uv sync
 
 ### Running the Application
 
-Development mode:
+Development mode with uv:
 ```bash
+uv run dev
+```
+
+Or directly with Python:
+```bash
+source .venv/bin/activate
 python run.py
 ```
 
