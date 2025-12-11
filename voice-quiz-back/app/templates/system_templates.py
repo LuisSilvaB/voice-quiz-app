@@ -10,7 +10,7 @@ ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
 [
     {
         "title": "<Titulo general para toda el fragmento>",
-        "questions":    [   
+        "questions":    [
                             {
                                 "questionTitle": "<Aqui va una pregunta>",
                                 "alternatives": ["a)...", "b)...", "c)...", "d)..."],
@@ -47,7 +47,7 @@ ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
 [
     {
         "title": "<Titulo general para toda la trancripcion>",
-        "questions":    [   
+        "questions":    [
                             {
                                 "questionTitle": "<Aqui va una pregunta abierta>",
                                 "alternatives": null,
@@ -80,7 +80,7 @@ ESTRUCTURA DE RESPUESTA, CON ESPACIADO Y SALTOS DE LINEA IGUAL AL FORMATO JSON:
 [
     {
         "title": "<Titulo general para toda la trancripcion>",
-        "questions":    [   
+        "questions":    [
                             {
                                 "questionTitle": "<Aqui va la afirmación>",
                                 "alternatives": ["Verdadero", "Falso"],

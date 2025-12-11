@@ -1,16 +1,18 @@
 # app/services/fireworks_service.py
 from flask import jsonify, request
-from app.utils.helpers import validate_documents, read_documents, select_template_system
+
 from app.api.ai_api_client import query_fireworks
+from app.utils.helpers import read_documents, select_template_system, validate_documents
+
 
 def process_docs():
-    question_type = request.form.get('kindquestion')
+    question_type = request.form.get("kindquestion")
     if not question_type:
-        return 'Question type is missing or empty', 400
-    
+        return "Question type is missing or empty", 400
+
     if not validate_documents(request.files):
-        return 'No documents found', 400
-    
+        return "No documents found", 400
+
     transcript_text = "".join(read_documents(request.files))
     template_system = select_template_system(question_type)
     # Prepare the conversation for the user role
@@ -25,15 +27,12 @@ def process_docs():
         {
             "role": "user",
             "content": template_user,
-        }
+        },
     ]
-    
+
     response_content = query_fireworks(messages)  # AI Model call
 
     print("respuesta del modelo 2: ", response_content)
 
     # Prepare and return response
-    return jsonify({
-        'data': response_content,
-        'status': 'success'
-    })
+    return jsonify({"data": response_content, "status": "success"})

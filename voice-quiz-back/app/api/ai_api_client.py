@@ -1,58 +1,92 @@
-#app/api/ai_api_client.py
+# app/api/ai_api_client.py
 
-#interacting with the AI services
-from usellm import Message, Options, UseLLM
-import openai
-
-from typing import List
-
-from dotenv import load_dotenv
+# OpenRouter AI integration - Using FREE models
 import os
+
+import openai
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
-fireworks_api_key = os.getenv("FIREWORKS_API_KEY")
-together_api_key = os.getenv("TOGETHER_API_KEY")
+openrouter_api_key = os.getenv("OPENROUTER_API_KEY", "")
 
-def query_usellm(messages:List[Message]):
-    service_usellm = UseLLM(service_url="https://usellm.org/api/llm")
-    options = Options(messages=messages)
-     # Interact with the service usellm
-    response = service_usellm.chat(options)
-    return response.content
 
-def query_fireworks(messages:List[dict]):
-    service_fireworks = openai.OpenAI(
-        base_url = "https://api.fireworks.ai/inference/v1",
-        api_key=fireworks_api_key,
+# OpenRouter client configuration
+def get_openrouter_client():
+    """Create and return an OpenRouter client instance"""
+    return openai.OpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=openrouter_api_key,
     )
-    client_fireworks = service_fireworks.chat.completions.create(
-        model="accounts/fireworks/models/mixtral-8x7b-instruct",
+
+
+def query_openrouter(
+    messages: list[dict],
+    model: str = "deepseek/deepseek-chat-v3-0324:free",
+    max_tokens: int = 4096,
+):
+    """
+    Query OpenRouter with specified model
+
+    Available FREE models:
+    - deepseek/deepseek-chat-v3-0324:free (Fast, great for general tasks)
+    - meta-llama/llama-3.3-70b-instruct:free (Powerful, good reasoning)
+    - google/gemini-2.5-pro-exp-03-25:free (Google's latest)
+    - mistralai/mistral-small-3.1-24b-instruct:free (Balanced performance)
+    """
+    client = get_openrouter_client()
+    response = client.chat.completions.create(
+        model=model,
         messages=messages,
+        max_tokens=max_tokens,
+    )
+    return response.choices[0].message.content
+
+
+# Main query function - uses DeepSeek V3 (fast and capable)
+def query_ai(messages: list[dict]):
+    """Main AI query function using DeepSeek V3 Chat (free)"""
+    return query_openrouter(
+        messages=messages, model="deepseek/deepseek-chat-v3-0324:free", max_tokens=4096
+    )
+
+
+# Title generation - uses smaller, faster model
+def query_title(messages: list[dict]):
+    """Generate titles using Mistral Small (free, optimized for short responses)"""
+    return query_openrouter(
+        messages=messages,
+        model="mistralai/mistral-small-3.1-24b-instruct:free",
+        max_tokens=100,
+    )
+
+
+# Advanced query - uses Llama 3.3 70B for complex reasoning
+def query_advanced(messages: list[dict]):
+    """Advanced queries using Llama 3.3 70B (free, powerful reasoning)"""
+    return query_openrouter(
+        messages=messages,
+        model="meta-llama/llama-3.3-70b-instruct:free",
         max_tokens=4096,
     )
-    return client_fireworks.choices[0].message.content
 
-def query_together(messages:List[dict]):
-    service_together = openai.OpenAI(
-        base_url='https://api.together.xyz/v1',
-        api_key=together_api_key,
-    )
-    client_together = service_together.chat.completions.create(
-        model="Qwen/Qwen1.5-32B-Chat",
-        max_tokens=4096,
-        messages=messages,
-    )
-    return client_together.choices[0].message.content
 
-def query_title_together(messages:List[dict]):
-    service_together = openai.OpenAI(
-        base_url='https://api.together.xyz/v1',
-        api_key=together_api_key,
-    )
-    client_together = service_together.chat.completions.create(
-        model="Qwen/Qwen1.5-14B-Chat",
-        max_tokens=2048,
-        messages=messages,
-    )
-    return client_together.choices[0].message.content
+# Legacy compatibility functions (redirect to OpenRouter)
+def query_usellm(messages: list[dict]):
+    """Legacy compatibility - redirects to OpenRouter"""
+    return query_ai(messages)
+
+
+def query_fireworks(messages: list[dict]):
+    """Legacy compatibility - redirects to OpenRouter"""
+    return query_ai(messages)
+
+
+def query_together(messages: list[dict]):
+    """Legacy compatibility - redirects to OpenRouter"""
+    return query_ai(messages)
+
+
+def query_title_together(messages: list[dict]):
+    """Legacy compatibility - redirects to OpenRouter title generation"""
+    return query_title(messages)
