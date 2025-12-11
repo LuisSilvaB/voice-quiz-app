@@ -1,7 +1,7 @@
 # app/services/together_service.py
 from flask import jsonify, request
 
-from app.api.ai_api_client import query_title_together, query_together
+from app.api.ai_api_client import query_ai, query_title
 from app.utils.helpers import read_documents, select_template_system, validate_documents
 
 
@@ -30,9 +30,9 @@ def process_docs():
         },
     ]
 
-    response_content = query_together(messages)  # AI Model call
+    response_content = query_ai(messages)  # OpenRouter AI call
 
-    print("respuesta del modelo 3: ")
+    print("Response from OpenRouter (DeepSeek V3): ")
     print(response_content)
 
     # Prepare and return response
@@ -60,9 +60,9 @@ def process_title_docs():
         },
     ]
 
-    response_content = query_title_together(messages)  # AI Model call
+    response_content = query_title(messages)  # OpenRouter title generation
 
-    print("respuesta del modelo 2: ", response_content)
+    print("Response from OpenRouter (Mistral Small): ", response_content)
 
     # Prepare and return response
     return jsonify({"title": response_content, "status": "success"})

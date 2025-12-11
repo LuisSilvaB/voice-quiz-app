@@ -1,7 +1,7 @@
 # app/services/fireworks_service.py
 from flask import jsonify, request
 
-from app.api.ai_api_client import query_fireworks
+from app.api.ai_api_client import query_ai
 from app.utils.helpers import read_documents, select_template_system, validate_documents
 
 
@@ -30,9 +30,9 @@ def process_docs():
         },
     ]
 
-    response_content = query_fireworks(messages)  # AI Model call
+    response_content = query_ai(messages)  # OpenRouter AI call
 
-    print("respuesta del modelo 2: ", response_content)
+    print("Response from OpenRouter (DeepSeek V3): ", response_content)
 
     # Prepare and return response
     return jsonify({"data": response_content, "status": "success"})

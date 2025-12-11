@@ -1,8 +1,7 @@
 # app/services/usellm_service.py
 from flask import jsonify, request
-from usellm import Message
 
-from app.api.ai_api_client import query_usellm
+from app.api.ai_api_client import query_ai, query_title
 from app.utils.helpers import read_documents, select_template_system, validate_documents
 
 
@@ -19,14 +18,14 @@ def process_docs():
     template_user = transcript_text
 
     messages = [
-        Message(role="system", content=template_system),
-        Message(role="user", content=template_user),
+        {"role": "system", "content": template_system},
+        {"role": "user", "content": template_user},
     ]
 
-    response_content = query_usellm(messages)  # AI Model call
+    response_content = query_ai(messages)  # OpenRouter AI call
 
     # Logging response for debugging
-    print("Response from USELLM Model: ", response_content)
+    print("Response from OpenRouter (DeepSeek V3): ", response_content)
 
     # Prepare and return response
     return jsonify({"data": response_content, "status": "success"})
@@ -42,14 +41,14 @@ def process_title_docs():
     template_user = f"Dame el enunciado de un titulo de no mas de 20 palabras sobre el siguiente texto: {transcript_text}"
 
     messages = [
-        Message(role="system", content=template_system),
-        Message(role="user", content=template_user),
+        {"role": "system", "content": template_system},
+        {"role": "user", "content": template_user},
     ]
 
-    response_content = query_usellm(messages)  # AI Model call
+    response_content = query_title(messages)  # OpenRouter title generation
 
     # Logging response for debugging
-    print("Response from USELLM Model: ", response_content)
+    print("Response from OpenRouter (Mistral Small): ", response_content)
 
     # Prepare and return response
     return jsonify({"title": response_content, "status": "success"})
