@@ -25,7 +25,7 @@ def process_docs():
     response_content = query_ai(messages)  # OpenRouter AI call
 
     # Logging response for debugging
-    print("Response from OpenRouter (DeepSeek V3): ", response_content)
+    print("Response from OpenRouter (Trinity Mini): ", response_content)
 
     # Prepare and return response
     return jsonify({"data": response_content, "status": "success"})

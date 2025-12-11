@@ -32,7 +32,7 @@ def process_docs():
 
     response_content = query_ai(messages)  # OpenRouter AI call
 
-    print("Response from OpenRouter (DeepSeek V3): ")
+    print("Response from OpenRouter (Trinity Mini): ")
     print(response_content)
 
     # Prepare and return response
