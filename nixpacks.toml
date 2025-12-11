@@ -3,8 +3,8 @@ nixPkgs = ["python311", "curl"]
 
 [phases.install]
 cmds = [
-  "curl -LsSf https://astral.sh/uv/install.sh | sh && source $HOME/.local/bin/env && cd voice-quiz-back && uv pip install --system -r requirements.txt"
+  "curl -LsSf https://astral.sh/uv/install.sh | sh && source $HOME/.local/bin/env && cd voice-quiz-back && uv venv && uv pip install -r requirements.txt"
 ]
 
 [start]
-cmd = "cd voice-quiz-back && python run.py"
+cmd = "cd voice-quiz-back && source .venv/bin/activate && python run.py"
