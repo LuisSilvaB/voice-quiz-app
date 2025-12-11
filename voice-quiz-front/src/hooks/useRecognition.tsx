@@ -83,18 +83,22 @@ const useRecognition = () => {
           // Marcar la solicitud como enviada para evitar múltiples envíos
           setRequestSent(true);
 
-          const response = await fetch(`${publicConfig.back_v1}/api/title/v2`, {
-            method: "POST",
-            body: formData,
-          });
+          // Usar endpoint con structured outputs para JSON confiable
+          const response = await fetch(
+            `${publicConfig.back_v1}/api/title/structured`,
+            {
+              method: "POST",
+              body: formData,
+            },
+          );
 
           if (response.ok) {
+            const data = await response.json();
+
+            // Con structured outputs, el título viene directamente en data.title
             const fragment: Fragment = {
               ID: v4(),
-              title:
-                (await response
-                  .json()
-                  .then((data) => JSON.parse(data.title))) || "",
+              title: data.title || "Sin título", // Acceso directo, sin parsing
               content: fragmentContent,
               USER_ID: currentUser?.ID || "",
               count_questions: 0,

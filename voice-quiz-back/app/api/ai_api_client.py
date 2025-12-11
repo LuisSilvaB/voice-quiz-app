@@ -1,14 +1,18 @@
 # app/api/ai_api_client.py
 
-# OpenRouter AI integration - Using FREE models with reasoning
+# OpenRouter AI integration - Using FREE models with reasoning and structured outputs
 import openai
-from typing import List
+import json
+from typing import List, Optional, Type, TypeVar
 from dotenv import load_dotenv
+from pydantic import BaseModel
 import os
 
 # Load environment variables from .env file
 load_dotenv()
 openrouter_api_key = os.getenv("OPENROUTER_API_KEY", "")
+
+T = TypeVar("T", bound=BaseModel)
 
 
 # OpenRouter client configuration
@@ -25,9 +29,10 @@ def query_openrouter(
     model: str = "arcee-ai/trinity-mini:free",
     max_tokens: int = 4096,
     enable_reasoning: bool = True,
+    response_format: Optional[dict] = None,
 ):
     """
-    Query OpenRouter with specified model
+    Query OpenRouter with specified model and optional structured output
 
     Available FREE models:
     - arcee-ai/trinity-mini:free (Reasoning model, best for complex tasks)
@@ -43,13 +48,92 @@ def query_openrouter(
     if enable_reasoning:
         extra_body["reasoning"] = {"enabled": True}
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=messages,
-        max_tokens=max_tokens,
-        extra_body=extra_body if extra_body else None,
-    )
+    # Prepare request parameters
+    request_params = {
+        "model": model,
+        "messages": messages,
+        "max_tokens": max_tokens,
+    }
+
+    # Add response_format if provided (for JSON mode)
+    if response_format:
+        request_params["response_format"] = response_format
+
+    # Add extra_body if not empty
+    if extra_body:
+        request_params["extra_body"] = extra_body
+
+    response = client.chat.completions.create(**request_params)
     return response.choices[0].message.content
+
+
+def query_structured(
+    messages: List[dict],
+    response_model: Type[T],
+    model: str = "arcee-ai/trinity-mini:free",
+    max_tokens: int = 4096,
+    enable_reasoning: bool = True,
+) -> T:
+    """
+    Query OpenRouter with structured output using Pydantic model
+
+    Args:
+        messages: List of message dictionaries
+        response_model: Pydantic model class for response validation
+        model: Model to use
+        max_tokens: Maximum tokens in response
+        enable_reasoning: Whether to enable reasoning mode
+
+    Returns:
+        Validated Pydantic model instance
+    """
+    # Add simplified JSON instruction to system message
+    schema_instruction = f"""
+
+IMPORTANT: You MUST respond with ONLY valid JSON data (no explanations, no schema definitions).
+The JSON must match this structure:
+- For QuizResponse: {{"title": "string", "questions": [...]}}
+- For TitleResponse: {{"title": "string"}}
+- For Question: {{"questionTitle": "string", "alternatives": ["a", "b"] or null, "answer": "string", "correctIndex": 0 or null}}
+
+Do NOT include the schema definition itself. Only provide the actual data."""
+
+    # Modify the last system message or add new one
+    modified_messages = messages.copy()
+    if modified_messages and modified_messages[0]["role"] == "system":
+        modified_messages[0]["content"] += schema_instruction
+    else:
+        modified_messages.insert(
+            0,
+            {
+                "role": "system",
+                "content": f"You are a helpful assistant that responds in JSON.{schema_instruction}",
+            },
+        )
+
+    # Request JSON mode
+    response_format = {"type": "json_object"}
+
+    # Get response
+    content = query_openrouter(
+        messages=modified_messages,
+        model=model,
+        max_tokens=max_tokens,
+        enable_reasoning=enable_reasoning,
+        response_format=response_format,
+    )
+
+    # Parse and validate JSON
+    try:
+        data = json.loads(content)
+
+        # Check if the model returned the schema instead of data
+        if "$defs" in data or "properties" in data:
+            raise ValueError("Model returned schema definition instead of data. Please try again.")
+
+        return response_model.model_validate(data)
+    except (json.JSONDecodeError, ValueError) as e:
+        raise ValueError(f"Failed to parse AI response as JSON: {e}\nResponse: {content}")
 
 
 # Main query function - uses Trinity Mini with reasoning (best for quiz generation)

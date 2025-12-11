@@ -1,39 +1,57 @@
-import { createAsyncThunk, createSlice  } from "@reduxjs/toolkit";
-import { kindQuestion, question } from '../interface/types';
-import { Fragment } from '../class/fragments';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { kindQuestion, question } from "../interface/types";
+import { Fragment } from "../class/fragments";
 import { supabase } from "../config/config";
-import { Alternative, Question } from '../class/questions.class';
+import { Alternative, Question } from "../class/questions.class";
 import { v4 } from "uuid";
 import { publicConfig } from "../config/config";
 
-export const createFragment = createAsyncThunk('fragments/createFragment', async(fragment:Fragment) => {
-    try{
-        await supabase.from('FRAGMENTS').insert([fragment])
-        const { data } =  await supabase.from('FRAGMENTS').select("*").eq("SESSION_ID", fragment.SESSION_ID)
-        return data as Fragment[]
-    }catch(e){
-        console.error("x", "fragmento no creado")
+export const createFragment = createAsyncThunk(
+  "fragments/createFragment",
+  async (fragment: Fragment) => {
+    try {
+      await supabase.from("FRAGMENTS").insert([fragment]);
+      const { data } = await supabase
+        .from("FRAGMENTS")
+        .select("*")
+        .eq("SESSION_ID", fragment.SESSION_ID);
+      return data as Fragment[];
+    } catch (e) {
+      console.error("x", "fragmento no creado");
     }
-})
+  },
+);
 
-export const getFragments = createAsyncThunk('fragments/getFragments', async(sessionId:string) => {
-    try{
-        const { data } = await supabase.from('FRAGMENTS').select("*").eq("SESSION_ID", sessionId)
-        return data as Fragment[]
-    }catch(e){
-        console.error("Error al obtener los fragmentos")
+export const getFragments = createAsyncThunk(
+  "fragments/getFragments",
+  async (sessionId: string) => {
+    try {
+      const { data } = await supabase
+        .from("FRAGMENTS")
+        .select("*")
+        .eq("SESSION_ID", sessionId);
+      return data as Fragment[];
+    } catch (e) {
+      console.error("Error al obtener los fragmentos");
     }
-})
+  },
+);
 
-export const deleteFragment = createAsyncThunk('fragments/deleteFragment', async(fragment:Fragment) => {
-    try{
-        await supabase.from('FRAGMENTS').delete().eq("ID", fragment.ID)
-        const { data } = await supabase.from('FRAGMENTS').select("*").eq("SESSION_ID", fragment.SESSION_ID)
-        return data as Fragment[]
-    }catch(e){
-        console.error("Error al eliminar el fragmento")
+export const deleteFragment = createAsyncThunk(
+  "fragments/deleteFragment",
+  async (fragment: Fragment) => {
+    try {
+      await supabase.from("FRAGMENTS").delete().eq("ID", fragment.ID);
+      const { data } = await supabase
+        .from("FRAGMENTS")
+        .select("*")
+        .eq("SESSION_ID", fragment.SESSION_ID);
+      return data as Fragment[];
+    } catch (e) {
+      console.error("Error al eliminar el fragmento");
     }
-})
+  },
+);
 
 export const createQuestions = createAsyncThunk(
   "fragments/submitFragments",
@@ -47,184 +65,201 @@ export const createQuestions = createAsyncThunk(
         new Blob([fragment.content], { type: "text/plain" }),
         "transcript.txt",
       ); // Envio del documento del fragmento
-      const response = await fetch(`${publicConfig.back_v1}/api/docs/v3`, {
-        method: "POST",
-        body: formData,
-      });
+
+      // Usar endpoint con structured outputs para JSON confiable
+      const response = await fetch(
+        `${publicConfig.back_v1}/api/docs/structured`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
       if (!response.ok) {
         throw new Error("Error al enviar la transcripción");
-      } else {
-        const decodedData = await response.json();
-        const regex = /\[(.*)\]/s;
-        console.log(decodedData)
-        const match = decodedData.data.match(regex);
+      }
 
-        if (match && match.length > 1) {
-          const jsonContent = match[1];
-          const dataParse: question[] = JSON.parse(jsonContent)?.questions;
-          console.log(dataParse)
-          const newQuestions: Question[] = dataParse.map((item: question) => ({
-            ID: v4(),
-            answer: item.answer,
-            alternatives: item.alternatives ?? [],
-            question: item.questionTitle,
-            created_at: new Date().toDateString(),
-            COURSE_ID: fragment.COURSE_ID,
-            FRAGMENT_ID: fragment.ID,
-            SESSION_ID: fragment.SESSION_ID,
-            type: kindquestion,
-            USER_ID: fragment.USER_ID,
-            correctIndex: item.correctIndex,
-          }));
-          newQuestions.map(async (question: Question) => {
-            await supabase.from("QUESTIONS").insert([{
-                ID: question.ID,
-                answer: question.answer,
-                alternatives: question.alternatives,
-                question: question.question,
-                created_at: question.created_at,
-                COURSE_ID: question.COURSE_ID,
-                FRAGMENT_ID: question.FRAGMENT_ID,
-                SESSION_ID: question.SESSION_ID,
-                type: question.type,
-                USER_ID: question.USER_ID,                
-            }]);
-            if (question.type !== "open_answer") {                
-                question.alternatives.map(async(alternative:string, index:number) => {
-                    const newAlternative: Alternative = {
-                      ID: v4(),
-                      content: alternative,
-                      position: index,
-                      QUESTION_ID: question.ID,
-                    };
-                    await supabase.from("ALTERNATIVES").insert([newAlternative])
-                });
-            }
-            await supabase
-              .from("ANSWERS")
-              .insert([
-                {
-                  ID: v4(),
-                  content: question.answer,
-                  position: question.correctIndex ?? 0,
-                  QUESTION_ID: question.ID,
-                },
-              ]);
+      const responseData = await response.json();
+      console.log("Structured response:", responseData);
 
-          });
+      // Con structured outputs, data ya es un objeto JSON, no un string
+      const quizData = responseData.data;
+      const dataParse: question[] = quizData.questions;
+
+      console.log("Parsed questions:", dataParse);
+      const newQuestions: Question[] = dataParse.map((item: question) => ({
+        ID: v4(),
+        answer: item.answer,
+        alternatives: item.alternatives ?? [],
+        question: item.questionTitle,
+        created_at: new Date().toDateString(),
+        COURSE_ID: fragment.COURSE_ID,
+        FRAGMENT_ID: fragment.ID,
+        SESSION_ID: fragment.SESSION_ID,
+        type: kindquestion,
+        USER_ID: fragment.USER_ID,
+        correctIndex: item.correctIndex,
+      }));
+
+      newQuestions.map(async (question: Question) => {
+        await supabase.from("QUESTIONS").insert([
+          {
+            ID: question.ID,
+            answer: question.answer,
+            alternatives: question.alternatives,
+            question: question.question,
+            created_at: question.created_at,
+            COURSE_ID: question.COURSE_ID,
+            FRAGMENT_ID: question.FRAGMENT_ID,
+            SESSION_ID: question.SESSION_ID,
+            type: question.type,
+            USER_ID: question.USER_ID,
+          },
+        ]);
+        if (question.type !== "open_answer") {
+          question.alternatives.map(
+            async (alternative: string, index: number) => {
+              const newAlternative: Alternative = {
+                ID: v4(),
+                content: alternative,
+                position: index,
+                QUESTION_ID: question.ID,
+              };
+              await supabase.from("ALTERNATIVES").insert([newAlternative]);
+            },
+          );
         }
-    }
+        await supabase.from("ANSWERS").insert([
+          {
+            ID: v4(),
+            content: question.answer,
+            position: question.correctIndex ?? 0,
+            QUESTION_ID: question.ID,
+          },
+        ]);
+      });
     } catch (err) {
       console.error(err);
     }
   },
 );
 
-export const getQuestions = createAsyncThunk('fragments/getQuestions', async(fragment:Fragment) => {
-    if(fragment.ID){
-        try{
-            const { data } = await supabase.from('QUESTIONS').select("*").eq("FRAGMENT_ID", fragment.ID)
-            return data as Question[]
-        }catch(e){
-            console.error("Error al obtener las preguntas")
-        }
+export const getQuestions = createAsyncThunk(
+  "fragments/getQuestions",
+  async (fragment: Fragment) => {
+    if (fragment.ID) {
+      try {
+        const { data } = await supabase
+          .from("QUESTIONS")
+          .select("*")
+          .eq("FRAGMENT_ID", fragment.ID);
+        return data as Question[];
+      } catch (e) {
+        console.error("Error al obtener las preguntas");
+      }
     }
-})
+  },
+);
 
 const fragmentsSlice = createSlice({
-    name: 'fragments',
-    initialState: {
-        loading: false as boolean,
-        audioUrl: '' as string,
-        transcription: '' as string,
-        fragments: [] as Fragment[],
-        fragmentLoading: false as boolean,  
-        fragmentsLoading: false as boolean,  
-        targetFragment: {} as Fragment,
-        questions: [] as Question[]
-    }, 
-    reducers:{
-        setLoading: (state, action) =>{
-            state.loading = action.payload;
-        },
-        setTargetFragment: (state, action) =>{
-            state.targetFragment = action.payload as Fragment
-        },
-        clearTargetFragment: (state) => {
-            state.targetFragment = {} as Fragment; 
-        },
-        setFragments:(state, action) => {
-            state.fragments = action.payload as Fragment[]
-        },  
-        clearFragments:(state) => {
-            state.fragments = [] as Fragment[]
-        },
-        clearAllStates:(state) => {
-            state.loading = false;
-            state.audioUrl = '' as string;
-            state.transcription = '' as string;
-            state.fragments = [] as Fragment[];
-            state.questions = [] as Question[]
-            state.targetFragment = {} as Fragment; 
-        },
-        clearQuestions : (state) => {
-            state.questions = [] as Question[]
-        }
+  name: "fragments",
+  initialState: {
+    loading: false as boolean,
+    audioUrl: "" as string,
+    transcription: "" as string,
+    fragments: [] as Fragment[],
+    fragmentLoading: false as boolean,
+    fragmentsLoading: false as boolean,
+    targetFragment: {} as Fragment,
+    questions: [] as Question[],
+  },
+  reducers: {
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     },
-    extraReducers: (builder) => {
-        builder
-        //createFragment
-        .addCase(createFragment.pending, (state) => {
-            state.fragmentsLoading = true; 
-            state.fragmentLoading = true;
-        })
-        .addCase(createFragment.fulfilled, (state, action) => {
-            state.fragmentsLoading = true;
-            state.fragmentLoading = false; 
-            state.fragments = action.payload as Fragment[]
-        })
-        // getFragment
-        .addCase(getFragments.pending, (state) => {
-            state.fragmentsLoading = true; 
-        })
-        .addCase(getFragments.fulfilled, (state, action) => {
-            state.fragmentsLoading = false; 
-            state.fragments = action.payload as Fragment[]
-        })
-        .addCase(getFragments.rejected, (state) => {
-            state.fragmentsLoading = false;
-        })
-        // getQuestions
-        .addCase(getQuestions.pending, (state) => {
-            state.loading = true;
-        })
-        .addCase(getQuestions.fulfilled, (state, action) => {
-            state.loading = false;
-            state.questions = action.payload as Question[]
-        })
-        .addCase(getQuestions.rejected, (state) => {
-            state.loading = false;
-        })
-        // createQuestions
-        .addCase(createQuestions.pending, (state) => {
-            state.loading = true;
-        })
-        .addCase(createQuestions.fulfilled, (state) => {
-            state.loading = false;
-        })
-        .addCase(createQuestions.rejected, (state) => {
-            state.loading = false;
-        })
-        .addCase(deleteFragment.pending, (state) => {
-            state.fragmentsLoading = true; 
-        })
-        .addCase(deleteFragment.fulfilled, (state, action) => {
-            state.fragmentsLoading = false; 
-            state.fragments = action.payload as Fragment[]
-        })
-    }
-})
+    setTargetFragment: (state, action) => {
+      state.targetFragment = action.payload as Fragment;
+    },
+    clearTargetFragment: (state) => {
+      state.targetFragment = {} as Fragment;
+    },
+    setFragments: (state, action) => {
+      state.fragments = action.payload as Fragment[];
+    },
+    clearFragments: (state) => {
+      state.fragments = [] as Fragment[];
+    },
+    clearAllStates: (state) => {
+      state.loading = false;
+      state.audioUrl = "" as string;
+      state.transcription = "" as string;
+      state.fragments = [] as Fragment[];
+      state.questions = [] as Question[];
+      state.targetFragment = {} as Fragment;
+    },
+    clearQuestions: (state) => {
+      state.questions = [] as Question[];
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      //createFragment
+      .addCase(createFragment.pending, (state) => {
+        state.fragmentsLoading = true;
+        state.fragmentLoading = true;
+      })
+      .addCase(createFragment.fulfilled, (state, action) => {
+        state.fragmentsLoading = true;
+        state.fragmentLoading = false;
+        state.fragments = action.payload as Fragment[];
+      })
+      // getFragment
+      .addCase(getFragments.pending, (state) => {
+        state.fragmentsLoading = true;
+      })
+      .addCase(getFragments.fulfilled, (state, action) => {
+        state.fragmentsLoading = false;
+        state.fragments = action.payload as Fragment[];
+      })
+      .addCase(getFragments.rejected, (state) => {
+        state.fragmentsLoading = false;
+      })
+      // getQuestions
+      .addCase(getQuestions.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getQuestions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.questions = action.payload as Question[];
+      })
+      .addCase(getQuestions.rejected, (state) => {
+        state.loading = false;
+      })
+      // createQuestions
+      .addCase(createQuestions.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createQuestions.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(createQuestions.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteFragment.pending, (state) => {
+        state.fragmentsLoading = true;
+      })
+      .addCase(deleteFragment.fulfilled, (state, action) => {
+        state.fragmentsLoading = false;
+        state.fragments = action.payload as Fragment[];
+      });
+  },
+});
 
-
-export const { setTargetFragment, clearTargetFragment, setFragments, clearFragments, clearQuestions } = fragmentsSlice.actions
+export const {
+  setTargetFragment,
+  clearTargetFragment,
+  setFragments,
+  clearFragments,
+  clearQuestions,
+} = fragmentsSlice.actions;
 export default fragmentsSlice.reducer;

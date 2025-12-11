@@ -47,3 +47,18 @@ def process_docs_v2():
 @api_blueprint.route("/api/docs/v3", methods=["POST"])
 def process_docs_v3():
     return process_docs_together()
+
+
+# NEW: Structured output endpoints (100% reliable JSON)
+@api_blueprint.route("/api/docs/structured", methods=["POST"])
+def process_docs_structured_route():
+    from app.services.structured_quiz_service import process_docs_structured
+
+    return process_docs_structured()
+
+
+@api_blueprint.route("/api/title/structured", methods=["POST"])
+def process_title_structured_route():
+    from app.services.structured_quiz_service import process_title_structured
+
+    return process_title_structured()
